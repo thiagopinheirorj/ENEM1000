@@ -1,4 +1,9 @@
-# ENEM 1000 · Devocional de Redação
+# Redação 1000 · Devocional diário
+
+> App independente, sem vínculo com o Inep ou o MEC. ENEM é um exame do Inep.
+
+**App publicado:** https://thiagopinheirorj.github.io/ENEM1000/ ·
+[Política de privacidade](https://thiagopinheirorj.github.io/ENEM1000/privacidade.html)
 
 Um app de **5 minutos por dia** para ampliar o repertório da redação do ENEM.
 Cada dia traz um "devocional" com:
@@ -62,4 +67,4 @@ embaralhada automaticamente; `correta` é o índice da opção certa na lista or
 Depois de publicar, preencha `APP_URL` em `js/app.js` para o link do app ir junto nas
 mensagens compartilhadas. Para um novo ano, atualize `PROVA_PADRAO`.
 
-Ao publicar uma versão nova, altere `CACHE` em `sw.js` (ex.: `enem1000-v2`).
+Ao publicar uma versão nova, altere `CACHE` em `sw.js` (ex.: `enem1000-v5`).

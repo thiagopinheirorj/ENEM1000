@@ -1,5 +1,5 @@
 /* Service worker: guarda os arquivos do app para uso offline. */
-var CACHE = "enem1000-v3";
+var CACHE = "enem1000-v4";
 var ASSETS = [
   "./",
   "index.html",
@@ -7,7 +7,8 @@ var ASSETS = [
   "js/content.js",
   "js/app.js",
   "manifest.webmanifest",
-  "icons/icon.svg"
+  "icons/icon.svg",
+  "privacidade.html"
 ];
 
 self.addEventListener("install", function (e) {

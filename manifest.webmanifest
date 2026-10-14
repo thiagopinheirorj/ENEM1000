@@ -1,7 +1,7 @@
 {
-  "name": "ENEM 1000 · Devocional de Redação",
-  "short_name": "ENEM 1000",
-  "description": "5 minutos por dia de repertório, dicas e exercícios para a redação do ENEM.",
+  "name": "Redação 1000 · Devocional diário",
+  "short_name": "Redação 1000",
+  "description": "5 minutos por dia de repertório, dicas e exercícios para a redação do ENEM. App independente, sem vínculo com o Inep ou o MEC.",
   "lang": "pt-BR",
   "start_url": "./#/hoje",
   "scope": "./",

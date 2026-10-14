@@ -29,7 +29,7 @@
   var today = isoDate(new Date());
 
   /* Link público do app, incluído nas mensagens compartilhadas. Preencha após publicar. */
-  var APP_URL = "";
+  var APP_URL = "https://thiagopinheirorj.github.io/ENEM1000/";
 
   /* Redação do ENEM 2026: 1º dia de prova, domingo 8/11, às 13h30 de Brasília (Edital Inep nº 64/2026). */
   var PROVA_PADRAO = "2026-11-08";
@@ -218,6 +218,10 @@
       fallback();
     }
   }
+
+  var AVISO =
+    '<p class="disclaimer">App independente, sem vínculo com o Inep ou o MEC. ENEM é um exame do Inep.<br>' +
+    '<a href="privacidade.html">Política de privacidade</a></p>';
 
   var NOMES_COMP = { 1: "Norma-padrão", 2: "Tema e repertório", 3: "Argumentação", 4: "Coesão", 5: "Proposta de intervenção" };
 
@@ -422,7 +426,7 @@
     // Conclusão
     function textoCompartilhar() {
       var n = diasParaProva();
-      return "🔥 " + streak() + (streak() === 1 ? " dia" : " dias") + " seguidos no ENEM 1000!\n\n" +
+      return "🔥 " + streak() + (streak() === 1 ? " dia" : " dias") + " seguidos no Redação 1000!\n\n" +
         "📚 Repertório de hoje: " + d.fonte + "\n" +
         "💡 " + d.chave +
         (n > 0 ? "\n\n⏳ Faltam " + n + " dias para a redação do ENEM." : "") +
@@ -450,9 +454,9 @@
         });
         if (podeNativo) {
           document.getElementById("sh-nativo").addEventListener("click", function () {
-            var dados = { title: "ENEM 1000", text: textoCompartilhar() };
+            var dados = { title: "Redação 1000", text: textoCompartilhar() };
             if (fotoBlob && typeof File === "function") {
-              var arq = new File([fotoBlob], "enem1000-dia-" + id + ".jpg", { type: "image/jpeg" });
+              var arq = new File([fotoBlob], "redacao1000-dia-" + id + ".jpg", { type: "image/jpeg" });
               if (navigator.canShare && navigator.canShare({ files: [arq] })) dados.files = [arq];
             }
             navigator.share(dados).catch(function (e) {
@@ -643,7 +647,8 @@
 
       '<section class="card" id="kit-zeram"><h2>O que zera a redação</h2><ul style="margin:0;padding-left:20px">' +
         KIT.zeram.map(function (z) { return "<li>" + esc(z) + "</li>"; }).join("") +
-      '</ul><p class="empty" style="margin-top:10px">Desrespeitar os direitos humanos na proposta pode zerar a Competência 5.</p></section>';
+      '</ul><p class="empty" style="margin-top:10px">Desrespeitar os direitos humanos na proposta pode zerar a Competência 5.</p></section>' +
+      AVISO;
   }
 
   /* ---------- Tela: progresso ---------- */
@@ -711,10 +716,11 @@
           '<button class="btn danger small" id="zerar">Recomeçar do zero</button>' +
         "</div>" +
         '<textarea id="caderno-texto" hidden readonly aria-label="Texto do caderno"></textarea>' +
-      "</section>";
+      "</section>" +
+      AVISO;
 
     document.getElementById("exportar").addEventListener("click", function () {
-      var linhas = ["ENEM 1000 — Meu caderno de repertório", ""];
+      var linhas = ["Redação 1000 — Meu caderno de repertório", ""];
       favs.forEach(function (id) {
         var d = byId(id);
         if (d) linhas.push("★ " + d.fonte, "  " + d.chave, "");

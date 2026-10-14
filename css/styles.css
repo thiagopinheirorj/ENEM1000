@@ -400,6 +400,15 @@ details.model p { margin-top: 8px; }
 
 .empty { color: var(--muted); font-size: 15px; }
 
+.disclaimer { font-size: 13px; color: var(--muted); text-align: center; margin: 18px 0 0; line-height: 1.5; }
+
+/* Página de política de privacidade */
+.policy { max-width: 680px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px)); }
+.policy { overflow-wrap: anywhere; }
+.policy h2 { margin-top: 26px; }
+.policy li { margin-bottom: 6px; }
+body.plain { padding-bottom: 0; }
+
 /* Barra de abas */
 .tabbar {
   position: fixed;
