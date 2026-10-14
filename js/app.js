@@ -27,9 +27,16 @@
   }
   var today = isoDate(new Date());
 
+  /* Link público do app, incluído nas mensagens compartilhadas. Preencha após publicar. */
+  var APP_URL = "";
+
+  /* Redação do ENEM 2026: 1º dia de prova, domingo 8/11, às 13h30 de Brasília (Edital Inep nº 64/2026). */
+  var PROVA_PADRAO = "2026-11-08";
+  var HORA_PROVA = "T13:30:00-03:00";
+
   /* ---------- Armazenamento local ---------- */
   function emptyState() {
-    return { inicio: today, done: {}, quiz: {}, textos: {}, favoritos: [], dias: [] };
+    return { inicio: today, done: {}, quiz: {}, textos: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO };
   }
   function load() {
     try {
@@ -104,6 +111,109 @@
     }
     return idx;
   }
+  /* ---------- Fotos do texto (IndexedDB: imagens são grandes demais para o localStorage) ---------- */
+  var fotos = (function () {
+    var dbp;
+    function db() {
+      if (!dbp) {
+        dbp = new Promise(function (res, rej) {
+          try {
+            var r = indexedDB.open("enem1000-fotos", 1);
+            r.onupgradeneeded = function () { r.result.createObjectStore("fotos"); };
+            r.onsuccess = function () { res(r.result); };
+            r.onerror = function () { rej(r.error); };
+          } catch (e) { rej(e); }
+        });
+      }
+      return dbp;
+    }
+    function run(mode, fn) {
+      return db().then(function (d) {
+        return new Promise(function (res, rej) {
+          var t = d.transaction("fotos", mode);
+          var req = fn(t.objectStore("fotos"));
+          t.oncomplete = function () { res(req && req.result); };
+          t.onerror = function () { rej(t.error); };
+        });
+      });
+    }
+    return {
+      get: function (id) { return run("readonly", function (st) { return st.get(id); }); },
+      set: function (id, blob) { return run("readwrite", function (st) { return st.put(blob, id); }); },
+      del: function (id) { return run("readwrite", function (st) { return st.delete(id); }); },
+      clear: function () { return run("readwrite", function (st) { return st.clear(); }); }
+    };
+  })();
+
+  /* Reduz a foto (máx. 1600 px, JPEG) para caber bem no aparelho. */
+  function comprimir(file) {
+    return new Promise(function (res, rej) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function () {
+        var w = img.naturalWidth, h = img.naturalHeight;
+        var k = Math.min(1, 1600 / Math.max(w, h));
+        var c = document.createElement("canvas");
+        c.width = Math.round(w * k);
+        c.height = Math.round(h * k);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        c.toBlob(function (b) { if (b) res(b); else rej(new Error("toBlob")); }, "image/jpeg", 0.82);
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); rej(new Error("imagem inválida")); };
+      img.src = url;
+    });
+  }
+
+  /* ---------- Contagem regressiva ---------- */
+  function horaProva() { return Date.parse((state.prova || PROVA_PADRAO) + HORA_PROVA); }
+  function diasParaProva() {
+    var diff = horaProva() - Date.now();
+    return diff > 0 ? Math.floor(diff / 86400000) : 0;
+  }
+  function countdownHtml() {
+    var diff = horaProva() - Date.now();
+    var dataTxt = new Date(horaProva()).toLocaleDateString("pt-BR", { day: "numeric", month: "long", year: "numeric", timeZone: "America/Sao_Paulo" });
+    if (diff <= 0) {
+      if (diff > -6 * 3600000) return '<div class="cd-big">É hoje!</div><div class="cd-sub">Boa prova. Você treinou para isso. ✨</div>';
+      return '<div class="cd-sub">A prova de ' + esc(dataTxt) + ' já passou. Defina a data da próxima em <a href="#/progresso">Progresso</a>.</div>';
+    }
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    return '<div class="cd-units">' +
+        '<span><b>' + d + '</b>' + (d === 1 ? "dia" : "dias") + '</span>' +
+        '<span><b>' + h + '</b>h</span>' +
+        '<span><b>' + String(m).padStart(2, "0") + '</b>min</span>' +
+      '</div>' +
+      '<div class="cd-sub">para a redação do ENEM · ' + esc(dataTxt) + ', 13h30 (Brasília)</div>';
+  }
+  function updateCountdowns() {
+    document.querySelectorAll(".js-countdown").forEach(function (el) { el.innerHTML = countdownHtml(); });
+    var chip = document.getElementById("cd-chip");
+    var n = diasParaProva();
+    chip.hidden = horaProva() - Date.now() <= 0;
+    chip.textContent = "⏳ " + n + "d";
+    chip.title = "Faltam " + n + " dias para a redação do ENEM";
+  }
+  setInterval(updateCountdowns, 30000);
+
+  /* Copia texto; se o navegador recusar, mostra o texto selecionado na caixa indicada. */
+  function copiar(texto, caixaId, okMsg) {
+    function fallback() {
+      var box = document.getElementById(caixaId);
+      box.hidden = false;
+      box.value = texto;
+      box.select();
+      toast("Selecione o texto e copie");
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(function () { toast(okMsg); }, fallback);
+    } else {
+      fallback();
+    }
+  }
+
   var NOMES_COMP = { 1: "Norma-padrão", 2: "Tema e repertório", 3: "Argumentação", 4: "Coesão", 5: "Proposta de intervenção" };
 
   var toastTimer;
@@ -138,6 +248,7 @@
     }).join("");
 
     app.innerHTML =
+      (isToday ? '<a class="countdown js-countdown" href="#/progresso" aria-label="Contagem regressiva para a redação do ENEM">' + countdownHtml() + "</a>" : "") +
       '<section class="day-head">' +
         '<p class="eyebrow">' + (isToday ? "Hoje · " + esc(formatDate(today)) : "Dia " + id + " da trilha") + "</p>" +
         "<h1>" + esc(d.titulo) + "</h1>" +
@@ -186,6 +297,15 @@
         '<label for="texto" class="eyebrow" style="display:block;margin-top:8px">Sua resposta</label>' +
         '<textarea id="texto" placeholder="Escreva aqui. Fica salvo só no seu aparelho."></textarea>' +
         '<div class="saved" id="saved" aria-live="polite"></div>' +
+        '<div class="photo">' +
+          '<p class="photo-hint">Escreveu no papel? Anexe uma foto da sua folha.</p>' +
+          '<img id="foto-img" hidden alt="Foto do texto escrito à mão">' +
+          '<div class="photo-actions">' +
+            '<label class="btn ghost small" for="foto-input" id="foto-label">📷 Anexar foto</label>' +
+            '<input type="file" id="foto-input" class="sr-only" accept="image/*">' +
+            '<button class="btn danger small" id="foto-del" hidden>Remover foto</button>' +
+          "</div>" +
+        "</div>" +
         '<details class="model"><summary>Ver resposta-modelo</summary><p class="example">' + esc(d.desafio.modelo) + "</p></details>" +
       "</article>" +
 
@@ -253,14 +373,89 @@
       }, 400);
     });
 
+    // Foto do texto
+    var fotoImg = document.getElementById("foto-img");
+    var fotoInput = document.getElementById("foto-input");
+    var fotoDel = document.getElementById("foto-del");
+    var fotoLabel = document.getElementById("foto-label");
+    var fotoBlob = null;
+    function mostrarFoto(blob) {
+      fotoBlob = blob || null;
+      if (fotoImg.src) URL.revokeObjectURL(fotoImg.src);
+      fotoImg.hidden = !blob;
+      fotoImg.src = blob ? URL.createObjectURL(blob) : "";
+      fotoDel.hidden = !blob;
+      fotoLabel.textContent = blob ? "📷 Trocar foto" : "📷 Anexar foto";
+    }
+    if (state.fotos[id]) fotos.get(id).then(mostrarFoto).catch(function () {});
+    fotoInput.addEventListener("change", function () {
+      var file = fotoInput.files && fotoInput.files[0];
+      fotoInput.value = "";
+      if (!file) return;
+      savedEl.textContent = "Salvando foto…";
+      comprimir(file)
+        .then(function (blob) { return fotos.set(id, blob).then(function () { return blob; }); })
+        .then(function (blob) {
+          state.fotos[id] = true;
+          save();
+          mostrarFoto(blob);
+          savedEl.textContent = "Foto salva no aparelho ✓";
+        })
+        .catch(function () {
+          savedEl.textContent = "";
+          toast("Não foi possível salvar a foto. Tente outra imagem.");
+        });
+    });
+    fotoDel.addEventListener("click", function () {
+      fotos.del(id).catch(function () {});
+      delete state.fotos[id];
+      save();
+      mostrarFoto(null);
+      toast("Foto removida");
+    });
+
     // Conclusão
+    function textoCompartilhar() {
+      var n = diasParaProva();
+      return "🔥 " + streak() + (streak() === 1 ? " dia" : " dias") + " seguidos no ENEM 1000!\n\n" +
+        "📚 Repertório de hoje: " + d.fonte + "\n" +
+        "💡 " + d.chave +
+        (n > 0 ? "\n\n⏳ Faltam " + n + " dias para a redação do ENEM." : "") +
+        (APP_URL ? "\n\n" + APP_URL : "");
+    }
     function renderFinish() {
       var box = document.getElementById("finish");
       if (state.done[id]) {
+        var podeNativo = typeof navigator.share === "function";
         box.innerHTML =
           '<div class="card done-banner"><div class="big" aria-hidden="true">🌱</div>' +
           "<h2>Devocional concluído</h2>" +
-          "<p>Sequência atual: <strong>" + streak() + " dia(s)</strong>. Volte amanhã para manter o ritmo.</p></div>";
+          "<p>Sequência atual: <strong>" + streak() + " dia(s)</strong>. Volte amanhã para manter o ritmo.</p>" +
+          '<div class="share">' +
+            '<p class="eyebrow">Compartilhe sua conquista</p>' +
+            '<div class="share-actions">' +
+              (podeNativo ? '<button class="btn small" id="sh-nativo">Compartilhar</button>' : "") +
+              '<a class="btn small ghost" id="sh-whats" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(textoCompartilhar()) + '">WhatsApp</a>' +
+              '<button class="btn small ghost" id="sh-copiar">Copiar mensagem</button>' +
+            "</div>" +
+            '<textarea id="sh-texto" hidden readonly aria-label="Mensagem para compartilhar"></textarea>' +
+          "</div></div>";
+        document.getElementById("sh-copiar").addEventListener("click", function () {
+          copiar(textoCompartilhar(), "sh-texto", "Mensagem copiada ✓");
+        });
+        if (podeNativo) {
+          document.getElementById("sh-nativo").addEventListener("click", function () {
+            var dados = { title: "ENEM 1000", text: textoCompartilhar() };
+            if (fotoBlob && typeof File === "function") {
+              var arq = new File([fotoBlob], "enem1000-dia-" + id + ".jpg", { type: "image/jpeg" });
+              if (navigator.canShare && navigator.canShare({ files: [arq] })) dados.files = [arq];
+            }
+            navigator.share(dados).catch(function (e) {
+              if (e && e.name === "AbortError") return; // a pessoa fechou a janela
+              copiar(textoCompartilhar(), "sh-texto", "Mensagem copiada ✓ Cole onde quiser.");
+            });
+          });
+        }
         return;
       }
       var can = id in state.quiz;
@@ -385,6 +580,8 @@
     }
 
     var textos = Object.keys(state.textos).map(Number).sort(function (a, b) { return a - b; });
+    var cadernoIds = Object.keys(state.textos).concat(Object.keys(state.fotos))
+      .map(Number).filter(function (v, i, a) { return a.indexOf(v) === i; }).sort(function (a, b) { return a - b; });
     var favs = state.favoritos.slice().sort(function (a, b) { return a - b; });
 
     app.innerHTML =
@@ -397,12 +594,25 @@
         '<div class="stat"><div class="v">' + taxa + '</div><div class="l">acertos no quiz</div></div>' +
       "</div>" +
 
+      '<section class="card"><h2>Contagem para o ENEM</h2>' +
+        '<div class="countdown js-countdown inline">' + countdownHtml() + "</div>" +
+        '<label for="prova-data" class="eyebrow" style="display:block;margin-top:14px">Data da prova de redação</label>' +
+        '<div class="row" style="flex-wrap:wrap">' +
+          '<input type="date" id="prova-data" value="' + esc(state.prova) + '">' +
+          '<button class="btn ghost small" id="prova-padrao" style="flex:none">Usar data oficial</button>' +
+        "</div>" +
+        '<p class="empty" style="margin-top:8px">Data oficial: 8 de novembro de 2026, às 13h30 (Brasília). Confirme sempre em enem.inep.gov.br.</p>' +
+      "</section>" +
+
       '<section class="card"><h2>Últimos 7 dias</h2><div class="week">' + week.join("") + "</div></section>" +
 
       '<section class="card"><h2>Meu caderno de frases</h2>' +
-        (textos.length ? textos.map(function (id) {
+        (cadernoIds.length ? cadernoIds.map(function (id) {
           var d = byId(id);
-          return d ? '<div class="note"><a href="#/dia/' + id + '">Dia ' + id + " · " + esc(d.titulo) + "</a><p>" + esc(state.textos[id]) + "</p></div>" : "";
+          return d ? '<div class="note"><a href="#/dia/' + id + '">Dia ' + id + " · " + esc(d.titulo) + (state.fotos[id] ? " 📷" : "") + "</a>" +
+            (state.textos[id] ? "<p>" + esc(state.textos[id]) + "</p>" : "") +
+            (state.fotos[id] ? '<img class="note-photo" data-foto="' + id + '" alt="Foto do texto do dia ' + id + '" hidden>' : "") +
+            "</div>" : "";
         }).join("") : '<p class="empty">Suas respostas dos desafios de escrita aparecem aqui — um caderno de repertório escrito por você.</p>') +
       "</section>" +
 
@@ -432,19 +642,31 @@
         var d = byId(id);
         if (d) linhas.push("Dia " + id + " · " + d.titulo, d.desafio.enunciado, "> " + state.textos[id], "");
       });
-      var texto = linhas.join("\n");
-      function fallback() {
-        var box = document.getElementById("caderno-texto");
-        box.hidden = false;
-        box.value = texto;
-        box.select();
-        toast("Selecione o texto e copie");
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(texto).then(function () { toast("Caderno copiado ✓"); }, fallback);
-      } else {
-        fallback();
-      }
+      copiar(linhas.join("\n"), "caderno-texto", "Caderno copiado ✓");
+    });
+
+    app.querySelectorAll("img[data-foto]").forEach(function (img) {
+      fotos.get(+img.getAttribute("data-foto")).then(function (b) {
+        if (!b) return;
+        img.src = URL.createObjectURL(b);
+        img.hidden = false;
+      }).catch(function () {});
+    });
+
+    var provaInput = document.getElementById("prova-data");
+    provaInput.addEventListener("change", function () {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(provaInput.value)) return;
+      state.prova = provaInput.value;
+      save();
+      updateCountdowns();
+      toast("Data da prova atualizada");
+    });
+    document.getElementById("prova-padrao").addEventListener("click", function () {
+      state.prova = PROVA_PADRAO;
+      provaInput.value = PROVA_PADRAO;
+      save();
+      updateCountdowns();
+      toast("Data oficial restaurada");
     });
 
     var zerar = document.getElementById("zerar");
@@ -460,6 +682,7 @@
         return;
       }
       state = emptyState();
+      fotos.clear().catch(function () {});
       save();
       updateStreakBadge();
       renderProgresso();
@@ -503,6 +726,7 @@
 
   window.addEventListener("hashchange", route);
   updateStreakBadge();
+  updateCountdowns();
   route();
 
   /* ---------- Funcionamento offline ---------- */
