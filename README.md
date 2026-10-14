@@ -17,7 +17,7 @@ Além disso:
 - **Kit** de consulta: 5 competências, estrutura em 4 parágrafos, banco de conectivos,
   proposta de intervenção, temas anteriores do ENEM e o que zera a redação
 - **Progresso**: sequência de dias (🔥), acertos no quiz, caderno com suas frases,
-  repertórios favoritos e exportação em `.txt`
+  repertórios favoritos e botão para copiar o caderno
 
 A trilha é pessoal: o dia 1 é o dia em que você abre o app pela primeira vez.
 Todo o progresso fica salvo **apenas no aparelho** (`localStorage`).

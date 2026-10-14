@@ -416,9 +416,10 @@
       '<section class="card"><h2>Dados</h2>' +
         '<p class="empty">Tudo fica salvo apenas neste aparelho. Você começou a trilha em ' + esc(parseIso(state.inicio).toLocaleDateString("pt-BR")) + ".</p>" +
         '<div class="row" style="margin-top:10px;flex-wrap:wrap">' +
-          '<button class="btn ghost small" id="exportar">Exportar caderno (.txt)</button>' +
+          '<button class="btn ghost small" id="exportar">Copiar caderno</button>' +
           '<button class="btn danger small" id="zerar">Recomeçar do zero</button>' +
         "</div>" +
+        '<textarea id="caderno-texto" hidden readonly aria-label="Texto do caderno"></textarea>' +
       "</section>";
 
     document.getElementById("exportar").addEventListener("click", function () {
@@ -431,16 +432,33 @@
         var d = byId(id);
         if (d) linhas.push("Dia " + id + " · " + d.titulo, d.desafio.enunciado, "> " + state.textos[id], "");
       });
-      var blob = new Blob([linhas.join("\n")], { type: "text/plain;charset=utf-8" });
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "enem1000-caderno.txt";
-      a.click();
-      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+      var texto = linhas.join("\n");
+      function fallback() {
+        var box = document.getElementById("caderno-texto");
+        box.hidden = false;
+        box.value = texto;
+        box.select();
+        toast("Selecione o texto e copie");
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texto).then(function () { toast("Caderno copiado ✓"); }, fallback);
+      } else {
+        fallback();
+      }
     });
 
-    document.getElementById("zerar").addEventListener("click", function () {
-      if (!confirm("Apagar todo o progresso, favoritos e textos deste aparelho?")) return;
+    var zerar = document.getElementById("zerar");
+    var armado = false;
+    zerar.addEventListener("click", function () {
+      if (!armado) {
+        armado = true;
+        zerar.textContent = "Toque de novo para apagar tudo";
+        setTimeout(function () {
+          armado = false;
+          if (document.body.contains(zerar)) zerar.textContent = "Recomeçar do zero";
+        }, 4000);
+        return;
+      }
       state = emptyState();
       save();
       updateStreakBadge();
