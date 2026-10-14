@@ -1,0 +1,14 @@
+{
+  "name": "ENEM 1000 · Devocional de Redação",
+  "short_name": "ENEM 1000",
+  "description": "5 minutos por dia de repertório, dicas e exercícios para a redação do ENEM.",
+  "lang": "pt-BR",
+  "start_url": "./#/hoje",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f3ec",
+  "theme_color": "#1f3a5f",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

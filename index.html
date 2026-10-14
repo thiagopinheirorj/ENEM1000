@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ENEM 1000 · Devocional de Redação</title>
+  <meta name="description" content="Um devocional diário de 5 minutos para ampliar o repertório da redação do ENEM: leitura, dica, exercício rápido e desafio de escrita.">
+  <meta name="theme-color" content="#1f3a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">✦</span>
+      <span>ENEM <strong>1000</strong></span>
+    </div>
+    <div class="streak" id="streak" title="Dias seguidos">
+      <span aria-hidden="true">🔥</span> <span id="streak-count">0</span>
+    </div>
+  </header>
+
+  <main id="app" tabindex="-1"></main>
+
+  <nav class="tabbar" aria-label="Navegação principal">
+    <a href="#/hoje" data-tab="hoje"><span aria-hidden="true">☀️</span>Hoje</a>
+    <a href="#/trilha" data-tab="trilha"><span aria-hidden="true">🧭</span>Trilha</a>
+    <a href="#/kit" data-tab="kit"><span aria-hidden="true">🧰</span>Kit</a>
+    <a href="#/progresso" data-tab="progresso"><span aria-hidden="true">📈</span>Progresso</a>
+  </nav>
+
+  <script src="js/content.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
