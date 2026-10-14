@@ -2,6 +2,7 @@
   "use strict";
 
   var DEV = window.DEVOCIONAIS;
+  var APOSTA = window.APOSTA;
   var KIT = window.KIT;
   var N = DEV.length;
   var STORE_KEY = "enem1000:v1";
@@ -171,6 +172,10 @@
     var diff = horaProva() - Date.now();
     return diff > 0 ? Math.floor(diff / 86400000) : 0;
   }
+  /* A aposta do tema abre na véspera da prova (e continua disponível depois). */
+  function dataLiberaAposta() { return addDays(state.prova || PROVA_PADRAO, -1); }
+  function apostaLiberada() { return today >= dataLiberaAposta(); }
+
   function countdownHtml() {
     var diff = horaProva() - Date.now();
     var dataTxt = new Date(horaProva()).toLocaleDateString("pt-BR", { day: "numeric", month: "long", year: "numeric", timeZone: "America/Sao_Paulo" });
@@ -475,6 +480,77 @@
     renderFinish();
   }
 
+  /* ---------- Tela: aposta do tema (véspera da prova) ---------- */
+  function renderAposta() {
+    if (!apostaLiberada()) {
+      app.innerHTML =
+        '<p class="eyebrow">Dia especial</p><h1>A aposta do tema</h1>' +
+        '<div class="card"><p>🔒 Esta página abre na véspera da prova, em <strong>' +
+        esc(parseIso(dataLiberaAposta()).toLocaleDateString("pt-BR", { day: "numeric", month: "long" })) +
+        '</strong>. Até lá, siga a trilha diária.</p></div>' +
+        '<a class="btn" style="display:block;text-align:center;text-decoration:none" href="#/dia/' + todayId() + '">Ir para o devocional de hoje</a>';
+      return;
+    }
+    var a = APOSTA;
+    app.innerHTML =
+      '<a class="countdown js-countdown" href="#/progresso" aria-label="Contagem regressiva para a redação do ENEM">' + countdownHtml() + "</a>" +
+      '<section class="day-head">' +
+        '<p class="eyebrow">Véspera da prova · dia especial</p>' +
+        "<h1>A aposta do tema</h1>" +
+        '<div class="day-meta"><span>Pesquisa feita em ' + esc(a.pesquisaEm) + " com cursinhos, professores e o histórico do Inep</span></div>" +
+      "</section>" +
+
+      '<article class="card key">' +
+        '<p class="eyebrow" style="color:inherit;opacity:.75">Tema mais provável</p>' +
+        "<blockquote>" + esc(a.tema) + "</blockquote>" +
+        '<div class="source">' + esc(a.resumo) + "</div>" +
+      "</article>" +
+
+      '<article class="card">' +
+        '<div class="step"><span class="step-n">1</span><h2>Por que essa aposta</h2></div>' +
+        a.porQue.map(function (r) {
+          return '<div class="kit-item"><strong>' + esc(r.titulo) + '</strong><span class="muted">' + esc(r.texto) + "</span></div>";
+        }).join("") +
+        '<p class="empty" style="margin-top:10px">' + esc(a.porQueNaoIA) + "</p>" +
+      "</article>" +
+
+      '<article class="card">' +
+        '<div class="step"><span class="step-n">2</span><h2>Repertórios para levar</h2></div>' +
+        a.repertorios.map(function (r) {
+          return '<div class="kit-item"><strong>' + esc(r.nome) + '</strong><span class="muted">' + esc(r.uso) + "</span></div>";
+        }).join("") +
+      "</article>" +
+
+      '<article class="card">' +
+        '<div class="step"><span class="step-n">3</span><h2>Roteiro da redação</h2></div>' +
+        a.roteiro.map(function (r) {
+          return '<div class="kit-item"><strong>' + esc(r.parte) + '</strong><span class="muted">' + esc(r.texto) + "</span></div>";
+        }).join("") +
+        '<h3 style="margin-top:14px">Introdução-modelo</h3>' +
+        '<p class="example">' + esc(a.introducaoModelo) + "</p>" +
+      "</article>" +
+
+      '<article class="card">' +
+        '<div class="step"><span class="step-n">4</span><h2>Se não for esse, os próximos da fila</h2></div>' +
+        a.alternativas.map(function (r) {
+          return '<div class="kit-item"><strong>' + esc(r.tema) + '</strong><span class="muted">' + esc(r.porque) + '</span><span class="muted" style="display:block;margin-top:4px"><em>Repertórios:</em> ' + esc(r.repertorios) + "</span></div>";
+        }).join("") +
+      "</article>" +
+
+      '<article class="card">' +
+        '<p class="eyebrow" style="text-align:center">Lembre-se</p>' +
+        '<p class="reflection">O tema é segredo até a prova. Esta é uma aposta, não uma garantia. Leia a proposta com calma e escreva sobre o tema que estiver na folha.</p>' +
+      "</article>" +
+
+      '<details class="card"><summary style="cursor:pointer;font-weight:600">Fontes da pesquisa</summary><ul style="margin:10px 0 0;padding-left:20px">' +
+        a.fontes.map(function (f) {
+          return '<li><a href="' + esc(f.url) + '" target="_blank" rel="noopener">' + esc(f.nome) + "</a></li>";
+        }).join("") +
+      "</ul></details>" +
+
+      '<a class="btn ghost" style="display:block;text-align:center;text-decoration:none" href="#/dia/' + todayId() + '">Ver também o devocional de hoje</a>';
+  }
+
   /* ---------- Tela: trilha ---------- */
   var filtroEixo = "Todos";
   function renderTrilha() {
@@ -507,7 +583,12 @@
           '<span><span class="t">' + esc(d.titulo) + (state.favoritos.indexOf(d.id) >= 0 ? " ★" : "") + "</span><br>" +
           '<span class="s">Dia ' + d.id + " · " + esc(d.fonte.split(",")[0]) + (d.id === tId ? " · hoje" : "") + "</span></span>" +
           "</a></li>";
-      }).join("") + "</ul>" : '<p class="empty">Nada por aqui ainda. Toque em ☆ em um devocional para salvá-lo.</p>');
+      }).join("") + "</ul>" : '<p class="empty">Nada por aqui ainda. Toque em ☆ em um devocional para salvá-lo.</p>') +
+      (filtroEixo === "Todos" ? '<ul class="list" style="margin-top:8px"><li><a href="#/aposta">' +
+        '<span class="num' + (apostaLiberada() ? " today" : "") + '">' + (apostaLiberada() ? "★" : "🔒") + "</span>" +
+        '<span><span class="t">Dia especial: a aposta do tema</span><br>' +
+        '<span class="s">' + (apostaLiberada() ? "Liberado · véspera da prova" : "Abre em " + esc(parseIso(dataLiberaAposta()).toLocaleDateString("pt-BR")) + ", véspera da prova") + "</span></span>" +
+        "</a></li></ul>" : "");
 
     app.querySelectorAll(".filter").forEach(function (b) {
       b.addEventListener("click", function () {
@@ -702,9 +783,11 @@
       var id = +m[1];
       tab = id === todayId() ? "hoje" : "trilha";
       renderDay(id, id === todayId());
-    } else if (h === "#/trilha") { tab = "trilha"; renderTrilha(); }
+    } else if (h === "#/aposta") { tab = apostaLiberada() ? "hoje" : "trilha"; renderAposta(); }
+    else if (h === "#/trilha") { tab = "trilha"; renderTrilha(); }
     else if (h === "#/kit") { tab = "kit"; renderKit(); }
     else if (h === "#/progresso") { tab = "progresso"; renderProgresso(); }
+    else if (apostaLiberada()) { renderAposta(); }
     else { renderDay(todayId(), true); }
 
     document.querySelectorAll(".tabbar a").forEach(function (a) {

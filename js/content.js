@@ -1089,6 +1089,7 @@ window.KIT = {
     { elemento: "Detalhamento", pergunta: "Que informação extra enriquece algum elemento?", ex: "ministradas por professores capacitados por especialistas" }
   ],
   temasAnteriores: [
+    { ano: 2025, tema: "Perspectivas acerca do envelhecimento na sociedade brasileira" },
     { ano: 2024, tema: "Desafios para a valorização da herança africana no Brasil" },
     { ano: 2023, tema: "Desafios para o enfrentamento da invisibilidade do trabalho de cuidado realizado pela mulher no Brasil" },
     { ano: 2022, tema: "Desafios para a valorização de comunidades e povos tradicionais no Brasil" },
@@ -1105,5 +1106,66 @@ window.KIT = {
     "Parte do texto deliberadamente desconectada do tema (ex.: receitas, hinos)",
     "Nome, assinatura ou identificação fora do local permitido",
     "Folha de redação em branco ou texto predominantemente copiado dos textos motivadores"
+  ]
+};
+
+/*
+ * Aposta do tema da redação, liberada na véspera da prova.
+ * Pesquisa feita em 14/10/2026 cruzando listas de cursinhos e professores
+ * com o padrão dos temas escolhidos pelo Inep. É uma aposta, não um vazamento.
+ */
+window.APOSTA = {
+  pesquisaEm: "14/10/2026",
+  tema: "Desafios para a inclusão de pessoas neurodivergentes na sociedade brasileira",
+  resumo: "Cruzamos as apostas dos principais cursinhos com o jeito como o Inep escolhe os temas. Esse foi o único assunto que aparece em quase todas as listas e, ao mesmo tempo, segue o padrão das últimas provas.",
+  porQue: [
+    { titulo: "Segue o padrão do Inep", texto: "Desde 2021, todos os temas giram em torno de um grupo social e da garantia de seus direitos: registro civil (2021), povos tradicionais (2022), trabalho de cuidado das mulheres (2023), herança africana (2024) e envelhecimento (2025). Pessoas com deficiência só foram tema em 2017, com os surdos." },
+    { titulo: "É consenso entre os cursinhos", texto: "Aparece nas apostas do Professor Ferretto, da Arco Educação (prof. Ademar Celedônio, na CNN Brasil), do prof. Saulo Genghini (Quero Bolsa), do Sesi (Tribuna Online) e do Correio Braziliense. Entre os temas que seguem o padrão do Inep, foi o mais repetido." },
+    { titulo: "Tem dado oficial novo", texto: "Pela primeira vez, o Censo 2022 do IBGE contou as pessoas com diagnóstico de autismo: 2,4 milhões, ou 1,2% da população (dado divulgado em 2025). O Inep costuma usar dados oficiais assim nos textos motivadores, como fez com o envelhecimento em 2025." },
+    { titulo: "Combina com um ano eleitoral", texto: "É um tema de direitos, sem polarização partidária, e permite propostas de intervenção claras, como formação de professores, adaptação de escolas e inclusão no trabalho." }
+  ],
+  porQueNaoIA: "A inteligência artificial é a aposta mais citada nas listas, mas o Inep não escolhe um tema de tecnologia desde 2018 e tem preferido grupos sociais. Por isso ficou como curinga, mais abaixo.",
+  repertorios: [
+    { nome: "Lei Berenice Piana (Lei nº 12.764/2012)", uso: "Criou a Política Nacional de Proteção dos Direitos da Pessoa com Transtorno do Espectro Autista e reconhece a pessoa autista como pessoa com deficiência para todos os efeitos legais." },
+    { nome: "Lei Romeo Mion (Lei nº 13.977/2020)", uso: "Criou a Carteira de Identificação da Pessoa com TEA (Ciptea), para garantir atendimento prioritário." },
+    { nome: "Lei Brasileira de Inclusão (Lei nº 13.146/2015)", uso: "Garante acessibilidade e educação inclusiva em todos os níveis. Use na estratégia \"lei × realidade\"." },
+    { nome: "Censo 2022 (IBGE)", uso: "2,4 milhões de brasileiros com diagnóstico de autismo (1,2% da população). Mostra o tamanho do grupo." },
+    { nome: "Judy Singer e a neurodiversidade", uso: "A socióloga australiana cunhou o termo no fim dos anos 1990: as diferenças neurológicas são parte da diversidade humana, e não defeitos a corrigir." },
+    { nome: "Modelo social da deficiência", uso: "A deficiência está nas barreiras impostas pela sociedade, e não só no corpo ou na mente da pessoa. Base da Convenção da ONU sobre os Direitos das Pessoas com Deficiência (2006)." },
+    { nome: "Erving Goffman, Estigma (dia 3 da trilha)", uso: "Explica por que rótulos como \"estranho\" ou \"difícil\" excluem pessoas neurodivergentes da escola e do trabalho." },
+    { nome: "Séries Atypical (2017) e Uma Advogada Extraordinária (2022)", uso: "Mostram protagonistas autistas e as barreiras de comunicação e preconceito que enfrentam no dia a dia." }
+  ],
+  roteiro: [
+    { parte: "Tese", texto: "A inclusão de pessoas neurodivergentes no Brasil esbarra no capacitismo e na falta de preparo das instituições, sobretudo da escola e do mercado de trabalho." },
+    { parte: "Desenvolvimento 1", texto: "Escola: faltam professores formados e adaptações, apesar da Lei Brasileira de Inclusão. Use \"lei × realidade\" e o modelo social da deficiência." },
+    { parte: "Desenvolvimento 2", texto: "Sociedade e trabalho: o estigma (Goffman) e o desconhecimento afastam neurodivergentes do emprego e do convívio social." },
+    { parte: "Proposta", texto: "O Ministério da Educação deve oferecer formação continuada sobre neurodiversidade aos professores, por meio de cursos on-line com certificação e apoio de profissionais de saúde, a fim de garantir uma inclusão escolar efetiva." }
+  ],
+  introducaoModelo: "Segundo o Censo 2022 do IBGE, cerca de 2,4 milhões de brasileiros têm diagnóstico de autismo. Embora a Lei Brasileira de Inclusão assegure a essas pessoas o direito à educação e ao trabalho em igualdade de condições, a realidade ainda é de exclusão. Nesse contexto, a inclusão de pessoas neurodivergentes no Brasil esbarra na falta de preparo das escolas e no estigma social que as afasta do mercado de trabalho.",
+  alternativas: [
+    {
+      tema: "Desafios para a proteção de crianças e adolescentes no ambiente digital",
+      porque: "O ECA Digital (Lei nº 15.211/2025) é recente, e o tema da reaplicação de 2025 já foi sobre a infância (\"A idade mínima para o trabalho como forma de proteção à infância\"). É a 1ª aposta da Arco Educação na CNN Brasil.",
+      repertorios: "ECA Digital (Lei 15.211/2025); art. 227 da Constituição (prioridade absoluta à criança e ao adolescente); Byung-Chul Han; Shoshana Zuboff; Bauman."
+    },
+    {
+      tema: "Desafios para o enfrentamento das calamidades climáticas no Brasil",
+      porque: "Depois das enchentes no Rio Grande do Sul (2024) e da COP30 em Belém (2025), aparece em quase todas as listas.",
+      repertorios: "Art. 225 da Constituição; Ulrich Beck (sociedade de risco); Ailton Krenak; Hans Jonas."
+    },
+    {
+      tema: "Curinga: desafios para o uso ético da inteligência artificial no Brasil",
+      porque: "É o tema mais citado pelos cursinhos, mas o menos alinhado ao padrão do Inep. Vale ter uma tese pronta.",
+      repertorios: "Shoshana Zuboff; Eli Pariser; LGPD (Lei 13.709/2018); Foucault (panóptico)."
+    }
+  ],
+  fontes: [
+    { nome: "CNN Brasil: professor aponta 7 temas (Arco Educação, 16/08/2026)", url: "https://www.cnnbrasil.com.br/educacao/redacao-do-enem-professor-aponta-7-temas-que-merecem-atencao-em-2026/" },
+    { nome: "Professor Ferretto: 10 apostas (06/10/2026)", url: "https://blog.professorferretto.com.br/atualidades/possiveis-temas-redacao-enem-2026/" },
+    { nome: "Aprova Total: 15 possibilidades (02/09/2026)", url: "https://aprovatotal.com.br/possiveis-tema-redacao-enem-2026" },
+    { nome: "Quero Bolsa: 5 possíveis temas (prof. Saulo Genghini)", url: "https://querobolsa.com.br/revista/enem-2026-possiveis-temas-redacao" },
+    { nome: "Tribuna Online: apostas de professores (11/06/2026)", url: "https://tribunaonline.com.br/educacao/enem-2026-10-apostas-de-professores-para-a-prova-de-redacao-313504" },
+    { nome: "IBGE: Censo 2022 e pessoas com autismo", url: "https://agenciadenoticias.ibge.gov.br/agencia-noticias/2012-agencia-de-noticias/noticias/43464" },
+    { nome: "Estratégia: tema da reaplicação 2025", url: "https://vestibulares.estrategia.com/portal/noticias/tema-de-redacao-enem-reaplicacao-2025/" }
   ]
 };

@@ -15,6 +15,9 @@ Além disso:
 
 - **Contagem regressiva** para a redação do ENEM (padrão: 8/11/2026, 13h30 de Brasília),
   com data editável na aba Progresso
+- **Aposta do tema** (dia especial liberado na véspera da prova): o tema mais provável,
+  com justificativa, repertórios, roteiro, introdução-modelo e alternativas — conteúdo em
+  `window.APOSTA`, em `js/content.js`
 - **Compartilhar** ao concluir o dia: menu nativo do celular (com a foto, se houver),
   WhatsApp ou copiar a mensagem
 
