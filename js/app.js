@@ -27,6 +27,13 @@
     return isoDate(d);
   }
   var today = isoDate(new Date());
+  /* Atualiza "hoje" quando o app fica aberto na virada da meia-noite. */
+  function atualizarHoje() {
+    var t = isoDate(new Date());
+    if (t === today) return false;
+    today = t;
+    return true;
+  }
 
   /* Link público do app, incluído nas mensagens compartilhadas. Preencha após publicar. */
   var APP_URL = "https://thiagopinheirorj.github.io/ENEM1000/";
@@ -45,7 +52,14 @@
       if (!raw) return emptyState();
       var s = JSON.parse(raw);
       var base = emptyState();
-      for (var k in base) if (!(k in s)) s[k] = base[k];
+      if (!s || typeof s !== "object" || Array.isArray(s)) return base;
+      /* Campo ausente ou de tipo errado (dado antigo ou corrompido) volta ao padrão. */
+      for (var k in base) {
+        var v = s[k];
+        var ok = v !== null && typeof v === typeof base[k] && Array.isArray(v) === Array.isArray(base[k]);
+        if (ok && typeof v === "string") ok = /^\d{4}-\d{2}-\d{2}$/.test(v);
+        if (!ok) s[k] = base[k];
+      }
       return s;
     } catch (e) {
       return emptyState();
@@ -186,6 +200,9 @@
     var d = Math.floor(diff / 86400000);
     var h = Math.floor((diff % 86400000) / 3600000);
     var m = Math.floor((diff % 3600000) / 60000);
+    if (isoDate(new Date()) === (state.prova || PROVA_PADRAO)) {
+      return '<div class="cd-big">É hoje!</div><div class="cd-sub">A redação começa às 13h30 (Brasília). Faltam ' + h + "h" + String(m).padStart(2, "0") + "min.</div>";
+    }
     return '<div class="cd-units">' +
         '<span><b>' + d + '</b>' + (d === 1 ? "dia" : "dias") + '</span>' +
         '<span><b>' + h + '</b>h</span>' +
@@ -197,11 +214,18 @@
     document.querySelectorAll(".js-countdown").forEach(function (el) { el.innerHTML = countdownHtml(); });
     var chip = document.getElementById("cd-chip");
     var n = diasParaProva();
+    var eHoje = isoDate(new Date()) === (state.prova || PROVA_PADRAO);
     chip.hidden = horaProva() - Date.now() <= 0;
-    chip.textContent = "⏳ " + n + "d";
-    chip.title = "Faltam " + n + " dias para a redação do ENEM";
+    chip.textContent = eHoje ? "⏳ hoje" : "⏳ " + n + "d";
+    chip.title = eHoje ? "A redação do ENEM é hoje" : (n === 1 ? "Falta 1 dia" : "Faltam " + n + " dias") + " para a redação do ENEM";
   }
-  setInterval(updateCountdowns, 30000);
+  setInterval(function () {
+    if (atualizarHoje()) {
+      updateStreakBadge();
+      if ((location.hash || "#/hoje") === "#/hoje") route(); // a tela Hoje passa para o novo dia
+    }
+    updateCountdowns();
+  }, 30000);
 
   /* Copia texto; se o navegador recusar, mostra o texto selecionado na caixa indicada. */
   function copiar(texto, caixaId, okMsg) {
@@ -426,10 +450,10 @@
     // Conclusão
     function textoCompartilhar() {
       var n = diasParaProva();
-      return "🔥 " + streak() + (streak() === 1 ? " dia" : " dias") + " seguidos no Redação 1000!\n\n" +
+      return "🔥 " + streak() + (streak() === 1 ? " dia seguido" : " dias seguidos") + " no Redação 1000!\n\n" +
         "📚 Repertório de hoje: " + d.fonte + "\n" +
         "💡 " + d.chave +
-        (n > 0 ? "\n\n⏳ Faltam " + n + " dias para a redação do ENEM." : "") +
+        (n > 0 ? "\n\n⏳ " + (n === 1 ? "Falta 1 dia" : "Faltam " + n + " dias") + " para a redação do ENEM." : "") +
         (APP_URL ? "\n\n" + APP_URL : "");
     }
     function renderFinish() {
@@ -473,6 +497,7 @@
         (can ? "" : '<p class="saved" style="text-align:center">Responda o exercício rápido para concluir.</p>');
       var btn = document.getElementById("concluir");
       btn.addEventListener("click", function () {
+        atualizarHoje();
         state.done[id] = today;
         if (state.dias.indexOf(today) < 0) state.dias.push(today);
         save();
@@ -772,6 +797,7 @@
       fotos.clear().catch(function () {});
       save();
       updateStreakBadge();
+      updateCountdowns();
       renderProgresso();
       toast("Trilha reiniciada");
     });
@@ -783,6 +809,7 @@
     var tab = "hoje";
     var m;
     if (h.indexOf("#kit-") === 0) return; // âncoras internas do Kit
+    if (atualizarHoje()) updateStreakBadge();
     var t = document.querySelector(".toast");
     if (t) t.remove();
     if ((m = h.match(/^#\/dia\/(\d+)$/))) {
@@ -793,7 +820,7 @@
     else if (h === "#/trilha") { tab = "trilha"; renderTrilha(); }
     else if (h === "#/kit") { tab = "kit"; renderKit(); }
     else if (h === "#/progresso") { tab = "progresso"; renderProgresso(); }
-    else if (apostaLiberada()) { renderAposta(); }
+    else if (apostaLiberada() && today <= (state.prova || PROVA_PADRAO)) { renderAposta(); } // Hoje mostra a aposta só na véspera e no dia da prova
     else { renderDay(todayId(), true); }
 
     document.querySelectorAll(".tabbar a").forEach(function (a) {

@@ -68,3 +68,14 @@ Depois de publicar, preencha `APP_URL` em `js/app.js` para o link do app ir junt
 mensagens compartilhadas. Para um novo ano, atualize `PROVA_PADRAO`.
 
 Ao publicar uma versão nova, altere `CACHE` em `sw.js` (ex.: `enem1000-v5`).
+
+## Testes automatizados
+
+```bash
+npm test
+```
+
+São 93 testes (Node `node:test` + Playwright/Chromium) cobrindo conteúdo, fluxo do dia, trilha,
+kit, progresso, datas com relógio simulado (sequência, contagem, aposta, virada da meia-noite),
+foto, compartilhamento, segurança, offline e visual/acessibilidade. Resultados, casos e bugs
+corrigidos estão em [`tests/RELATORIO-DE-TESTES.md`](tests/RELATORIO-DE-TESTES.md).

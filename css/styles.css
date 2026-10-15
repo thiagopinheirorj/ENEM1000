@@ -396,7 +396,7 @@ details.model p { margin-top: 8px; }
 .note { border-top: 1px solid var(--line); padding: 10px 0; }
 .note:first-of-type { border-top: 0; padding-top: 0; }
 .note a { font-weight: 600; text-decoration: none; }
-.note p { margin: 4px 0 0; color: var(--muted); font-size: 15px; white-space: pre-wrap; }
+.note p { margin: 4px 0 0; color: var(--muted); font-size: 15px; white-space: pre-wrap; overflow-wrap: anywhere; }
 
 .empty { color: var(--muted); font-size: 15px; }
 

@@ -1,0 +1,227 @@
+/* Telas Trilha, Kit e Progresso. */
+"use strict";
+
+const { describe, it, before, after } = require("node:test");
+const assert = require("node:assert/strict");
+const { setup, getState, loadContent } = require("./helpers");
+
+const { DEVOCIONAIS: DEV, KIT } = loadContent();
+let env;
+before(async () => { env = await setup(); });
+after(async () => { await env.teardown(); });
+
+/* Estado de exemplo: começou em 11/10 (hoje, 15/10, é o dia 5). */
+function estadoExemplo() {
+  return {
+    inicio: "2026-10-11",
+    done: { 1: "2026-10-10", 2: "2026-10-11", 3: "2026-10-12", 4: "2026-10-14", 5: "2026-10-15" },
+    quiz: { 1: DEV[0].quiz.correta, 2: DEV[1].quiz.correta, 3: DEV[2].quiz.correta, 4: (DEV[3].quiz.correta + 1) % 4 },
+    textos: { 3: "Goffman e o estigma <b>forte</b>", 1: "Bauman e a liquidez" },
+    favoritos: [4, 2],
+    dias: ["2026-10-10", "2026-10-11", "2026-10-12", "2026-10-14", "2026-10-15"],
+    fotos: {},
+    prova: "2026-11-08"
+  };
+}
+
+describe("T · Trilha", () => {
+  it("T01 · lista os 30 dias e o card da aposta (bloqueado antes da véspera)", async () => {
+    const { page } = await env.open({ hash: "#/trilha" });
+    assert.equal(await page.locator('.list a[href^="#/dia/"]').count(), 30);
+    const aposta = page.locator('.list a[href="#/aposta"]');
+    assert.equal(await aposta.count(), 1);
+    assert.match(await aposta.textContent(), /🔒/);
+    assert.match(await aposta.textContent(), /Abre em 07\/11\/2026, véspera da prova/);
+    assert.match(await page.textContent("#app"), /0 de 30 concluídos/);
+    assert.equal(await page.getAttribute('.tabbar a[data-tab="trilha"]', "aria-current"), "page");
+  });
+
+  it("T02 · filtro por eixo mostra só aquele eixo e esconde a aposta", async () => {
+    const { page } = await env.open({ hash: "#/trilha" });
+    const eixos = [...new Set(DEV.map((d) => d.eixo))];
+    const botoes = await page.$$eval(".filter", (bs) => bs.map((b) => b.textContent));
+    assert.deepEqual(botoes, ["Todos", "Favoritos", ...eixos]);
+    for (const e of eixos.slice(0, 3)) {
+      await page.click('.filter[data-e="' + e + '"]');
+      assert.equal(await page.getAttribute('.filter[data-e="' + e + '"]', "aria-pressed"), "true");
+      assert.equal(await page.getAttribute('.filter[data-e="Todos"]', "aria-pressed"), "false");
+      const ids = await page.$$eval('.list a[href^="#/dia/"]', (as) => as.map((a) => +a.getAttribute("href").split("/")[2]));
+      assert.deepEqual(ids, DEV.filter((d) => d.eixo === e).map((d) => d.id));
+      assert.equal(await page.locator('a[href="#/aposta"]').count(), 0);
+    }
+    await page.click('.filter[data-e="Todos"]');
+    assert.equal(await page.locator('.list a[href^="#/dia/"]').count(), 30);
+  });
+
+  it("T03 · filtro Favoritos: estado vazio e depois com favoritos", async () => {
+    const { page } = await env.open({ hash: "#/trilha" });
+    await page.click('.filter[data-e="Favoritos"]');
+    assert.equal(await page.locator(".list").count(), 0);
+    assert.match(await page.textContent(".empty"), /Nada por aqui ainda/);
+
+    const ctx = await env.open({ hash: "#/trilha", state: estadoExemplo() });
+    await ctx.page.click('.filter[data-e="Favoritos"]');
+    const ids = await ctx.page.$$eval('.list a[href^="#/dia/"]', (as) => as.map((a) => a.getAttribute("href")));
+    assert.deepEqual(ids, ["#/dia/2", "#/dia/4"]);
+    assert.match(await ctx.page.textContent('.list a[href="#/dia/2"] .t'), /★$/);
+  });
+
+  it("T04 · marca concluídos (✓) e o dia de hoje", async () => {
+    const st = estadoExemplo();
+    delete st.done[5];
+    const { page } = await env.open({ hash: "#/trilha", state: st });
+    assert.match(await page.textContent("#app"), /4 de 30 concluídos/);
+    for (const id of [1, 2, 3, 4]) {
+      assert.equal(await page.textContent('.list a[href="#/dia/' + id + '"] .num.done'), "✓");
+    }
+    assert.equal(await page.textContent('.list a[href="#/dia/5"] .num.today'), "5");
+    assert.match(await page.textContent('.list a[href="#/dia/5"] .s'), /· hoje$/);
+    assert.equal(await page.locator(".list .num.today").count(), 1);
+    assert.equal(await page.getAttribute(".bar span", "style"), "width:13%");
+  });
+});
+
+describe("K · Kit", () => {
+  it("K01 · seções presentes, 5 competências, temas anteriores com 2025 e aviso com privacidade", async () => {
+    const { page } = await env.open({ hash: "#/kit" });
+    for (const s of ["competencias", "estrutura", "conectivos", "proposta", "temas", "zeram"]) {
+      assert.equal(await page.locator("#kit-" + s).count(), 1, s);
+      assert.equal(await page.locator('.kit-nav a[href="#kit-' + s + '"]').count(), 1, s);
+    }
+    assert.equal(await page.locator("#kit-competencias .kit-item").count(), 5);
+    const temas = await page.textContent("#kit-temas");
+    assert.match(temas, /2025/);
+    assert.match(temas, new RegExp(KIT.temasAnteriores[0].tema));
+    assert.equal(await page.getAttribute(".disclaimer a", "href"), "privacidade.html");
+    assert.equal(await page.getAttribute('.tabbar a[data-tab="kit"]', "aria-current"), "page");
+  });
+
+  it("K02 · âncoras do Kit rolam até a seção sem trocar de tela", async () => {
+    const { page } = await env.open({ hash: "#/kit" });
+    await page.click('.kit-nav a[href="#kit-zeram"]');
+    await page.waitForFunction(() => {
+      const r = document.getElementById("kit-zeram").getBoundingClientRect();
+      return window.scrollY > 200 && Math.abs(r.top) < 150 || r.bottom <= window.innerHeight;
+    });
+    assert.equal(await page.evaluate(() => location.hash), "#/kit");
+    assert.equal(await page.textContent("h1"), "Kit da redação nota 1000");
+    assert.ok(await page.evaluate(() => window.scrollY) > 200);
+  });
+});
+
+describe("P · Progresso", () => {
+  it("P01 · estatísticas: sequência, melhor sequência, x/30 e % de acertos", async () => {
+    const { page } = await env.open({ hash: "#/progresso", state: estadoExemplo() });
+    const stats = await page.$$eval(".stat .v", (v) => v.map((x) => x.textContent));
+    assert.deepEqual(stats, ["2", "3", "5/30", "75%"]);
+    assert.equal(await page.textContent("#streak-count"), "2");
+    assert.match(await page.textContent("#app"), /Você começou a trilha em 11\/10\/2026/);
+  });
+
+  it("P02 · sem respostas, % de acertos mostra travessão", async () => {
+    const { page } = await env.open({ hash: "#/progresso" });
+    const stats = await page.$$eval(".stat .v", (v) => v.map((x) => x.textContent));
+    assert.deepEqual(stats, ["0", "0", "0/30", "—"]);
+  });
+
+  it("P03 · últimos 7 dias marcam os dias estudados", async () => {
+    const { page } = await env.open({ hash: "#/progresso", state: estadoExemplo() });
+    const dots = await page.$$eval(".week .dot", (d) => d.map((x) => x.classList.contains("on")));
+    // 09/10 a 15/10: estudou 10, 11, 12, 14, 15
+    assert.deepEqual(dots, [false, true, true, true, false, true, true]);
+    const labels = await page.$$eval(".week > div", (d) => d.map((x) => x.firstChild.textContent));
+    assert.equal(labels[6], "qui");
+  });
+
+  it("P04 · caderno lista textos em ordem e favoritos mostram o repertório", async () => {
+    const { page } = await env.open({ hash: "#/progresso", state: estadoExemplo() });
+    const notas = await page.$$eval("section:nth-of-type(3) .note a", (a) => a.map((x) => x.getAttribute("href")));
+    assert.deepEqual(notas, ["#/dia/1", "#/dia/3"]);
+    assert.match(await page.textContent("#app"), /Goffman e o estigma <b>forte<\/b>/);
+    const favs = await page.$$eval("section:nth-of-type(4) .note a", (a) => a.map((x) => x.textContent));
+    assert.deepEqual(favs, [DEV[1].fonte, DEV[3].fonte]);
+  });
+
+  it("P05 · caderno vazio e favoritos vazios mostram mensagens de estado vazio", async () => {
+    const { page } = await env.open({ hash: "#/progresso" });
+    assert.match(await page.textContent("#app"), /Suas respostas dos desafios de escrita aparecem aqui/);
+    assert.match(await page.textContent("#app"), /Toque em ☆ Favoritar/);
+  });
+
+  it("P06 · Copiar caderno usa a área de transferência", async () => {
+    const { page } = await env.open({ hash: "#/progresso", state: estadoExemplo() });
+    await page.click("#exportar");
+    await page.waitForSelector(".toast");
+    assert.equal(await page.textContent(".toast"), "Caderno copiado ✓");
+    const txt = (await page.evaluate(() => window.__copiado))[0];
+    assert.ok(txt.startsWith("Redação 1000 — Meu caderno de repertório\n"));
+    assert.ok(txt.includes("★ " + DEV[1].fonte + "\n  " + DEV[1].chave));
+    assert.ok(txt.indexOf("★ " + DEV[1].fonte) < txt.indexOf("★ " + DEV[3].fonte));
+    assert.ok(txt.includes("Dia 1 · " + DEV[0].titulo + "\n" + DEV[0].desafio.enunciado + "\n> Bauman e a liquidez"));
+    assert.ok(txt.indexOf("Dia 1 ·") < txt.indexOf("Dia 3 ·"));
+    assert.ok(await page.isHidden("#caderno-texto"));
+  });
+
+  it("P07 · Copiar caderno sem área de transferência mostra o texto selecionado (fallback)", async () => {
+    for (const init of [
+      () => { Object.defineProperty(navigator, "clipboard", { configurable: true, value: undefined }); },
+      () => { Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: () => Promise.reject(new Error("negado")) } }); }
+    ]) {
+      const { page } = await env.open({ hash: "#/progresso", state: estadoExemplo(), clipboard: false, init });
+      await page.click("#exportar");
+      await page.waitForSelector("#caderno-texto:not([hidden])");
+      assert.match(await page.inputValue("#caderno-texto"), /Meu caderno de repertório/);
+      assert.equal(await page.textContent(".toast"), "Selecione o texto e copie");
+      const sel = await page.evaluate(() => { const t = document.getElementById("caderno-texto"); return t.selectionEnd - t.selectionStart; });
+      assert.ok(sel > 50);
+    }
+  });
+
+  it("P08 · Recomeçar exige 2 toques, desarma após 4 s e apaga localStorage e fotos", async () => {
+    const { page } = await env.open({ hash: "#/progresso", state: Object.assign(estadoExemplo(), { fotos: { 1: true } }) });
+    // grava uma foto no IndexedDB do app
+    await page.evaluate(() => new Promise((res, rej) => {
+      const r = indexedDB.open("enem1000-fotos", 1);
+      r.onupgradeneeded = () => r.result.createObjectStore("fotos");
+      r.onsuccess = () => { const t = r.result.transaction("fotos", "readwrite"); t.objectStore("fotos").put(new Blob(["x"]), 1); t.oncomplete = () => { r.result.close(); res(); }; t.onerror = rej; };
+    }));
+    await page.click("#zerar");
+    assert.equal(await page.textContent("#zerar"), "Toque de novo para apagar tudo");
+    assert.equal((await getState(page)).dias.length, 5);
+    await page.clock.fastForward(4100);
+    assert.equal(await page.textContent("#zerar"), "Recomeçar do zero");
+    await page.click("#zerar");
+    assert.equal((await getState(page)).dias.length, 5, "um toque depois de desarmar não apaga");
+    await page.click("#zerar");
+    await page.waitForSelector(".toast");
+    assert.equal(await page.textContent(".toast"), "Trilha reiniciada");
+    const s = await getState(page);
+    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08" });
+    assert.equal(await page.textContent("#streak-count"), "0");
+    const stats = await page.$$eval(".stat .v", (v) => v.map((x) => x.textContent));
+    assert.deepEqual(stats, ["0", "0", "0/30", "—"]);
+    const n = await page.evaluate(() => new Promise((res) => {
+      const r = indexedDB.open("enem1000-fotos", 1);
+      r.onsuccess = () => { const q = r.result.transaction("fotos").objectStore("fotos").count(); q.onsuccess = () => res(q.result); };
+    }));
+    assert.equal(n, 0);
+  });
+
+  it("P09 · Recomeçar com data de prova personalizada atualiza o selo de contagem na hora", async () => {
+    const st = Object.assign(estadoExemplo(), { prova: "2026-12-06" });
+    const { page } = await env.open({ hash: "#/progresso", state: st });
+    assert.equal(await page.textContent("#cd-chip"), "⏳ 52d");
+    await page.click("#zerar");
+    await page.click("#zerar");
+    await page.waitForSelector(".toast");
+    assert.equal(await page.inputValue("#prova-data"), "2026-11-08");
+    assert.equal(await page.textContent("#cd-chip"), "⏳ 24d");
+  });
+
+  it("P10 · aba Progresso fica marcada com aria-current", async () => {
+    const { page } = await env.open({ hash: "#/progresso" });
+    assert.equal(await page.getAttribute('.tabbar a[data-tab="progresso"]', "aria-current"), "page");
+    assert.equal(await page.locator(".tabbar a[aria-current]").count(), 1);
+  });
+});
+
