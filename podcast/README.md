@@ -2,7 +2,7 @@
 
 O podcast transforma cada devocional do app num bate-papo de 4 a 5 minutos entre dois
 apresentadores: **Thiago**, professor de redação, e **Isa**, vestibulanda curiosa
-e bem-humorado. Inclui também um episódio especial com a aposta do tema. Os roteiros saem direto do conteúdo do
+e bem-humorada. Inclui também um episódio especial com a aposta do tema. Os roteiros saem direto do conteúdo do
 app (`js/content.js`), então app e podcast nunca ficam diferentes. As falas próprias de cada
 episódio (a história que abre o papo, a dúvida da Isa e as respostas da reflexão) ficam em
 `js/conversa.js`.
