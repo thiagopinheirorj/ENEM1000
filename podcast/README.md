@@ -37,9 +37,44 @@ As pausas aparecem no roteiro como _[pausa de N segundos]_.
 - **Com a sua voz (recomendado):** soa mais próximo e cria vínculo com quem ouve. Um celular
   num lugar silencioso já serve. O app gratuito Spotify for Creators grava e edita direto
   no celular.
-- **Com voz sintética:** serviços como ElevenLabs, Google Cloud Text-to-Speech ou Azure
-  Speech transformam os roteiros em áudio. Confira a licença de uso comercial do serviço
-  escolhido e se a plataforma pede para informar que a voz é gerada por IA.
+- **Com voz de IA (pronto para usar):** `npm run audio` gera os MP3 dos 31 episódios. Veja a
+  seção abaixo.
+
+## Gerar os episódios com voz de IA
+
+`podcast/gerar-audio.js` transforma os roteiros em MP3 prontos para publicar: mono, 44,1 kHz,
+96 kbps, volume padrão de podcast (−16 LUFS), capa e título embutidos, e as pausas do
+exercício. Os arquivos saem em `podcast/audio/` (fora do git). Precisa do **ffmpeg**.
+
+**Google Cloud Text-to-Speech (padrão).** O volume total é de cerca de 95 mil caracteres, o que
+costuma caber na cota gratuita mensal. Confira os preços atuais no console do Google Cloud.
+
+1. No [Google Cloud Console](https://console.cloud.google.com/), crie um projeto e ative a
+   **Cloud Text-to-Speech API** (pede cadastro de cartão, mesmo no uso gratuito).
+2. Em **APIs e serviços → Credenciais**, crie uma **chave de API** e restrinja-a à
+   Text-to-Speech API.
+3. Guarde a chave na variável `GOOGLE_TTS_API_KEY` e rode:
+
+```bash
+npm run audio -- --ep 1                     # ouça o primeiro e ajuste a voz
+npm run audio -- --ep 1 --voz pt-BR-Neural2-B --velocidade 1.05
+npm run audio                               # todos os episódios
+```
+
+Vozes em português do Brasil para testar com `--voz`: `pt-BR-Neural2-A`, `pt-BR-Neural2-B`,
+`pt-BR-Neural2-C`, `pt-BR-Wavenet-A` a `pt-BR-Wavenet-E`. A lista completa está na
+documentação do Google Cloud Text-to-Speech.
+
+**ElevenLabs (voz mais natural, plano pago para este volume).** Defina `ELEVENLABS_API_KEY` e
+`ELEVENLABS_VOICE_ID` (o ID da voz escolhida na biblioteca da ElevenLabs) e rode
+`npm run audio -- --provedor elevenlabs`.
+
+**Dicas**
+- Trechos já gerados ficam em cache: refazer um episódio não cobra de novo o que não mudou.
+- `npm run audio -- --provedor teste` roda todo o processo sem voz real e sem custo.
+- Confira a licença de uso comercial do serviço e se a plataforma de podcast pede para
+  informar que a voz é gerada por IA. Uma frase na descrição resolve: "Narração com voz
+  sintética."
 
 ## Como publicar (grátis)
 

@@ -24,7 +24,7 @@ Além disso:
   com justificativa, repertórios, roteiro, introdução-modelo e alternativas — conteúdo em
   `window.APOSTA`, em `js/content.js`
 - **Podcast:** botão "🎧 Ouvir episódio" em cada dia (voz do próprio aparelho) e roteiros
-  dos 31 episódios para gravar e publicar — veja [`podcast/README.md`](podcast/README.md)
+  dos 31 episódios, com geração dos MP3 por voz de IA (`npm run audio`) — veja [`podcast/README.md`](podcast/README.md)
 - **Compartilhar** ao concluir o dia: menu nativo do celular (com a foto, se houver),
   WhatsApp ou copiar a mensagem
 
@@ -77,7 +77,7 @@ Ao publicar uma versão nova, altere `CACHE` em `sw.js` (ex.: `enem1000-v5`).
 npm test
 ```
 
-São 102 testes (Node `node:test` + Playwright/Chromium) cobrindo conteúdo, fluxo do dia, trilha,
+São 107 testes (Node `node:test` + Playwright/Chromium) cobrindo conteúdo, fluxo do dia, trilha,
 kit, progresso, datas com relógio simulado (sequência, contagem, aposta, virada da meia-noite),
-foto, compartilhamento, podcast, segurança, offline e visual/acessibilidade. Resultados, casos e bugs
+foto, compartilhamento, podcast (roteiros, player e geração de MP3), segurança, offline e visual/acessibilidade. Resultados, casos e bugs
 corrigidos estão em [`tests/RELATORIO-DE-TESTES.md`](tests/RELATORIO-DE-TESTES.md).

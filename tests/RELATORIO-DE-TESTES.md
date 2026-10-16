@@ -112,6 +112,11 @@ Legenda: ✅ passou na execução final. **🐞** indica um teste que falhou no 
 | PC07 | Podcast | trocar de tela encerra o episódio | ✅ |
 | PC08 | Podcast | episódio especial na página da aposta | ✅ |
 | PC09 | Podcast | sem voz no navegador, o botão Ouvir não aparece | ✅ |
+| PA01 | Podcast (áudio) | MP3 mono com capa, título, faixa e volume de podcast (−16 LUFS) | ✅ |
+| PA02 | Podcast (áudio) | trechos já gerados vêm do cache, sem nova cobrança | ✅ |
+| PA03 | Podcast (áudio) | episódio especial e intervalo de episódios (`--ep 2-4`) | ✅ |
+| PA04 | Podcast (áudio) | sem chave, explica a variável a definir e não cria arquivo | ✅ |
+| PA05 | Podcast (áudio) | textos longos divididos no limite do serviço sem quebrar frases | ✅ |
 | DT11 | Datas | mudar a data no Progresso atualiza a contagem, o selo, a Trilha e Hoje; “Usar data oficial” restaura tudo | ✅ |
 | DT12 | Datas | apagar o campo de data não altera a data salva | ✅ |
 | DT13 | Datas | virada da meia-noite com Hoje aberto: a tela passa para o novo dia e a sequência é recalculada | ✅ 🐞 |
@@ -145,7 +150,7 @@ Legenda: ✅ passou na execução final. **🐞** indica um teste que falhou no 
 | V06 | A11y | cada aba clicada recebe aria-current | ✅ |
 | O01 | Offline | o service worker guarda todos os ASSETS e o app e a privacidade abrem sem internet | ✅ |
 
-**Total: 102 testes** em 16 grupos. Os casos com mais de uma variante (DT10 ×2 e R03 ×5) contam como testes separados.
+**Total: 107 testes** em 16 grupos. Os casos com mais de uma variante (DT10 ×2 e R03 ×5) contam como testes separados.
 
 ## Bugs encontrados e corrigidos
 
@@ -239,7 +244,7 @@ Com o código original, 9 testes falharam (P09, DT05, DT13, DT14, S01, S09, R03-
 
 ## Resultado final da execução
 
-Execução final de `npm test` (depois da correção 8 e dos testes do podcast, 16/10/2026):
+Execução final de `npm test` (depois da correção 8 e dos testes do podcast e do áudio, 16/10/2026):
 
 ```
 > redacao-1000@1.0.0 test
@@ -262,13 +267,13 @@ ok 14 - T · Trilha
 ok 15 - K · Kit
 ok 16 - P · Progresso
 1..16
-# tests 102
+# tests 107
 # suites 16
-# pass 102
+# pass 107
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
 ```
 
-**102 passaram, 0 falharam.** Com o código original, o mesmo conjunto dava 83 passaram e 9 falharam.
+**107 passaram, 0 falharam.** Com o código original, o mesmo conjunto dava 83 passaram e 9 falharam.
