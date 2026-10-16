@@ -4,6 +4,7 @@
   "private": true,
   "description": "Redação 1000 · devocional diário de repertório para a redação do ENEM (PWA estático, sem build).",
   "scripts": {
-    "test": "node --test \"tests/**/*.test.js\""
+    "test": "node --test \"tests/**/*.test.js\"",
+    "podcast": "node podcast/gerar-roteiros.js"
   }
 }

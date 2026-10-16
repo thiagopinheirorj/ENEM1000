@@ -400,6 +400,12 @@ details.model p { margin-top: 8px; }
 
 .empty { color: var(--muted); font-size: 15px; }
 
+/* Player do podcast */
+.player { display: grid; gap: 10px; border-color: var(--primary); }
+.player-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.player-info span { font-size: 14px; color: var(--muted); }
+.player-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
 .disclaimer { font-size: 13px; color: var(--muted); text-align: center; margin: 18px 0 0; line-height: 1.5; }
 
 /* Página de política de privacidade */

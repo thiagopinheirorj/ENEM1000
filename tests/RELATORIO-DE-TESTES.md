@@ -103,6 +103,15 @@ Legenda: ✅ passou na execução final. **🐞** indica um teste que falhou no 
 | DT09 | Aposta | bloqueada em 06/11 às 23h59; Hoje continua no devocional | ✅ |
 | DT10 | Aposta | liberada na véspera (07/11 00h01) e no dia (08/11): Hoje abre a aposta e a Trilha mostra “Liberado” | ✅ |
 | DT10b | Aposta | depois da prova (09/11), Hoje volta ao devocional do dia e a aposta continua aberta pela Trilha | ✅ |
+| PC01 | Podcast | ordem das alternativas no podcast é igual à do app | ✅ |
+| PC02 | Podcast | os 30 episódios têm todos os blocos e a letra certa do quiz | ✅ |
+| PC03 | Podcast | texto falado sem formas escritas (nº, 10.216/2001, (2000), ×, prof.) | ✅ |
+| PC04 | Podcast | `npm run podcast` gera 31 roteiros e o índice | ✅ |
+| PC05 | Podcast | Ouvir lê o episódio em pt-BR, mostra o andamento e termina | ✅ |
+| PC06 | Podcast | pausar, continuar, velocidade e parar | ✅ |
+| PC07 | Podcast | trocar de tela encerra o episódio | ✅ |
+| PC08 | Podcast | episódio especial na página da aposta | ✅ |
+| PC09 | Podcast | sem voz no navegador, o botão Ouvir não aparece | ✅ |
 | DT11 | Datas | mudar a data no Progresso atualiza a contagem, o selo, a Trilha e Hoje; “Usar data oficial” restaura tudo | ✅ |
 | DT12 | Datas | apagar o campo de data não altera a data salva | ✅ |
 | DT13 | Datas | virada da meia-noite com Hoje aberto: a tela passa para o novo dia e a sequência é recalculada | ✅ 🐞 |
@@ -136,7 +145,7 @@ Legenda: ✅ passou na execução final. **🐞** indica um teste que falhou no 
 | V06 | A11y | cada aba clicada recebe aria-current | ✅ |
 | O01 | Offline | o service worker guarda todos os ASSETS e o app e a privacidade abrem sem internet | ✅ |
 
-**Total: 93 testes** em 16 grupos. Os casos com mais de uma variante (DT10 ×2 e R03 ×5) contam como testes separados.
+**Total: 102 testes** em 16 grupos. Os casos com mais de uma variante (DT10 ×2 e R03 ×5) contam como testes separados.
 
 ## Bugs encontrados e corrigidos
 
@@ -230,7 +239,7 @@ Com o código original, 9 testes falharam (P09, DT05, DT13, DT14, S01, S09, R03-
 
 ## Resultado final da execução
 
-Execução final de `npm test` (depois da correção 8):
+Execução final de `npm test` (depois da correção 8 e dos testes do podcast, 16/10/2026):
 
 ```
 > redacao-1000@1.0.0 test
@@ -253,13 +262,13 @@ ok 14 - T · Trilha
 ok 15 - K · Kit
 ok 16 - P · Progresso
 1..16
-# tests 93
+# tests 102
 # suites 16
-# pass 93
+# pass 102
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
 ```
 
-**93 passaram, 0 falharam.** Com o código original, o mesmo conjunto dava 83 passaram e 9 falharam.
+**102 passaram, 0 falharam.** Com o código original, o mesmo conjunto dava 83 passaram e 9 falharam.

@@ -3,6 +3,7 @@
 
   var DEV = window.DEVOCIONAIS;
   var APOSTA = window.APOSTA;
+  var Podcast = window.Podcast;
   var KIT = window.KIT;
   var N = DEV.length;
   var STORE_KEY = "enem1000:v1";
@@ -126,6 +127,109 @@
     }
     return idx;
   }
+  /* ---------- Modo podcast: lê o episódio com a voz do aparelho (Web Speech API) ---------- */
+  var temVoz = !!(Podcast && window.speechSynthesis && typeof window.SpeechSynthesisUtterance === "function");
+  var VELOCIDADES = [1, 1.25, 1.5, 0.85];
+  var player = (function () {
+    var trechos = [], i = 0, tocando = false, vel = 0, timer = null, aoMudar = null, geracao = 0;
+    function voz() {
+      var vs = [];
+      try { vs = window.speechSynthesis.getVoices() || []; } catch (e) { /* sem vozes */ }
+      return vs.filter(function (v) { return /^pt[-_]BR/i.test(v.lang); })[0] ||
+        vs.filter(function (v) { return /^pt/i.test(v.lang); })[0] || null;
+    }
+    /* Frases curtas: alguns navegadores cortam falas longas no meio. */
+    function partes(texto) {
+      var frases = texto.match(/[^.!?…:]+[.!?…:]*["”]?\s*/g) || [texto];
+      var out = [], atual = "";
+      frases.forEach(function (f) {
+        if ((atual + f).length > 220 && atual) { out.push(atual.trim()); atual = ""; }
+        atual += f;
+      });
+      if (atual.trim()) out.push(atual.trim());
+      return out;
+    }
+    function avisar() { if (aoMudar) aoMudar(estado()); }
+    function falar() {
+      if (!tocando) return;
+      if (i >= trechos.length) { tocando = false; avisar(); return; }
+      var tr = trechos[i], pedacos = partes(tr.texto), k = 0, g = geracao;
+      function proximo() {
+        if (g !== geracao || !tocando) return;
+        if (k >= pedacos.length) {
+          timer = setTimeout(function () {
+            if (g !== geracao) return;
+            i++;
+            avisar();
+            falar();
+          }, (tr.pausa || 0) * 1000 + 250);
+          return;
+        }
+        var u = new window.SpeechSynthesisUtterance(pedacos[k++]);
+        u.lang = "pt-BR";
+        u.rate = VELOCIDADES[vel];
+        var v = voz();
+        if (v) u.voice = v;
+        u.onend = proximo;
+        u.onerror = function () { if (g === geracao) proximo(); };
+        window.speechSynthesis.speak(u);
+      }
+      proximo();
+    }
+    function silenciar() {
+      geracao++;
+      clearTimeout(timer);
+      try { window.speechSynthesis.cancel(); } catch (e) { /* nada tocando */ }
+    }
+    function estado() {
+      var bloco = "";
+      for (var j = Math.min(i, trechos.length - 1); j >= 0; j--) if (trechos[j].bloco) { bloco = trechos[j].bloco; break; }
+      return { tocando: tocando, ativo: trechos.length > 0, i: i, total: trechos.length, bloco: bloco, fim: i >= trechos.length, vel: VELOCIDADES[vel] };
+    }
+    return {
+      tocar: function (lista, cb) { silenciar(); trechos = lista; i = 0; tocando = true; aoMudar = cb; avisar(); falar(); },
+      pausar: function () { silenciar(); tocando = false; avisar(); },
+      continuar: function () { if (i >= trechos.length) i = 0; silenciar(); tocando = true; avisar(); falar(); }, // retoma do início do trecho
+      parar: function () { silenciar(); var cb = aoMudar; tocando = false; trechos = []; i = 0; aoMudar = null; if (cb) cb(estado()); },
+      velocidade: function () { vel = (vel + 1) % VELOCIDADES.length; if (tocando) { silenciar(); falar(); } avisar(); return VELOCIDADES[vel]; },
+      estado: estado
+    };
+  })();
+
+  function playerHtml() {
+    return '<div class="card player" id="player" hidden aria-live="polite">' +
+      '<div class="player-info"><strong id="pl-titulo"></strong><span id="pl-status"></span></div>' +
+      '<div class="player-actions">' +
+        '<button class="btn small" id="pl-toggle">Pausar</button>' +
+        '<button class="btn small ghost" id="pl-vel" aria-label="Velocidade da leitura">1x</button>' +
+        '<button class="btn small ghost" id="pl-stop">Parar</button>' +
+      "</div></div>";
+  }
+  /* Liga o botão "Ouvir" ao player da tela. */
+  function ligarPlayer(titulo, gerarTrechos) {
+    var btn = document.getElementById("ouvir");
+    if (!btn) return;
+    var box = document.getElementById("player");
+    var toggle = document.getElementById("pl-toggle");
+    var velBtn = document.getElementById("pl-vel");
+    function fmtVel(v) { return String(v).replace(".", ",") + "x"; }
+    function mostrar(e) {
+      if (!document.body.contains(box)) return;
+      box.hidden = !e.ativo;
+      btn.hidden = e.ativo;
+      document.getElementById("pl-titulo").textContent = "🎧 " + titulo;
+      document.getElementById("pl-status").textContent = e.fim
+        ? "Episódio concluído"
+        : (e.tocando ? "Tocando" : "Pausado") + " · " + (e.bloco || "") + " · " + (e.i + 1) + " de " + e.total;
+      toggle.textContent = e.tocando ? "Pausar" : (e.fim ? "Ouvir de novo" : "Continuar");
+      velBtn.textContent = fmtVel(e.vel);
+    }
+    btn.addEventListener("click", function () { player.tocar(gerarTrechos(), mostrar); });
+    toggle.addEventListener("click", function () { if (player.estado().tocando) player.pausar(); else player.continuar(); });
+    velBtn.addEventListener("click", function () { player.velocidade(); });
+    document.getElementById("pl-stop").addEventListener("click", function () { player.parar(); });
+  }
+
   /* ---------- Fotos do texto (IndexedDB: imagens são grandes demais para o localStorage) ---------- */
   var fotos = (function () {
     var dbp;
@@ -290,8 +394,10 @@
           "<span>Dia " + id + " de " + N + " · ~5 min</span>" +
           (done ? '<span class="chip ok">✓ Concluído</span>' : "") +
           '<button class="icon-btn" id="fav" aria-pressed="' + fav + '">' + (fav ? "★ Favorito" : "☆ Favoritar") + "</button>" +
+          (temVoz ? '<button class="icon-btn" id="ouvir">🎧 Ouvir episódio</button>' : "") +
         "</div>" +
       "</section>" +
+      (temVoz ? playerHtml() : "") +
 
       '<article class="card key">' +
         '<p class="eyebrow" style="color:inherit;opacity:.75">Ideia-chave</p>' +
@@ -353,6 +459,8 @@
         '<a class="btn ghost" style="text-align:center;text-decoration:none" href="#/dia/' + (id === 1 ? N : id - 1) + '">← Anterior</a>' +
         '<a class="btn ghost" style="text-align:center;text-decoration:none" href="#/dia/' + (id === N ? 1 : id + 1) + '">Próximo →</a>' +
       "</div>";
+
+    ligarPlayer("Episódio " + id, function () { return Podcast.roteiroDia(d); });
 
     // Favorito
     document.getElementById("fav").addEventListener("click", function () {
@@ -526,8 +634,11 @@
       '<section class="day-head">' +
         '<p class="eyebrow">Véspera da prova · dia especial</p>' +
         "<h1>A aposta do tema</h1>" +
-        '<div class="day-meta"><span>Pesquisa feita em ' + esc(a.pesquisaEm) + " com cursinhos, professores e o histórico do Inep</span></div>" +
+        '<div class="day-meta"><span>Pesquisa feita em ' + esc(a.pesquisaEm) + " com cursinhos, professores e o histórico do Inep</span>" +
+          (temVoz ? '<button class="icon-btn" id="ouvir">🎧 Ouvir episódio especial</button>' : "") +
+        "</div>" +
       "</section>" +
+      (temVoz ? playerHtml() : "") +
 
       '<article class="card key">' +
         '<p class="eyebrow" style="color:inherit;opacity:.75">Tema mais provável</p>' +
@@ -578,6 +689,7 @@
       "</ul></details>" +
 
       '<a class="btn ghost" style="display:block;text-align:center;text-decoration:none" href="#/dia/' + todayId() + '">Ver também o devocional de hoje</a>';
+    ligarPlayer("Episódio especial", function () { return Podcast.roteiroAposta(a); });
   }
 
   /* ---------- Tela: trilha ---------- */
@@ -809,6 +921,7 @@
     var tab = "hoje";
     var m;
     if (h.indexOf("#kit-") === 0) return; // âncoras internas do Kit
+    if (temVoz) player.parar(); // trocar de tela encerra o episódio
     if (atualizarHoje()) updateStreakBadge();
     var t = document.querySelector(".toast");
     if (t) t.remove();
