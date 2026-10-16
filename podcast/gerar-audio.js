@@ -5,13 +5,13 @@
  *   npm run audio                       → todos os episódios (1 a 30 + especial)
  *   npm run audio -- --ep 1             → só o episódio 1 (use "especial" para a aposta)
  *   npm run audio -- --ep 1-5           → episódios 1 a 5
- *   npm run audio -- --voz-bia pt-BR-Neural2-C --voz-teo pt-BR-Neural2-B --velocidade 1.05
+ *   npm run audio -- --voz-thiago pt-BR-Neural2-C --voz-isa pt-BR-Neural2-B --velocidade 1.05
  *   npm run audio -- --provedor elevenlabs
  *   npm run audio -- --provedor teste   → sem voz real (bipes), para testar o processo sem custo
  *
  * Chaves (variáveis de ambiente, nunca no código):
  *   Google Cloud Text-to-Speech: GOOGLE_TTS_API_KEY
- *   ElevenLabs: ELEVENLABS_API_KEY, ELEVENLABS_VOICE_BIA e ELEVENLABS_VOICE_TEO (IDs das vozes)
+ *   ElevenLabs: ELEVENLABS_API_KEY, ELEVENLABS_VOICE_THIAGO e ELEVENLABS_VOICE_ISA (IDs das vozes)
  *
  * Precisa do ffmpeg instalado. Os MP3 saem em podcast/audio/ (fora do git).
  * Trechos já gerados ficam em podcast/audio/.cache e não são cobrados de novo.
@@ -32,14 +32,14 @@ const PAUSA_ENTRE_FALAS = 0.25; // respiro entre uma fala e outra
 
 /* ---------- Opções ---------- */
 function opcoes(argv) {
-  const o = { provedor: "google", ep: "todos", vozBia: null, vozTeo: null, velocidade: 1 };
+  const o = { provedor: "google", ep: "todos", vozThiago: null, vozIsa: null, velocidade: 1 };
   for (let i = 0; i < argv.length; i++) {
     const [k, v] = argv[i].includes("=") ? argv[i].split("=") : [argv[i], argv[i + 1]];
     const usaProximo = !argv[i].includes("=");
     if (k === "--provedor") { o.provedor = v; if (usaProximo) i++; }
     else if (k === "--ep") { o.ep = v; if (usaProximo) i++; }
-    else if (k === "--voz-bia") { o.vozBia = v; if (usaProximo) i++; }
-    else if (k === "--voz-teo") { o.vozTeo = v; if (usaProximo) i++; }
+    else if (k === "--voz-thiago") { o.vozThiago = v; if (usaProximo) i++; }
+    else if (k === "--voz-isa") { o.vozIsa = v; if (usaProximo) i++; }
     else if (k === "--velocidade") { o.velocidade = Number(v); if (usaProximo) i++; }
   }
   return o;
@@ -48,7 +48,7 @@ function opcoes(argv) {
 /* ---------- Provedores de voz: recebem texto e devolvem um Buffer de áudio ---------- */
 const PROVEDORES = {
   google: {
-    vozes: { bia: "pt-BR-Neural2-A", teo: "pt-BR-Neural2-B" }, // feminina e masculina
+    vozes: { thiago: "pt-BR-Neural2-B", isa: "pt-BR-Neural2-A" }, // masculina (Thiago) e feminina (Isa)
     limite: 4500, // bytes por requisição
     async falar(texto, voz, velocidade) {
       const chave = process.env.GOOGLE_TTS_API_KEY;
@@ -67,12 +67,12 @@ const PROVEDORES = {
     }
   },
   elevenlabs: {
-    vozes: { bia: process.env.ELEVENLABS_VOICE_BIA || null, teo: process.env.ELEVENLABS_VOICE_TEO || null },
+    vozes: { thiago: process.env.ELEVENLABS_VOICE_THIAGO || null, isa: process.env.ELEVENLABS_VOICE_ISA || null },
     limite: 4500,
     async falar(texto, voz) {
       const chave = process.env.ELEVENLABS_API_KEY;
       if (!chave) throw new Error("Defina ELEVENLABS_API_KEY com a chave da ElevenLabs.");
-      if (!voz) throw new Error("Defina ELEVENLABS_VOICE_BIA e ELEVENLABS_VOICE_TEO (ou use --voz-bia e --voz-teo) com os IDs das vozes escolhidas na ElevenLabs.");
+      if (!voz) throw new Error("Defina ELEVENLABS_VOICE_THIAGO e ELEVENLABS_VOICE_ISA (ou use --voz-thiago e --voz-isa) com os IDs das vozes escolhidas na ElevenLabs.");
       const r = await fetch("https://api.elevenlabs.io/v1/text-to-speech/" + encodeURIComponent(voz) + "?output_format=mp3_44100_128", {
         method: "POST",
         headers: { "Content-Type": "application/json", "xi-api-key": chave, Accept: "audio/mpeg" },
@@ -84,7 +84,7 @@ const PROVEDORES = {
   },
   /* Sem custo e sem internet: um bipe com a duração aproximada da fala. Serve para testar. */
   teste: {
-    vozes: { bia: "bipe-agudo", teo: "bipe-grave" },
+    vozes: { thiago: "bipe-grave", isa: "bipe-agudo" },
     limite: 4500,
     async falar(texto, voz) {
       const segundos = Math.max(0.3, texto.split(/\s+/).length / 2.5 / 4); // encurtado para testes rápidos
@@ -149,7 +149,7 @@ async function trechoEmAudio(prov, nomeProv, voz, velocidade, texto) {
 
 async function gerarEpisodio(ep, o) {
   const prov = PROVEDORES[o.provedor];
-  const vozes = { bia: o.vozBia || prov.vozes.bia, teo: o.vozTeo || prov.vozes.teo };
+  const vozes = { thiago: o.vozThiago || prov.vozes.thiago, isa: o.vozIsa || prov.vozes.isa };
   const tmp = fs.mkdtempSync(path.join(CACHE, "ep-"));
   const lista = [];
   try {

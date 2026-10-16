@@ -25,7 +25,7 @@ fs.mkdirSync(pasta, { recursive: true });
 
 const indice = ["# Episódios do podcast Redação 1000", "",
   "Gerado automaticamente por `npm run podcast` a partir do conteúdo do app (`js/content.js`) e das falas de cada episódio (`js/conversa.js`). Não edite à mão.", "",
-  "Formato: conversa entre Bia (professora de redação) e Téo (vestibulando), apresentadores fictícios.", "",
+  "Formato: conversa entre Thiago (professor de redação) e Isa (vestibulanda), apresentadores.", "",
   "| Ep. | Título | Eixo | Duração estimada | Roteiro |", "| --- | --- | --- | --- | --- |"];
 
 DEVOCIONAIS.forEach((d) => {

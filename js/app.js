@@ -138,7 +138,7 @@
       try { vs = window.speechSynthesis.getVoices() || []; } catch (e) { /* sem vozes */ }
       var pt = vs.filter(function (v) { return /^pt[-_]BR/i.test(v.lang); });
       if (!pt.length) pt = vs.filter(function (v) { return /^pt/i.test(v.lang); });
-      return { bia: pt[0] || null, teo: pt[1] || pt[0] || null, mesmaVoz: pt.length < 2 };
+      return { thiago: pt[0] || null, isa: pt[1] || pt[0] || null, mesmaVoz: pt.length < 2 };
     }
     /* Frases curtas: alguns navegadores cortam falas longas no meio. */
     function partes(texto) {
@@ -170,9 +170,9 @@
         var u = new window.SpeechSynthesisUtterance(pedacos[k++]);
         u.lang = "pt-BR";
         u.rate = VELOCIDADES[vel];
-        var vz = vozes(), quem = tr.voz === "teo" ? "teo" : "bia";
+        var vz = vozes(), quem = tr.voz === "isa" ? "isa" : "thiago";
         if (vz[quem]) u.voice = vz[quem];
-        u.pitch = vz.mesmaVoz ? (quem === "teo" ? 0.8 : 1.2) : 1;
+        u.pitch = vz.mesmaVoz ? (quem === "isa" ? 1.2 : 0.8) : 1;
         u.onend = proximo;
         u.onerror = function () { if (g === geracao) proximo(); };
         window.speechSynthesis.speak(u);

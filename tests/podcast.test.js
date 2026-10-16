@@ -42,22 +42,22 @@ describe("PC · Roteiros do podcast", () => {
     assert.equal(Podcast.falado("Modernidade Líquida (2000) e Amor Líquido (2003)"), "Modernidade Líquida, de 2000, e Amor Líquido, de 2003");
   });
 
-  it("PC10 · todo episódio é uma conversa entre Bia e Téo, com falas próprias", () => {
+  it("PC10 · todo episódio é uma conversa entre Thiago e Isa, com falas próprias", () => {
     W.DEVOCIONAIS.forEach((d) => {
       const c = CONVERSAS[d.id];
       assert.ok(c, "falas do episódio " + d.id);
-      assert.ok(c.gancho.length >= 3 && c.duvida && c.reflexao.bia && c.reflexao.teo, "ep " + d.id);
-      c.gancho.forEach((f) => assert.ok(["bia", "teo"].includes(f[0]) && f[1], "ep " + d.id));
+      assert.ok(c.gancho.length >= 3 && c.duvida && c.reflexao.thiago && c.reflexao.isa, "ep " + d.id);
+      c.gancho.forEach((f) => assert.ok(["thiago", "isa"].includes(f[0]) && f[1], "ep " + d.id));
       const t = Podcast.roteiroDia(d, c);
-      t.forEach((x) => assert.ok(x.voz === "bia" || x.voz === "teo"));
-      assert.ok(t.filter((x) => x.voz === "teo").length >= 8 && t.filter((x) => x.voz === "bia").length >= 8, "ep " + d.id);
+      t.forEach((x) => assert.ok(x.voz === "thiago" || x.voz === "isa"));
+      assert.ok(t.filter((x) => x.voz === "isa").length >= 8 && t.filter((x) => x.voz === "thiago").length >= 8, "ep " + d.id);
       assert.ok(t.some((x) => x.texto === Podcast.falado(c.duvida)), "dúvida no ep " + d.id);
       const md = Podcast.markdown("x", t);
-      assert.match(md, /\*\*Bia:\*\* /);
-      assert.match(md, /\*\*Téo:\*\* /);
+      assert.match(md, /\*\*Thiago:\*\* /);
+      assert.match(md, /\*\*Isa:\*\* /);
     });
     const esp = Podcast.roteiroAposta(W.APOSTA);
-    assert.ok(esp.some((x) => x.voz === "teo") && esp.some((x) => x.voz === "bia"));
+    assert.ok(esp.some((x) => x.voz === "isa") && esp.some((x) => x.voz === "thiago"));
   });
 
   it("PC04 · npm run podcast gera 31 roteiros e o índice", () => {
@@ -69,7 +69,7 @@ describe("PC · Roteiros do podcast", () => {
     arquivos.forEach((f) => assert.ok(indice.includes("(" + f + ")"), f));
     const ep1 = fs.readFileSync(path.join(pasta, arquivos.find((f) => f.startsWith("ep01"))), "utf8");
     assert.match(ep1, /^# Episódio 1 · Relações que escorrem pelos dedos/);
-    assert.match(ep1, /\*\*Téo:\*\* Bia, ontem eu fiz uma limpa nos meus seguidores/);
+    assert.match(ep1, /\*\*Isa:\*\* Thiago, ontem eu fiz uma limpa nos meus seguidores/);
     assert.match(ep1, /_\[pausa de 5 segundos\]_/);
   });
 });
@@ -108,9 +108,9 @@ describe("PC · Player Ouvir no app", () => {
     const primeira = await page.evaluate(() => window.__falas[0]);
     assert.match(primeira.text, /Redação 1000\./);
     assert.equal(primeira.lang, "pt-BR");
-    assert.equal(primeira.voz, "Caio", "o Téo abre o episódio com a segunda voz");
+    assert.equal(primeira.voz, "Caio", "a Isa abre o episódio com a segunda voz");
     await page.waitForFunction(() => window.__falas.some((f) => f.voz === "Ana"));
-    assert.match(await page.textContent("#pl-fala"), /^(Bia|Téo): /);
+    assert.match(await page.textContent("#pl-fala"), /^(Thiago|Isa): /);
     assert.match(await page.textContent("#pl-status"), /Tocando · .+ · \d+ de \d+/);
     // Avança o tempo das pausas até o fim do episódio.
     for (let n = 0; n < 40 && !(await page.textContent("#pl-status")).includes("concluído"); n++) {
@@ -119,7 +119,7 @@ describe("PC · Player Ouvir no app", () => {
     assert.equal(await page.textContent("#pl-status"), "Episódio concluído");
     assert.equal(await page.textContent("#pl-toggle"), "Ouvir de novo");
     const falas = await page.evaluate(() => window.__falas.map((f) => f.text).join(" "));
-    assert.match(falas, /(tá\?|episódio!|repertório!)$/, "termina com a despedida da Bia");
+    assert.match(falas, /(tá\?|episódio!|repertório!)$/, "termina com a despedida do Thiago");
     assert.deepEqual(errors, []);
   });
 
@@ -162,7 +162,7 @@ describe("PC · Player Ouvir no app", () => {
     assert.match(await page.evaluate(() => window.__falas[0].text), /Episódio especial do Redação 1000/);
   });
 
-  it("PC11 · com uma só voz em português, Bia e Téo falam em tons diferentes", async () => {
+  it("PC11 · com uma só voz em português, Thiago e Isa falam em tons diferentes", async () => {
     const { page } = await env.open({ init: vozFalsaInit, initArg: [{ lang: "pt-BR", name: "Unica" }] });
     await page.click("#ouvir");
     await page.waitForFunction(() => window.__falas.length >= 3);

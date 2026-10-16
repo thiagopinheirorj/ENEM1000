@@ -1,10 +1,10 @@
 # Podcast Redação 1000
 
 O podcast transforma cada devocional do app num bate-papo de 4 a 5 minutos entre dois
-apresentadores fictícios: **Bia**, professora de redação, e **Téo**, vestibulando curioso
+apresentadores: **Thiago**, professor de redação, e **Isa**, vestibulanda curiosa
 e bem-humorado. Inclui também um episódio especial com a aposta do tema. Os roteiros saem direto do conteúdo do
 app (`js/content.js`), então app e podcast nunca ficam diferentes. As falas próprias de cada
-episódio (a história que abre o papo, a dúvida do Téo e as respostas da reflexão) ficam em
+episódio (a história que abre o papo, a dúvida da Isa e as respostas da reflexão) ficam em
 `js/conversa.js`.
 
 ## O que já está pronto
@@ -23,17 +23,17 @@ do próprio celular. Funciona sem internet e não envia nada para fora.
 
 ## Estrutura de cada episódio
 
-1. Abertura: Téo e Bia se apresentam, e o Téo conta uma situação do dia a dia ligada ao tema
-2. Ideia-chave: a Bia apresenta o repertório e o Téo reage
-3. Leitura: a Bia explica, e o Téo interrompe com a dúvida que o ouvinte teria
+1. Abertura: Isa e Thiago se apresentam, e a Isa conta uma situação do dia a dia ligada ao tema
+2. Ideia-chave: o Thiago apresenta o repertório e a Isa reage
+3. Leitura: o Thiago explica, e a Isa interrompe com a dúvida que o ouvinte teria
 4. Temas em que o repertório funciona e exemplo de uso numa redação
 5. Dica de ouro (com a competência do ENEM)
-6. Exercício rápido: o Téo desafia quem está ouvindo, **pausa de 5 segundos** e resposta
+6. Exercício rápido: a Isa desafia quem está ouvindo, **pausa de 5 segundos** e resposta
 7. Desafio de escrita, pausa e uma resposta possível
 8. Pergunta para refletir, com a resposta de cada um
 9. Encerramento chamando para o app
 
-No roteiro, cada fala aparece com o nome de quem fala (**Bia:** ou **Téo:**). No app, o botão
+No roteiro, cada fala aparece com o nome de quem fala (**Thiago:** ou **Isa:**). No app, o botão
 "Ouvir" usa duas vozes do aparelho; se só houver uma em português, muda o tom de cada um.
 
 As pausas aparecem no roteiro como _[pausa de N segundos]_.
@@ -49,7 +49,7 @@ As pausas aparecem no roteiro como _[pausa de N segundos]_.
 ## Gerar os episódios com voz de IA
 
 `podcast/gerar-audio.js` transforma os roteiros em MP3 prontos para publicar, com uma voz
-para a Bia e outra para o Téo: mono, 44,1 kHz,
+para o Thiago e outra para a Isa: mono, 44,1 kHz,
 96 kbps, volume padrão de podcast (−16 LUFS), capa e título embutidos, e as pausas do
 exercício. Os arquivos saem em `podcast/audio/` (fora do git). Precisa do **ffmpeg**.
 
@@ -64,17 +64,17 @@ costuma caber na cota gratuita mensal. Confira os preços atuais no console do G
 
 ```bash
 npm run audio -- --ep 1                     # ouça o primeiro e ajuste a voz
-npm run audio -- --ep 1 --voz-bia pt-BR-Neural2-C --voz-teo pt-BR-Wavenet-B --velocidade 1.05
+npm run audio -- --ep 1 --voz-thiago pt-BR-Neural2-C --voz-isa pt-BR-Wavenet-B --velocidade 1.05
 npm run audio                               # todos os episódios
 ```
 
-Por padrão, a Bia usa `pt-BR-Neural2-A` (feminina) e o Téo, `pt-BR-Neural2-B` (masculina).
-Outras vozes em português do Brasil para testar com `--voz-bia` e `--voz-teo`:
+Por padrão, o Thiago usa `pt-BR-Neural2-B` (masculina) e a Isa, `pt-BR-Neural2-A` (feminina).
+Outras vozes em português do Brasil para testar com `--voz-thiago` e `--voz-isa`:
 `pt-BR-Neural2-C`, `pt-BR-Wavenet-A` a `pt-BR-Wavenet-E`. A lista completa está na
 documentação do Google Cloud Text-to-Speech.
 
 **ElevenLabs (voz mais natural, plano pago para este volume).** Defina `ELEVENLABS_API_KEY`,
-`ELEVENLABS_VOICE_BIA` e `ELEVENLABS_VOICE_TEO` (os IDs das duas vozes escolhidas na
+`ELEVENLABS_VOICE_THIAGO` e `ELEVENLABS_VOICE_ISA` (os IDs das duas vozes escolhidas na
 biblioteca da ElevenLabs) e rode
 `npm run audio -- --provedor elevenlabs`.
 

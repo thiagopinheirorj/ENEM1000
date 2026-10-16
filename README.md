@@ -23,7 +23,7 @@ Além disso:
 - **Aposta do tema** (dia especial liberado na véspera da prova): o tema mais provável,
   com justificativa, repertórios, roteiro, introdução-modelo e alternativas — conteúdo em
   `window.APOSTA`, em `js/content.js`
-- **Podcast em formato de conversa** (Bia e Téo): botão "🎧 Ouvir episódio" em cada dia (vozes do próprio aparelho) e roteiros
+- **Podcast em formato de conversa** (Thiago e Isa): botão "🎧 Ouvir episódio" em cada dia (vozes do próprio aparelho) e roteiros
   dos 31 episódios, com geração dos MP3 por voz de IA (`npm run audio`) — veja [`podcast/README.md`](podcast/README.md)
 - **Compartilhar** ao concluir o dia: menu nativo do celular (com a foto, se houver),
   WhatsApp ou copiar a mensagem

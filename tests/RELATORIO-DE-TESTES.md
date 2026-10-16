@@ -112,8 +112,8 @@ Legenda: ✅ passou na execução final. **🐞** indica um teste que falhou no 
 | PC07 | Podcast | trocar de tela encerra o episódio | ✅ |
 | PC08 | Podcast | episódio especial na página da aposta | ✅ |
 | PC09 | Podcast | sem voz no navegador, o botão Ouvir não aparece | ✅ |
-| PC10 | Podcast | todo episódio é conversa entre Bia e Téo, com falas próprias (gancho, dúvida, reflexão) | ✅ |
-| PC11 | Podcast | com uma só voz em português no aparelho, Bia e Téo falam em tons diferentes | ✅ |
+| PC10 | Podcast | todo episódio é conversa entre Thiago e Isa, com falas próprias (gancho, dúvida, reflexão) | ✅ |
+| PC11 | Podcast | com uma só voz em português no aparelho, Thiago e Isa falam em tons diferentes | ✅ |
 | PA01 | Podcast (áudio) | MP3 mono com capa, título, faixa e volume de podcast (−16 LUFS) | ✅ |
 | PA02 | Podcast (áudio) | trechos já gerados vêm do cache, sem nova cobrança | ✅ |
 | PA03 | Podcast (áudio) | episódio especial e intervalo de episódios (`--ep 2-4`) | ✅ |
