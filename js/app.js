@@ -132,11 +132,13 @@
   var VELOCIDADES = [1, 1.25, 1.5, 0.85];
   var player = (function () {
     var trechos = [], i = 0, tocando = false, vel = 0, timer = null, aoMudar = null, geracao = 0;
-    function voz() {
+    /* Duas vozes para a conversa: se o aparelho tiver só uma em português, muda o tom. */
+    function vozes() {
       var vs = [];
       try { vs = window.speechSynthesis.getVoices() || []; } catch (e) { /* sem vozes */ }
-      return vs.filter(function (v) { return /^pt[-_]BR/i.test(v.lang); })[0] ||
-        vs.filter(function (v) { return /^pt/i.test(v.lang); })[0] || null;
+      var pt = vs.filter(function (v) { return /^pt[-_]BR/i.test(v.lang); });
+      if (!pt.length) pt = vs.filter(function (v) { return /^pt/i.test(v.lang); });
+      return { bia: pt[0] || null, teo: pt[1] || pt[0] || null, mesmaVoz: pt.length < 2 };
     }
     /* Frases curtas: alguns navegadores cortam falas longas no meio. */
     function partes(texto) {
@@ -162,14 +164,15 @@
             i++;
             avisar();
             falar();
-          }, (tr.pausa || 0) * 1000 + 250);
+          }, (tr.pausa || 0) * 1000 + 150);
           return;
         }
         var u = new window.SpeechSynthesisUtterance(pedacos[k++]);
         u.lang = "pt-BR";
         u.rate = VELOCIDADES[vel];
-        var v = voz();
-        if (v) u.voice = v;
+        var vz = vozes(), quem = tr.voz === "teo" ? "teo" : "bia";
+        if (vz[quem]) u.voice = vz[quem];
+        u.pitch = vz.mesmaVoz ? (quem === "teo" ? 0.8 : 1.2) : 1;
         u.onend = proximo;
         u.onerror = function () { if (g === geracao) proximo(); };
         window.speechSynthesis.speak(u);
@@ -184,7 +187,7 @@
     function estado() {
       var bloco = "";
       for (var j = Math.min(i, trechos.length - 1); j >= 0; j--) if (trechos[j].bloco) { bloco = trechos[j].bloco; break; }
-      return { tocando: tocando, ativo: trechos.length > 0, i: i, total: trechos.length, bloco: bloco, fim: i >= trechos.length, vel: VELOCIDADES[vel] };
+      return { tocando: tocando, ativo: trechos.length > 0, i: i, total: trechos.length, bloco: bloco, fim: i >= trechos.length, vel: VELOCIDADES[vel], fala: trechos[i] || null };
     }
     return {
       tocar: function (lista, cb) { silenciar(); trechos = lista; i = 0; tocando = true; aoMudar = cb; avisar(); falar(); },
@@ -199,6 +202,7 @@
   function playerHtml() {
     return '<div class="card player" id="player" hidden aria-live="polite">' +
       '<div class="player-info"><strong id="pl-titulo"></strong><span id="pl-status"></span></div>' +
+      '<p class="player-fala" id="pl-fala"></p>' +
       '<div class="player-actions">' +
         '<button class="btn small" id="pl-toggle">Pausar</button>' +
         '<button class="btn small ghost" id="pl-vel" aria-label="Velocidade da leitura">1x</button>' +
@@ -221,6 +225,7 @@
       document.getElementById("pl-status").textContent = e.fim
         ? "Episódio concluído"
         : (e.tocando ? "Tocando" : "Pausado") + " · " + (e.bloco || "") + " · " + (e.i + 1) + " de " + e.total;
+      document.getElementById("pl-fala").textContent = e.fim || !e.fala ? "" : (Podcast.NOMES[e.fala.voz] || "") + ": " + e.fala.texto;
       toggle.textContent = e.tocando ? "Pausar" : (e.fim ? "Ouvir de novo" : "Continuar");
       velBtn.textContent = fmtVel(e.vel);
     }
@@ -460,7 +465,7 @@
         '<a class="btn ghost" style="text-align:center;text-decoration:none" href="#/dia/' + (id === N ? 1 : id + 1) + '">Próximo →</a>' +
       "</div>";
 
-    ligarPlayer("Episódio " + id, function () { return Podcast.roteiroDia(d); });
+    ligarPlayer("Episódio " + id, function () { return Podcast.roteiroDia(d, (window.CONVERSAS || {})[id]); });
 
     // Favorito
     document.getElementById("fav").addEventListener("click", function () {

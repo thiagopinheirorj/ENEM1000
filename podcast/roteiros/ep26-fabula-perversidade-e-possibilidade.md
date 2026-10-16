@@ -1,63 +1,93 @@
 # Episódio 26 · Fábula, perversidade e possibilidade
 
-> Eixo: Desigualdade social · Repertório: Milton Santos, Por uma Outra Globalização (2000) · Duração estimada: 3 min
+> Eixo: Desigualdade social · Repertório: Milton Santos, Por uma Outra Globalização (2000) · Duração estimada: 4 min
 
 ## Abertura
 
-Redação 1000, episódio 26: Fábula, perversidade e possibilidade. Poucos minutos por dia para ampliar o seu repertório para a redação do ENEM. O eixo de hoje é Desigualdade social.
+**Téo:** Salve, salve! Bem-vindos a mais um Redação 1000. Aqui é o Téo, vestibulando oficial do programa. E comigo, como sempre...
+
+**Bia:** A Bia! E hoje o papo está bom, viu?
+
+**Téo:** Episódio 26: Fábula, perversidade e possibilidade. O assunto de hoje é desigualdade social.
+
+**Téo:** Bia, a globalização não era pra deixar todo mundo conectado e igual?
+
+**Bia:** Era a promessa.
+
+**Téo:** E cadê?
+
+**Bia:** O Milton Santos tem uma resposta em três palavras.
 
 ## Ideia-chave
 
-A ideia-chave de hoje: A globalização pode ser vista como fábula (como nos fazem crer), como perversidade (como é) e como possibilidade (como pode ser). A referência é Milton Santos, Por uma Outra Globalização, de 2000.
+**Bia:** A ideia-chave de hoje é esta: A globalização pode ser vista como fábula (como nos fazem crer), como perversidade (como é) e como possibilidade (como pode ser). Isso vem de Milton Santos, Por uma Outra Globalização, de 2000.
+
+**Téo:** Faz sentido demais.
 
 ## Leitura
 
-O geógrafo baiano Milton Santos é um dos intelectuais brasileiros mais reconhecidos no mundo. Ele critica a globalização como "fábula": a promessa de um mundo integrado e igual para todos, que não se cumpre.
+**Bia:** O geógrafo baiano Milton Santos é um dos intelectuais brasileiros mais reconhecidos no mundo. Ele critica a globalização como "fábula": a promessa de um mundo integrado e igual para todos, que não se cumpre.
 
-Na prática, diz ele, a globalização é "perversa": concentra riqueza, aumenta o desemprego e a desigualdade. Mas também pode ser "possibilidade", se a técnica for usada a favor da maioria.
+**Téo:** Então a globalização é só coisa ruim?
 
-Use em temas sobre desigualdade, inclusão digital, trabalho por aplicativo, consumo e acesso à tecnologia.
+**Bia:** Na prática, diz ele, a globalização é "perversa": concentra riqueza, aumenta o desemprego e a desigualdade. Mas também pode ser "possibilidade", se a técnica for usada a favor da maioria.
 
-Esse repertório funciona bem em temas sobre globalização, desigualdade, inclusão digital e trabalho por aplicativo.
+**Téo:** Nossa, nunca tinha pensado assim.
+
+**Bia:** Use em temas sobre desigualdade, inclusão digital, trabalho por aplicativo, consumo e acesso à tecnologia.
+
+**Téo:** E isso serve pra quais temas?
+
+**Bia:** Funciona bem em temas sobre globalização, desigualdade, inclusão digital e trabalho por aplicativo.
 
 ## Na redação
 
-Agora, veja como ele aparece numa redação. Milton Santos denunciava a globalização como "fábula", ao prometer integração universal sem cumpri-la. A exclusão digital comprova essa leitura: enquanto parte da população tem acesso à internet de alta velocidade, outra parcela permanece desconectada e privada de oportunidades.
+**Téo:** Tá, e como isso aparece num parágrafo de verdade?
+
+**Bia:** Olha só: Milton Santos denunciava a globalização como "fábula", ao prometer integração universal sem cumpri-la. A exclusão digital comprova essa leitura: enquanto parte da população tem acesso à internet de alta velocidade, outra parcela permanece desconectada e privada de oportunidades.
+
+**Téo:** Isso é texto de nota mil, hein.
 
 ## Dica de ouro
 
-Dica de ouro, ligada à competência 5, Proposta de intervenção. Proposta ligada aos argumentos. A proposta deve resolver os problemas que você discutiu. Se o D1 falou de falta de infraestrutura e o D2 de falta de informação, proponha ações para cada um. Proposta desconectada perde pontos.
+**Téo:** Agora a parte que eu mais gosto: a dica de ouro.
+
+**Bia:** Essa é da competência 5, Proposta de intervenção. Proposta ligada aos argumentos. A proposta deve resolver os problemas que você discutiu. Se o D1 falou de falta de infraestrutura e o D2 de falta de informação, proponha ações para cada um. Proposta desconectada perde pontos.
 
 ## Exercício rápido
 
-Hora do exercício rápido. Para Milton Santos, a globalização como "perversidade" se refere a:
+**Téo:** Bora pro exercício! Quem tá ouvindo, joga junto com a gente. Para Milton Santos, a globalização como "perversidade" se refere a:
 
-Alternativa A: O modo como ela é vendida pela mídia.
+**Bia:** Alternativa A: O modo como ela é vendida pela mídia. Alternativa B: Seus efeitos reais, como concentração de riqueza e aumento das desigualdades. Alternativa C: O avanço da internet. Alternativa D: Seu potencial de transformação positiva.
 
-Alternativa B: Seus efeitos reais, como concentração de riqueza e aumento das desigualdades.
-
-Alternativa C: O avanço da internet.
-
-Alternativa D: Seu potencial de transformação positiva.
-
-Pense um pouco antes de ouvir a resposta.
+**Téo:** Pensa aí. Vou dar uns segundinhos.
 
 _[pausa de 5 segundos]_
 
-A resposta certa é a alternativa B: Seus efeitos reais, como concentração de riqueza e aumento das desigualdades. Fábula = como nos fazem vê-la; perversidade = como ela é de fato; possibilidade = como pode vir a ser.
+**Bia:** A resposta certa é a alternativa B: Seus efeitos reais, como concentração de riqueza e aumento das desigualdades. Fábula = como nos fazem vê-la; perversidade = como ela é de fato; possibilidade = como pode vir a ser.
+
+**Téo:** Acertei, mas foi no chute. Vale?
 
 ## Desafio de escrita
 
-Seu desafio de escrita de hoje, para fazer no app: Use a ideia de "globalização como possibilidade" em uma frase de proposta. Pause o episódio e tente antes de ouvir uma resposta possível.
+**Bia:** E o desafio de escrita de hoje é este: Use a ideia de "globalização como possibilidade" em uma frase de proposta. Pausa o episódio e tenta antes de ouvir uma resposta possível.
 
 _[pausa de 3 segundos]_
 
-Uma resposta possível seria: Para que a globalização se torne "possibilidade", como propunha Milton Santos, o poder público deve ampliar o acesso gratuito à internet em escolas e espaços públicos de regiões periféricas.
+**Téo:** Eu tentei aqui, mas vou deixar a Bia mostrar como fica.
+
+**Bia:** Uma resposta possível: Para que a globalização se torne "possibilidade", como propunha Milton Santos, o poder público deve ampliar o acesso gratuito à internet em escolas e espaços públicos de regiões periféricas.
 
 ## Para refletir
 
-Para fechar, uma pergunta para refletir: A tecnologia que você usa hoje te aproxima ou te afasta das oportunidades?
+**Téo:** Pra fechar, a pergunta pra refletir: A tecnologia que você usa hoje te aproxima ou te afasta das oportunidades?
+
+**Bia:** Me aproxima. Eu dou aula on-line pra alunos do Brasil inteiro.
+
+**Téo:** Às vezes me afasta. O sinal da minha rua é um mistério.
 
 ## Encerramento
 
-Isso foi o Redação 1000. Abra o app, responda o exercício e mantenha a sua sequência de dias. Até amanhã!
+**Téo:** Fechou! Corre pro app, que o desafio de escrita tá te esperando.
+
+**Bia:** Um beijo, e até o próximo episódio!

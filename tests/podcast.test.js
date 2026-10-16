@@ -10,6 +10,12 @@ const { ROOT, setup, loadContent, order, br } = require("./helpers");
 const Podcast = require("../js/podcast.js");
 
 const W = loadContent();
+const vm = require("vm");
+const CONVERSAS = (() => {
+  const sb = { window: {} };
+  vm.runInNewContext(fs.readFileSync(path.join(ROOT, "js", "conversa.js"), "utf8"), sb);
+  return sb.window.CONVERSAS;
+})();
 
 describe("PC · Roteiros do podcast", () => {
   it("PC01 · a ordem das alternativas é a mesma do app", () => {
@@ -36,6 +42,24 @@ describe("PC · Roteiros do podcast", () => {
     assert.equal(Podcast.falado("Modernidade Líquida (2000) e Amor Líquido (2003)"), "Modernidade Líquida, de 2000, e Amor Líquido, de 2003");
   });
 
+  it("PC10 · todo episódio é uma conversa entre Bia e Téo, com falas próprias", () => {
+    W.DEVOCIONAIS.forEach((d) => {
+      const c = CONVERSAS[d.id];
+      assert.ok(c, "falas do episódio " + d.id);
+      assert.ok(c.gancho.length >= 3 && c.duvida && c.reflexao.bia && c.reflexao.teo, "ep " + d.id);
+      c.gancho.forEach((f) => assert.ok(["bia", "teo"].includes(f[0]) && f[1], "ep " + d.id));
+      const t = Podcast.roteiroDia(d, c);
+      t.forEach((x) => assert.ok(x.voz === "bia" || x.voz === "teo"));
+      assert.ok(t.filter((x) => x.voz === "teo").length >= 8 && t.filter((x) => x.voz === "bia").length >= 8, "ep " + d.id);
+      assert.ok(t.some((x) => x.texto === Podcast.falado(c.duvida)), "dúvida no ep " + d.id);
+      const md = Podcast.markdown("x", t);
+      assert.match(md, /\*\*Bia:\*\* /);
+      assert.match(md, /\*\*Téo:\*\* /);
+    });
+    const esp = Podcast.roteiroAposta(W.APOSTA);
+    assert.ok(esp.some((x) => x.voz === "teo") && esp.some((x) => x.voz === "bia"));
+  });
+
   it("PC04 · npm run podcast gera 31 roteiros e o índice", () => {
     const pasta = path.join(ROOT, "podcast", "roteiros");
     execFileSync(process.execPath, [path.join(ROOT, "podcast", "gerar-roteiros.js")], { stdio: "pipe" });
@@ -45,26 +69,30 @@ describe("PC · Roteiros do podcast", () => {
     arquivos.forEach((f) => assert.ok(indice.includes("(" + f + ")"), f));
     const ep1 = fs.readFileSync(path.join(pasta, arquivos.find((f) => f.startsWith("ep01"))), "utf8");
     assert.match(ep1, /^# Episódio 1 · Relações que escorrem pelos dedos/);
+    assert.match(ep1, /\*\*Téo:\*\* Bia, ontem eu fiz uma limpa nos meus seguidores/);
     assert.match(ep1, /_\[pausa de 5 segundos\]_/);
   });
 });
 
 /* Voz simulada: registra o que seria falado e termina cada fala logo em seguida. */
-function vozFalsa() {
+function vozFalsaInit(vozes) {
+  if (vozes) window.__vozes = vozes;
   window.__falas = [];
   window.__canceladas = 0;
   function U(texto) { this.text = texto; }
   window.SpeechSynthesisUtterance = U;
   const synth = {
     speak(u) {
-      window.__falas.push({ text: u.text, lang: u.lang, rate: u.rate });
+      window.__falas.push({ text: u.text, lang: u.lang, rate: u.rate, pitch: u.pitch, voz: u.voice && u.voice.name });
       setTimeout(() => u.onend && u.onend(), 5);
     },
     cancel() { window.__canceladas++; },
-    getVoices() { return [{ lang: "pt-BR", name: "Teste" }]; }
+    getVoices() { return window.__vozes || [{ lang: "pt-BR", name: "Ana" }, { lang: "pt-BR", name: "Caio" }, { lang: "en-US", name: "Eng" }]; }
   };
   Object.defineProperty(window, "speechSynthesis", { configurable: true, value: synth });
 }
+
+const vozFalsa = vozFalsaInit;
 
 describe("PC · Player Ouvir no app", () => {
   let env;
@@ -78,8 +106,11 @@ describe("PC · Player Ouvir no app", () => {
     assert.ok(await page.isHidden("#ouvir"));
     await page.waitForFunction(() => window.__falas.length >= 3);
     const primeira = await page.evaluate(() => window.__falas[0]);
-    assert.match(primeira.text, /^Redação 1000, episódio 1: Relações que escorrem pelos dedos\./);
+    assert.match(primeira.text, /Redação 1000\./);
     assert.equal(primeira.lang, "pt-BR");
+    assert.equal(primeira.voz, "Caio", "o Téo abre o episódio com a segunda voz");
+    await page.waitForFunction(() => window.__falas.some((f) => f.voz === "Ana"));
+    assert.match(await page.textContent("#pl-fala"), /^(Bia|Téo): /);
     assert.match(await page.textContent("#pl-status"), /Tocando · .+ · \d+ de \d+/);
     // Avança o tempo das pausas até o fim do episódio.
     for (let n = 0; n < 40 && !(await page.textContent("#pl-status")).includes("concluído"); n++) {
@@ -88,7 +119,7 @@ describe("PC · Player Ouvir no app", () => {
     assert.equal(await page.textContent("#pl-status"), "Episódio concluído");
     assert.equal(await page.textContent("#pl-toggle"), "Ouvir de novo");
     const falas = await page.evaluate(() => window.__falas.map((f) => f.text).join(" "));
-    assert.match(falas, /Até amanhã!$/);
+    assert.match(falas, /(tá\?|episódio!|repertório!)$/, "termina com a despedida da Bia");
     assert.deepEqual(errors, []);
   });
 
@@ -128,7 +159,15 @@ describe("PC · Player Ouvir no app", () => {
     const { page } = await env.open({ init: vozFalsa, fixed: br("2026-11-07", "10:00"), hash: "#/aposta" });
     await page.click("#ouvir");
     await page.waitForFunction(() => window.__falas.length >= 1);
-    assert.match(await page.evaluate(() => window.__falas[0].text), /^Redação 1000, episódio especial: a aposta do tema\./);
+    assert.match(await page.evaluate(() => window.__falas[0].text), /Episódio especial do Redação 1000/);
+  });
+
+  it("PC11 · com uma só voz em português, Bia e Téo falam em tons diferentes", async () => {
+    const { page } = await env.open({ init: vozFalsaInit, initArg: [{ lang: "pt-BR", name: "Unica" }] });
+    await page.click("#ouvir");
+    await page.waitForFunction(() => window.__falas.length >= 3);
+    const tons = await page.evaluate(() => Array.from(new Set(window.__falas.map((f) => f.pitch))).sort());
+    assert.deepEqual(tons, [0.8, 1.2]);
   });
 
   it("PC09 · sem voz no navegador, o botão Ouvir não aparece", async () => {

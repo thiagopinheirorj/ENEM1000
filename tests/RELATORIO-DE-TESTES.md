@@ -112,6 +112,8 @@ Legenda: ✅ passou na execução final. **🐞** indica um teste que falhou no 
 | PC07 | Podcast | trocar de tela encerra o episódio | ✅ |
 | PC08 | Podcast | episódio especial na página da aposta | ✅ |
 | PC09 | Podcast | sem voz no navegador, o botão Ouvir não aparece | ✅ |
+| PC10 | Podcast | todo episódio é conversa entre Bia e Téo, com falas próprias (gancho, dúvida, reflexão) | ✅ |
+| PC11 | Podcast | com uma só voz em português no aparelho, Bia e Téo falam em tons diferentes | ✅ |
 | PA01 | Podcast (áudio) | MP3 mono com capa, título, faixa e volume de podcast (−16 LUFS) | ✅ |
 | PA02 | Podcast (áudio) | trechos já gerados vêm do cache, sem nova cobrança | ✅ |
 | PA03 | Podcast (áudio) | episódio especial e intervalo de episódios (`--ep 2-4`) | ✅ |
@@ -150,7 +152,7 @@ Legenda: ✅ passou na execução final. **🐞** indica um teste que falhou no 
 | V06 | A11y | cada aba clicada recebe aria-current | ✅ |
 | O01 | Offline | o service worker guarda todos os ASSETS e o app e a privacidade abrem sem internet | ✅ |
 
-**Total: 107 testes** em 16 grupos. Os casos com mais de uma variante (DT10 ×2 e R03 ×5) contam como testes separados.
+**Total: 109 testes** em 16 grupos. Os casos com mais de uma variante (DT10 ×2 e R03 ×5) contam como testes separados.
 
 ## Bugs encontrados e corrigidos
 
@@ -267,13 +269,13 @@ ok 14 - T · Trilha
 ok 15 - K · Kit
 ok 16 - P · Progresso
 1..16
-# tests 107
+# tests 109
 # suites 16
-# pass 107
+# pass 109
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
 ```
 
-**107 passaram, 0 falharam.** Com o código original, o mesmo conjunto dava 83 passaram e 9 falharam.
+**109 passaram, 0 falharam.** Com o código original, o mesmo conjunto dava 83 passaram e 9 falharam.

@@ -11,7 +11,8 @@ const Podcast = require("../js/podcast.js");
 const raiz = path.join(__dirname, "..");
 const sandbox = { window: {} };
 vm.runInNewContext(fs.readFileSync(path.join(raiz, "js/content.js"), "utf8"), sandbox);
-const { DEVOCIONAIS, APOSTA } = sandbox.window;
+vm.runInNewContext(fs.readFileSync(path.join(raiz, "js/conversa.js"), "utf8"), sandbox);
+const { DEVOCIONAIS, APOSTA, CONVERSAS } = sandbox.window;
 
 const PALAVRAS_POR_MINUTO = 150;
 const slug = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
@@ -23,11 +24,12 @@ fs.rmSync(pasta, { recursive: true, force: true });
 fs.mkdirSync(pasta, { recursive: true });
 
 const indice = ["# Episódios do podcast Redação 1000", "",
-  "Gerado automaticamente por `npm run podcast` a partir do conteúdo do app. Não edite à mão.", "",
+  "Gerado automaticamente por `npm run podcast` a partir do conteúdo do app (`js/content.js`) e das falas de cada episódio (`js/conversa.js`). Não edite à mão.", "",
+  "Formato: conversa entre Bia (professora de redação) e Téo (vestibulando), apresentadores fictícios.", "",
   "| Ep. | Título | Eixo | Duração estimada | Roteiro |", "| --- | --- | --- | --- | --- |"];
 
 DEVOCIONAIS.forEach((d) => {
-  const trechos = Podcast.roteiroDia(d);
+  const trechos = Podcast.roteiroDia(d, CONVERSAS[d.id]);
   const nome = "ep" + String(d.id).padStart(2, "0") + "-" + slug(d.titulo) + ".md";
   const titulo = "Episódio " + d.id + " · " + d.titulo;
   const cabecalho = "> Eixo: " + d.eixo + " · Repertório: " + d.fonte + " · Duração estimada: " + minutos(trechos) + " min\n\n";

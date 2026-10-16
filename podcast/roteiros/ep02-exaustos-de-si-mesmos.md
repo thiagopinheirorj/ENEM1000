@@ -1,63 +1,93 @@
 # Episódio 2 · Exaustos de si mesmos
 
-> Eixo: Saúde mental e trabalho · Repertório: Byung-Chul Han, Sociedade do Cansaço (2010) · Duração estimada: 3 min
+> Eixo: Saúde mental e trabalho · Repertório: Byung-Chul Han, Sociedade do Cansaço (2010) · Duração estimada: 4 min
 
 ## Abertura
 
-Redação 1000, episódio 2: Exaustos de si mesmos. Poucos minutos por dia para ampliar o seu repertório para a redação do ENEM. O eixo de hoje é Saúde mental e trabalho.
+**Téo:** Salve, salve! Bem-vindos a mais um Redação 1000. Aqui é o Téo, vestibulando oficial do programa. E comigo, como sempre...
+
+**Bia:** A Bia! E hoje o papo está bom, viu?
+
+**Téo:** Episódio 2: Exaustos de si mesmos. O assunto de hoje é saúde mental e trabalho.
+
+**Téo:** Confissão: eu montei um cronograma de estudo de dezesseis horas por dia.
+
+**Bia:** Dezesseis?!
+
+**Téo:** Com dez minutos pra almoçar.
+
+**Bia:** Téo, isso tem nome. E hoje a gente vai falar dele.
 
 ## Ideia-chave
 
-A ideia-chave de hoje: A sociedade do desempenho produz sujeitos que se exploram voluntariamente, e adoecem de esgotamento. A referência é Byung-Chul Han, Sociedade do Cansaço, de 2010.
+**Bia:** A ideia-chave de hoje é esta: A sociedade do desempenho produz sujeitos que se exploram voluntariamente, e adoecem de esgotamento. Isso vem de Byung-Chul Han, Sociedade do Cansaço, de 2010.
+
+**Téo:** Caramba. Anotei.
 
 ## Leitura
 
-O filósofo sul-coreano Byung-Chul Han, radicado na Alemanha, afirma que deixamos de viver em uma sociedade disciplinar (do "não pode") para viver em uma sociedade do desempenho (do "você pode"). A cobrança não vem mais só de um chefe: o próprio indivíduo se cobra o tempo todo.
+**Bia:** O filósofo sul-coreano Byung-Chul Han, radicado na Alemanha, afirma que deixamos de viver em uma sociedade disciplinar (do "não pode") para viver em uma sociedade do desempenho (do "você pode"). A cobrança não vem mais só de um chefe: o próprio indivíduo se cobra o tempo todo.
 
-Para Han, esse excesso de positividade gera doenças típicas do século XXI, como depressão, ansiedade e síndrome de burnout. O sujeito é ao mesmo tempo explorador e explorado.
+**Téo:** Mas se ninguém tá me obrigando, como isso vira problema?
 
-Use em temas sobre saúde mental, trabalho, produtividade, estudantes sobrecarregados e uso excessivo de telas.
+**Bia:** Para Han, esse excesso de positividade gera doenças típicas do século XXI, como depressão, ansiedade e síndrome de burnout. O sujeito é ao mesmo tempo explorador e explorado.
 
-Esse repertório funciona bem em temas sobre saúde mental, trabalho, juventude e produtividade.
+**Téo:** Olha, isso é bom demais pra redação.
+
+**Bia:** Use em temas sobre saúde mental, trabalho, produtividade, estudantes sobrecarregados e uso excessivo de telas.
+
+**Téo:** E isso serve pra quais temas?
+
+**Bia:** Funciona bem em temas sobre saúde mental, trabalho, juventude e produtividade.
 
 ## Na redação
 
-Agora, veja como ele aparece numa redação. De acordo com o filósofo Byung-Chul Han, a sociedade atual é a "sociedade do cansaço", na qual o indivíduo se autoexplora em nome do desempenho. Nesse cenário, o adoecimento psíquico deixa de ser exceção e torna-se sintoma de um modelo social baseado na produtividade ininterrupta.
+**Téo:** Tá, e como isso aparece num parágrafo de verdade?
+
+**Bia:** Olha só: De acordo com o filósofo Byung-Chul Han, a sociedade atual é a "sociedade do cansaço", na qual o indivíduo se autoexplora em nome do desempenho. Nesse cenário, o adoecimento psíquico deixa de ser exceção e torna-se sintoma de um modelo social baseado na produtividade ininterrupta.
+
+**Téo:** Isso é texto de nota mil, hein.
 
 ## Dica de ouro
 
-Dica de ouro, ligada à competência 3, Argumentação. Causa → consequência. Um argumento forte mostra uma cadeia lógica: apresente a causa do problema, explique como ela age e termine com a consequência. Use o repertório como prova de que essa relação existe.
+**Téo:** Agora a parte que eu mais gosto: a dica de ouro.
+
+**Bia:** Essa é da competência 3, Argumentação. Causa → consequência. Um argumento forte mostra uma cadeia lógica: apresente a causa do problema, explique como ela age e termine com a consequência. Use o repertório como prova de que essa relação existe.
 
 ## Exercício rápido
 
-Hora do exercício rápido. Segundo Byung-Chul Han, a principal característica da sociedade do desempenho é:
+**Téo:** Bora pro exercício! Quem tá ouvindo, joga junto com a gente. Segundo Byung-Chul Han, a principal característica da sociedade do desempenho é:
 
-Alternativa A: A autoexploração do indivíduo em nome da produtividade.
+**Bia:** Alternativa A: A autoexploração do indivíduo em nome da produtividade. Alternativa B: O fim das doenças psicológicas. Alternativa C: A proibição rígida imposta por instituições. Alternativa D: A ausência total de trabalho.
 
-Alternativa B: O fim das doenças psicológicas.
-
-Alternativa C: A proibição rígida imposta por instituições.
-
-Alternativa D: A ausência total de trabalho.
-
-Pense um pouco antes de ouvir a resposta.
+**Téo:** Pensa aí. Vou dar uns segundinhos.
 
 _[pausa de 5 segundos]_
 
-A resposta certa é a alternativa A: A autoexploração do indivíduo em nome da produtividade. Han destaca que o sujeito passa a explorar a si mesmo, acreditando ser livre, o que leva ao esgotamento.
+**Bia:** A resposta certa é a alternativa A: A autoexploração do indivíduo em nome da produtividade. Han destaca que o sujeito passa a explorar a si mesmo, acreditando ser livre, o que leva ao esgotamento.
+
+**Téo:** Acertei, mas foi no chute. Vale?
 
 ## Desafio de escrita
 
-Seu desafio de escrita de hoje, para fazer no app: Complete: "A síndrome de burnout entre estudantes pode ser compreendida à luz de Byung-Chul Han, pois..." Pause o episódio e tente antes de ouvir uma resposta possível.
+**Bia:** E o desafio de escrita de hoje é este: Complete: "A síndrome de burnout entre estudantes pode ser compreendida à luz de Byung-Chul Han, pois..." Pausa o episódio e tenta antes de ouvir uma resposta possível.
 
 _[pausa de 3 segundos]_
 
-Uma resposta possível seria: ...a cultura do desempenho faz o estudante internalizar cobranças excessivas, transformando a rotina de estudos em autoexploração e levando ao esgotamento físico e mental.
+**Téo:** Eu tentei aqui, mas vou deixar a Bia mostrar como fica.
+
+**Bia:** Uma resposta possível: ...a cultura do desempenho faz o estudante internalizar cobranças excessivas, transformando a rotina de estudos em autoexploração e levando ao esgotamento físico e mental.
 
 ## Para refletir
 
-Para fechar, uma pergunta para refletir: O que você tem cobrado de si que não cobraria de um amigo?
+**Téo:** Pra fechar, a pergunta pra refletir: O que você tem cobrado de si que não cobraria de um amigo?
+
+**Bia:** Eu cobro perfeição de mim em tudo. De um amigo, eu só cobraria que ele estivesse bem.
+
+**Téo:** Vou refazer o cronograma. Com almoço de verdade.
 
 ## Encerramento
 
-Isso foi o Redação 1000. Abra o app, responda o exercício e mantenha a sua sequência de dias. Até amanhã!
+**Téo:** Fechou! Corre pro app, que o desafio de escrita tá te esperando.
+
+**Bia:** Um beijo, e até o próximo episódio!

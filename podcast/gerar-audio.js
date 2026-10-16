@@ -5,13 +5,13 @@
  *   npm run audio                       → todos os episódios (1 a 30 + especial)
  *   npm run audio -- --ep 1             → só o episódio 1 (use "especial" para a aposta)
  *   npm run audio -- --ep 1-5           → episódios 1 a 5
- *   npm run audio -- --voz pt-BR-Neural2-B --velocidade 1.05
+ *   npm run audio -- --voz-bia pt-BR-Neural2-C --voz-teo pt-BR-Neural2-B --velocidade 1.05
  *   npm run audio -- --provedor elevenlabs
  *   npm run audio -- --provedor teste   → sem voz real (bipes), para testar o processo sem custo
  *
  * Chaves (variáveis de ambiente, nunca no código):
  *   Google Cloud Text-to-Speech: GOOGLE_TTS_API_KEY
- *   ElevenLabs: ELEVENLABS_API_KEY e ELEVENLABS_VOICE_ID
+ *   ElevenLabs: ELEVENLABS_API_KEY, ELEVENLABS_VOICE_BIA e ELEVENLABS_VOICE_TEO (IDs das vozes)
  *
  * Precisa do ffmpeg instalado. Os MP3 saem em podcast/audio/ (fora do git).
  * Trechos já gerados ficam em podcast/audio/.cache e não são cobrados de novo.
@@ -28,17 +28,18 @@ const RAIZ = path.join(__dirname, "..");
 const SAIDA = process.env.PODCAST_AUDIO_DIR || path.join(__dirname, "audio");
 const CACHE = path.join(SAIDA, ".cache");
 const CAPA = path.join(__dirname, "capa.png");
-const PAUSA_ENTRE_TRECHOS = 0.35; // segundos de respiro entre trechos
+const PAUSA_ENTRE_FALAS = 0.25; // respiro entre uma fala e outra
 
 /* ---------- Opções ---------- */
 function opcoes(argv) {
-  const o = { provedor: "google", ep: "todos", voz: null, velocidade: 1 };
+  const o = { provedor: "google", ep: "todos", vozBia: null, vozTeo: null, velocidade: 1 };
   for (let i = 0; i < argv.length; i++) {
     const [k, v] = argv[i].includes("=") ? argv[i].split("=") : [argv[i], argv[i + 1]];
     const usaProximo = !argv[i].includes("=");
     if (k === "--provedor") { o.provedor = v; if (usaProximo) i++; }
     else if (k === "--ep") { o.ep = v; if (usaProximo) i++; }
-    else if (k === "--voz") { o.voz = v; if (usaProximo) i++; }
+    else if (k === "--voz-bia") { o.vozBia = v; if (usaProximo) i++; }
+    else if (k === "--voz-teo") { o.vozTeo = v; if (usaProximo) i++; }
     else if (k === "--velocidade") { o.velocidade = Number(v); if (usaProximo) i++; }
   }
   return o;
@@ -47,7 +48,7 @@ function opcoes(argv) {
 /* ---------- Provedores de voz: recebem texto e devolvem um Buffer de áudio ---------- */
 const PROVEDORES = {
   google: {
-    vozPadrao: "pt-BR-Neural2-A",
+    vozes: { bia: "pt-BR-Neural2-A", teo: "pt-BR-Neural2-B" }, // feminina e masculina
     limite: 4500, // bytes por requisição
     async falar(texto, voz, velocidade) {
       const chave = process.env.GOOGLE_TTS_API_KEY;
@@ -66,12 +67,12 @@ const PROVEDORES = {
     }
   },
   elevenlabs: {
-    vozPadrao: process.env.ELEVENLABS_VOICE_ID || null,
+    vozes: { bia: process.env.ELEVENLABS_VOICE_BIA || null, teo: process.env.ELEVENLABS_VOICE_TEO || null },
     limite: 4500,
     async falar(texto, voz) {
       const chave = process.env.ELEVENLABS_API_KEY;
       if (!chave) throw new Error("Defina ELEVENLABS_API_KEY com a chave da ElevenLabs.");
-      if (!voz) throw new Error("Defina ELEVENLABS_VOICE_ID (ou use --voz) com o ID da voz escolhida na ElevenLabs.");
+      if (!voz) throw new Error("Defina ELEVENLABS_VOICE_BIA e ELEVENLABS_VOICE_TEO (ou use --voz-bia e --voz-teo) com os IDs das vozes escolhidas na ElevenLabs.");
       const r = await fetch("https://api.elevenlabs.io/v1/text-to-speech/" + encodeURIComponent(voz) + "?output_format=mp3_44100_128", {
         method: "POST",
         headers: { "Content-Type": "application/json", "xi-api-key": chave, Accept: "audio/mpeg" },
@@ -83,11 +84,12 @@ const PROVEDORES = {
   },
   /* Sem custo e sem internet: um bipe com a duração aproximada da fala. Serve para testar. */
   teste: {
-    vozPadrao: "bipe",
+    vozes: { bia: "bipe-agudo", teo: "bipe-grave" },
     limite: 4500,
-    async falar(texto) {
+    async falar(texto, voz) {
       const segundos = Math.max(0.3, texto.split(/\s+/).length / 2.5 / 4); // encurtado para testes rápidos
-      return ffmpegBuffer(["-f", "lavfi", "-i", "sine=frequency=440:sample_rate=44100:duration=" + segundos.toFixed(2), "-f", "mp3", "pipe:1"]);
+      const freq = voz === "bipe-grave" ? 330 : 660;
+      return ffmpegBuffer(["-f", "lavfi", "-i", "sine=frequency=" + freq + ":sample_rate=44100:duration=" + segundos.toFixed(2), "-f", "mp3", "pipe:1"]);
     }
   }
 };
@@ -147,20 +149,20 @@ async function trechoEmAudio(prov, nomeProv, voz, velocidade, texto) {
 
 async function gerarEpisodio(ep, o) {
   const prov = PROVEDORES[o.provedor];
-  const voz = o.voz || prov.vozPadrao;
+  const vozes = { bia: o.vozBia || prov.vozes.bia, teo: o.vozTeo || prov.vozes.teo };
   const tmp = fs.mkdtempSync(path.join(CACHE, "ep-"));
   const lista = [];
   try {
     let n = 0;
     for (const tr of ep.trechos) {
       for (const parte of dividir(tr.texto, prov.limite)) {
-        const mp3 = await trechoEmAudio(prov, o.provedor, voz, o.velocidade, parte);
+        const mp3 = await trechoEmAudio(prov, o.provedor, vozes[tr.voz], o.velocidade, parte);
         const wav = path.join(tmp, String(n++).padStart(4, "0") + ".wav");
         paraWav(mp3, wav);
         lista.push(wav);
       }
       const pausa = path.join(tmp, String(n++).padStart(4, "0") + "-pausa.wav");
-      silencio(PAUSA_ENTRE_TRECHOS + (tr.pausa || 0), pausa);
+      silencio(PAUSA_ENTRE_FALAS + (tr.pausa || 0), pausa);
       lista.push(pausa);
     }
     const listaTxt = path.join(tmp, "lista.txt");
@@ -187,13 +189,14 @@ async function gerarEpisodio(ep, o) {
 function episodios() {
   const sandbox = { window: {} };
   vm.runInNewContext(fs.readFileSync(path.join(RAIZ, "js/content.js"), "utf8"), sandbox);
-  const { DEVOCIONAIS, APOSTA } = sandbox.window;
+  vm.runInNewContext(fs.readFileSync(path.join(RAIZ, "js/conversa.js"), "utf8"), sandbox);
+  const { DEVOCIONAIS, APOSTA, CONVERSAS } = sandbox.window;
   const lista = Array.from(DEVOCIONAIS, (d) => ({
     id: d.id,
     faixa: d.id,
     titulo: "Ep. " + d.id + " · " + d.titulo,
     arquivo: "redacao1000-ep" + String(d.id).padStart(2, "0") + ".mp3",
-    trechos: Podcast.roteiroDia(d)
+    trechos: Podcast.roteiroDia(d, CONVERSAS[d.id])
   }));
   lista.push({ id: "especial", faixa: 31, titulo: "Especial · A aposta do tema", arquivo: "redacao1000-ep31-especial.mp3", trechos: Podcast.roteiroAposta(APOSTA) });
   return lista;

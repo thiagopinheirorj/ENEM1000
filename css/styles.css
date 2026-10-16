@@ -404,6 +404,8 @@ details.model p { margin-top: 8px; }
 .player { display: grid; gap: 10px; border-color: var(--primary); }
 .player-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .player-info span { font-size: 14px; color: var(--muted); }
+.player-fala { margin: 0; font-size: 15px; line-height: 1.5; max-height: 6.2em; overflow: hidden; }
+.player-fala:empty { display: none; }
 .player-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .disclaimer { font-size: 13px; color: var(--muted); text-align: center; margin: 18px 0 0; line-height: 1.5; }
