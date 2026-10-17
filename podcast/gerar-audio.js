@@ -87,6 +87,7 @@ const PROVEDORES = {
      A voz é uma descrição (voice design) ou "clone:<audio_ref>|<texto_do_audio_ref>". */
   omnivoice: {
     vozes: { thiago: "male, middle-aged", isa: "female, young adult" },
+    versao: "voz-fixa-1", // muda o cache quando o jeito de gerar muda
     limite: 1500,
     ext: "wav",
     lote: true,
@@ -141,7 +142,7 @@ function dividir(texto, limite) {
 }
 
 function arquivoCache(prov, nomeProv, voz, velocidade, texto) {
-  const id = crypto.createHash("sha1").update([nomeProv, voz, velocidade, texto].join("|")).digest("hex");
+  const id = crypto.createHash("sha1").update([nomeProv + (prov.versao || ""), voz, velocidade, texto].join("|")).digest("hex");
   return path.join(CACHE, id + "." + (prov.ext || "mp3"));
 }
 
