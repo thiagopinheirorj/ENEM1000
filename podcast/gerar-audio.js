@@ -82,6 +82,20 @@ const PROVEDORES = {
       return Buffer.from(await r.arrayBuffer());
     }
   },
+  /* OmniVoice (código aberto, roda no próprio computador). Precisa de um Python com o pacote
+     omnivoice instalado: OMNIVOICE_PYTHON aponta para ele (padrão: python3).
+     A voz é uma descrição (voice design) ou "clone:<audio_ref>|<texto_do_audio_ref>". */
+  omnivoice: {
+    vozes: { thiago: "male, middle-aged", isa: "female, young adult" },
+    limite: 1500,
+    ext: "wav",
+    lote: true,
+    preparar(itens) {
+      const lista = path.join(CACHE, "omnivoice-lote.json");
+      fs.writeFileSync(lista, JSON.stringify(itens.map((i) => ({ arquivo: i.arq, texto: i.texto, voz: i.voz }))));
+      execFileSync(process.env.OMNIVOICE_PYTHON || "python3", [path.join(__dirname, "omnivoice_falas.py"), lista], { stdio: ["ignore", "inherit", "inherit"] });
+    }
+  },
   /* Sem custo e sem internet: um bipe com a duração aproximada da fala. Serve para testar. */
   teste: {
     vozes: { thiago: "bipe-grave", isa: "bipe-agudo" },
@@ -126,9 +140,13 @@ function dividir(texto, limite) {
   return partes;
 }
 
-async function trechoEmAudio(prov, nomeProv, voz, velocidade, texto) {
+function arquivoCache(prov, nomeProv, voz, velocidade, texto) {
   const id = crypto.createHash("sha1").update([nomeProv, voz, velocidade, texto].join("|")).digest("hex");
-  const arq = path.join(CACHE, id + ".mp3");
+  return path.join(CACHE, id + "." + (prov.ext || "mp3"));
+}
+
+async function trechoEmAudio(prov, nomeProv, voz, velocidade, texto) {
+  const arq = arquivoCache(prov, nomeProv, voz, velocidade, texto);
   if (!fs.existsSync(arq)) {
     let ultimoErro;
     for (let tentativa = 1; tentativa <= 3; tentativa++) {
@@ -150,6 +168,15 @@ async function trechoEmAudio(prov, nomeProv, voz, velocidade, texto) {
 async function gerarEpisodio(ep, o) {
   const prov = PROVEDORES[o.provedor];
   const vozes = { thiago: o.vozThiago || prov.vozes.thiago, isa: o.vozIsa || prov.vozes.isa };
+  if (prov.lote) {
+    // Provedores locais geram todas as falas que faltam de uma vez (o modelo carrega uma vez só).
+    const faltam = [];
+    for (const tr of ep.trechos) for (const parte of dividir(tr.texto, prov.limite)) {
+      const arq = arquivoCache(prov, o.provedor, vozes[tr.voz], o.velocidade, parte);
+      if (!fs.existsSync(arq) && !faltam.some((f) => f.arq === arq)) faltam.push({ arq, texto: parte, voz: vozes[tr.voz] });
+    }
+    if (faltam.length) { console.log("  " + faltam.length + " falas para gerar…"); prov.preparar(faltam); }
+  }
   const tmp = fs.mkdtempSync(path.join(CACHE, "ep-"));
   const lista = [];
   try {
@@ -212,7 +239,7 @@ function filtrar(lista, ep) {
 
 async function main(argv) {
   const o = opcoes(argv);
-  if (!PROVEDORES[o.provedor]) throw new Error("Provedor desconhecido: " + o.provedor + " (use google, elevenlabs ou teste).");
+  if (!PROVEDORES[o.provedor]) throw new Error("Provedor desconhecido: " + o.provedor + " (use google, elevenlabs, omnivoice ou teste).");
   if (!(o.velocidade >= 0.5 && o.velocidade <= 2)) throw new Error("--velocidade deve ficar entre 0.5 e 2.");
   fs.mkdirSync(CACHE, { recursive: true });
   const escolhidos = filtrar(episodios(), o.ep);

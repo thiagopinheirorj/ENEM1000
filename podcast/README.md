@@ -78,6 +78,13 @@ documentação do Google Cloud Text-to-Speech.
 biblioteca da ElevenLabs) e rode
 `npm run audio -- --provedor elevenlabs`.
 
+**OmniVoice (grátis, de código aberto, roda no próprio computador).** Instale com
+`pip install omnivoice` (num ambiente Python à parte) e rode
+`OMNIVOICE_PYTHON=caminho/do/python npm run audio -- --provedor omnivoice --ep 1`. As vozes padrão
+são criadas por descrição (`male, middle-aged` e `female, young adult`). Para clonar uma voz
+autorizada, use `--voz-thiago "clone:caminho/ref.wav|texto exato do áudio"`. Sem placa de vídeo,
+um episódio leva cerca de meia hora.
+
 **Dicas**
 - Trechos já gerados ficam em cache: refazer um episódio não cobra de novo o que não mudou.
 - `npm run audio -- --provedor teste` roda todo o processo sem voz real e sem custo.
