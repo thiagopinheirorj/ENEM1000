@@ -1,6 +1,6 @@
 # Episódio 1 · Relações que escorrem pelos dedos
 
-> Eixo: Tecnologia e sociedade · Repertório: Zygmunt Bauman, Modernidade Líquida (2000) e Amor Líquido (2003) · Duração estimada: 4 min
+> Eixo: Tecnologia e sociedade · Repertório: Zygmunt Bauman, Modernidade Líquida (2000) e Amor Líquido (2003) · Duração estimada: 5 min
 
 ## Abertura
 
@@ -89,5 +89,7 @@ _[pausa de 3 segundos]_
 ## Encerramento
 
 **Isa:** Acabou por hoje! Bora pro app fazer o desafio e manter o foguinho aceso.
+
+**Thiago:** E se você quer subir a sua nota de verdade, eu corrijo a sua redação com comentários detalhados e dicas pra você evoluir. É só me chamar no WhatsApp: vinte e um, nove sete dois zero três, dois dois sete cinco. O link também tá na descrição.
 
 **Thiago:** Valeu, gente. Até amanhã, com mais repertório!

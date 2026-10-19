@@ -58,6 +58,8 @@
   function trecho(voz, bloco, texto, pausa) {
     return { voz: voz, bloco: bloco, texto: falado(texto), pausa: pausa || 0 };
   }
+  /* Chamada para a correção de redação, falada no fim dos episódios (número dito em grupos). */
+  var CHAMADA_CORRECAO = "E se você quer subir a sua nota de verdade, eu corrijo a sua redação com comentários detalhados e dicas pra você evoluir. É só me chamar no WhatsApp: vinte e um, nove sete dois zero três, dois dois sete cinco. O link também tá na descrição.";
   var NOMES = { thiago: "Thiago", isa: "Isa" };
 
   /* Falas de apoio: variam por episódio para a conversa não soar repetida. */
@@ -147,6 +149,7 @@
       t.push(trecho("isa", "", c.reflexao.isa, 1));
     }
     t.push(trecho("isa", "Encerramento", escolhe(POOL.encerraIsa, n)));
+    t.push(trecho("thiago", "", CHAMADA_CORRECAO));
     t.push(trecho("thiago", "", escolhe(POOL.encerraThiago, n, 2)));
     return t;
   }
@@ -181,6 +184,7 @@
     t.push(trecho("isa", "Encerramento", "Thiago, e se cair um tema nada a ver com tudo isso?"));
     t.push(trecho("thiago", "", "Aí você faz o que treinou: lê a proposta com calma, acha o problema, escolhe dois argumentos, usa o repertório que encaixar e fecha com uma proposta completa. A aposta é só uma aposta. O seu treino é que vale."));
     t.push(trecho("isa", "", "Então é isso, galera. Boa prova pra todo mundo!"));
+    t.push(trecho("thiago", "", CHAMADA_CORRECAO));
     t.push(trecho("thiago", "", "Boa prova! A gente torce por você."));
     return t;
   }

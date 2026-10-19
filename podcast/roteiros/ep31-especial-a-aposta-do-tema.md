@@ -90,4 +90,6 @@
 
 **Isa:** Então é isso, galera. Boa prova pra todo mundo!
 
+**Thiago:** E se você quer subir a sua nota de verdade, eu corrijo a sua redação com comentários detalhados e dicas pra você evoluir. É só me chamar no WhatsApp: vinte e um, nove sete dois zero três, dois dois sete cinco. O link também tá na descrição.
+
 **Thiago:** Boa prova! A gente torce por você.

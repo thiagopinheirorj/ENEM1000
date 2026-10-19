@@ -1,6 +1,6 @@
 # Episódio 3 · A marca invisível do estigma
 
-> Eixo: Saúde mental e trabalho · Repertório: Erving Goffman, Estigma (1963) · Duração estimada: 4 min
+> Eixo: Saúde mental e trabalho · Repertório: Erving Goffman, Estigma (1963) · Duração estimada: 5 min
 
 ## Abertura
 
@@ -89,5 +89,7 @@ _[pausa de 3 segundos]_
 ## Encerramento
 
 **Isa:** E é isso, galera! Abre o app, faz o exercício e mantém a sequência.
+
+**Thiago:** E se você quer subir a sua nota de verdade, eu corrijo a sua redação com comentários detalhados e dicas pra você evoluir. É só me chamar no WhatsApp: vinte e um, nove sete dois zero três, dois dois sete cinco. O link também tá na descrição.
 
 **Thiago:** Até amanhã! E escreve um pouquinho hoje, tá?

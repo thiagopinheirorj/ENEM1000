@@ -6,11 +6,11 @@ Formato: conversa entre Thiago (professor de redação) e Isa (vestibulanda), ap
 
 | Ep. | Título | Eixo | Duração estimada | Roteiro |
 | --- | --- | --- | --- | --- |
-| 1 | Relações que escorrem pelos dedos | Tecnologia e sociedade | ~4 min | [ep01-relacoes-que-escorrem-pelos-dedos.md](ep01-relacoes-que-escorrem-pelos-dedos.md) |
+| 1 | Relações que escorrem pelos dedos | Tecnologia e sociedade | ~5 min | [ep01-relacoes-que-escorrem-pelos-dedos.md](ep01-relacoes-que-escorrem-pelos-dedos.md) |
 | 2 | Exaustos de si mesmos | Saúde mental e trabalho | ~4 min | [ep02-exaustos-de-si-mesmos.md](ep02-exaustos-de-si-mesmos.md) |
-| 3 | A marca invisível do estigma | Saúde mental e trabalho | ~4 min | [ep03-a-marca-invisivel-do-estigma.md](ep03-a-marca-invisivel-do-estigma.md) |
+| 3 | A marca invisível do estigma | Saúde mental e trabalho | ~5 min | [ep03-a-marca-invisivel-do-estigma.md](ep03-a-marca-invisivel-do-estigma.md) |
 | 4 | Cuidar sem aprisionar | Saúde mental e trabalho | ~4 min | [ep04-cuidar-sem-aprisionar.md](ep04-cuidar-sem-aprisionar.md) |
-| 5 | Vigiados sem perceber | Tecnologia e sociedade | ~4 min | [ep05-vigiados-sem-perceber.md](ep05-vigiados-sem-perceber.md) |
+| 5 | Vigiados sem perceber | Tecnologia e sociedade | ~5 min | [ep05-vigiados-sem-perceber.md](ep05-vigiados-sem-perceber.md) |
 | 6 | Dentro da bolha | Tecnologia e sociedade | ~4 min | [ep06-dentro-da-bolha.md](ep06-dentro-da-bolha.md) |
 | 7 | A vida como vitrine | Tecnologia e sociedade | ~4 min | [ep07-a-vida-como-vitrine.md](ep07-a-vida-como-vitrine.md) |
 | 8 | Educar é transformar | Educação | ~4 min | [ep08-educar-e-transformar.md](ep08-educar-e-transformar.md) |
@@ -36,4 +36,4 @@ Formato: conversa entre Thiago (professor de redação) e Isa (vestibulanda), ap
 | 28 | Atrás do véu | Inclusão e direitos | ~4 min | [ep28-atras-do-veu.md](ep28-atras-do-veu.md) |
 | 29 | Envelhecer com dignidade | Inclusão e direitos | ~4 min | [ep29-envelhecer-com-dignidade.md](ep29-envelhecer-com-dignidade.md) |
 | 30 | Quando as regras perdem a força | Violência e ética | ~4 min | [ep30-quando-as-regras-perdem-a-forca.md](ep30-quando-as-regras-perdem-a-forca.md) |
-| Especial | A aposta do tema (publicar na véspera da prova) | — | ~6 min | [ep31-especial-a-aposta-do-tema.md](ep31-especial-a-aposta-do-tema.md) |
+| Especial | A aposta do tema (publicar na véspera da prova) | — | ~7 min | [ep31-especial-a-aposta-do-tema.md](ep31-especial-a-aposta-do-tema.md) |

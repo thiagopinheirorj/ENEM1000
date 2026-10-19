@@ -90,4 +90,6 @@ _[pausa de 3 segundos]_
 
 **Isa:** Fechou! Corre pro app, que o desafio de escrita tá te esperando.
 
+**Thiago:** E se você quer subir a sua nota de verdade, eu corrijo a sua redação com comentários detalhados e dicas pra você evoluir. É só me chamar no WhatsApp: vinte e um, nove sete dois zero três, dois dois sete cinco. O link também tá na descrição.
+
 **Thiago:** Um beijo, e até o próximo episódio!

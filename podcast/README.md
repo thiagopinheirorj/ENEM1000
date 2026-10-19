@@ -113,6 +113,9 @@ um episódio leva cerca de meia hora.
 
 > Repertório do dia: {fonte}. Eixo: {eixo}. Ouça, responda o exercício e faça o desafio
 > de escrita no app: https://thiagopinheirorj.github.io/ENEM1000/
+>
+> ✍️ Correção de redação comentada com o professor Thiago, com dicas para você evoluir:
+> WhatsApp (21) 97203-2275 · https://wa.me/5521972032275
 
 ## Calendário sugerido até a prova (8/11/2026)
 

@@ -408,6 +408,8 @@ details.model p { margin-top: 8px; }
 .player-fala:empty { display: none; }
 .player-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
+.correcao { text-align: center; border-color: var(--accent); }
+.correcao .btn { display: block; text-decoration: none; margin-top: 10px; }
 .disclaimer { font-size: 13px; color: var(--muted); text-align: center; margin: 18px 0 0; line-height: 1.5; }
 
 /* Página de política de privacidade */

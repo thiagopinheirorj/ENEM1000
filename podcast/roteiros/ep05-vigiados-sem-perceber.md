@@ -1,6 +1,6 @@
 # Episódio 5 · Vigiados sem perceber
 
-> Eixo: Tecnologia e sociedade · Repertório: Michel Foucault, Vigiar e Punir (1975); Shoshana Zuboff, A Era do Capitalismo de Vigilância (2019) · Duração estimada: 4 min
+> Eixo: Tecnologia e sociedade · Repertório: Michel Foucault, Vigiar e Punir (1975); Shoshana Zuboff, A Era do Capitalismo de Vigilância (2019) · Duração estimada: 5 min
 
 ## Abertura
 
@@ -89,5 +89,7 @@ _[pausa de 3 segundos]_
 ## Encerramento
 
 **Isa:** Fechou! Corre pro app, que o desafio de escrita tá te esperando.
+
+**Thiago:** E se você quer subir a sua nota de verdade, eu corrijo a sua redação com comentários detalhados e dicas pra você evoluir. É só me chamar no WhatsApp: vinte e um, nove sete dois zero três, dois dois sete cinco. O link também tá na descrição.
 
 **Thiago:** Um beijo, e até o próximo episódio!

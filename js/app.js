@@ -352,9 +352,20 @@
     }
   }
 
+  /* Contato do professor Thiago para correção de redação. */
+  var WHATSAPP_CORRECAO = "https://wa.me/5521972032275?text=" +
+    encodeURIComponent("Olá, professor Thiago! Vim pelo app Redação 1000 e quero a correção comentada da minha redação.");
+  var CARD_CORRECAO =
+    '<article class="card correcao">' +
+      "<h2>Quer subir sua nota de verdade?</h2>" +
+      "<p>O professor Thiago corrige sua redação com comentários detalhados e dicas para você evoluir.</p>" +
+      '<a class="btn" id="corrigir" href="' + WHATSAPP_CORRECAO + '" target="_blank" rel="noopener">✍️ Corrigir minha redação</a>' +
+      '<p class="empty" style="margin-top:8px">WhatsApp (21) 97203-2275</p>' +
+    "</article>";
+
   var AVISO =
     '<p class="disclaimer">App independente, sem vínculo com o Inep ou o MEC. ENEM é um exame do Inep.<br>' +
-    '<a href="privacidade.html">Política de privacidade</a></p>';
+    '<a href="privacidade.html">Política de privacidade</a> · <a href="' + WHATSAPP_CORRECAO + '" target="_blank" rel="noopener">Correção de redação</a></p>';
 
   var NOMES_COMP = { 1: "Norma-padrão", 2: "Tema e repertório", 3: "Argumentação", 4: "Coesão", 5: "Proposta de intervenção" };
 
@@ -457,6 +468,7 @@
         '<p class="eyebrow" style="text-align:center">Para refletir</p>' +
         '<p class="reflection">' + esc(d.reflexao) + "</p>" +
       "</article>" +
+      CARD_CORRECAO +
 
       '<div id="finish"></div>' +
 

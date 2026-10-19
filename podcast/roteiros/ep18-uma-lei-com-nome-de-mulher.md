@@ -90,4 +90,6 @@ _[pausa de 3 segundos]_
 
 **Isa:** E é isso, galera! Abre o app, faz o exercício e mantém a sequência.
 
+**Thiago:** E se você quer subir a sua nota de verdade, eu corrijo a sua redação com comentários detalhados e dicas pra você evoluir. É só me chamar no WhatsApp: vinte e um, nove sete dois zero três, dois dois sete cinco. O link também tá na descrição.
+
 **Thiago:** Até amanhã! E escreve um pouquinho hoje, tá?
