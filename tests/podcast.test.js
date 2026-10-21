@@ -94,88 +94,44 @@ function vozFalsaInit(vozes) {
 
 const vozFalsa = vozFalsaInit;
 
-describe("PC · Player Ouvir no app", () => {
+describe("PC · Ouvir no Spotify e Instagram", () => {
   let env;
   before(async () => { env = await setup(); });
   after(async () => { await env.teardown(); });
 
-  it("PC05 · Ouvir lê o episódio em pt-BR, mostra o andamento e termina", async () => {
-    const { page, errors } = await env.open({ init: vozFalsa });
-    await page.click("#ouvir");
-    assert.ok(await page.isVisible("#player"));
-    assert.ok(await page.isHidden("#ouvir"));
-    await page.waitForFunction(() => window.__falas.length >= 3);
-    const primeira = await page.evaluate(() => window.__falas[0]);
-    assert.match(primeira.text, /Redação 1000\./);
-    assert.equal(primeira.lang, "pt-BR");
-    assert.equal(primeira.voz, "Caio", "a Isa abre o episódio com a segunda voz");
-    await page.waitForFunction(() => window.__falas.some((f) => f.voz === "Ana"));
-    assert.match(await page.textContent("#pl-fala"), /^(Thiago|Isa): /);
-    assert.match(await page.textContent("#pl-status"), /Tocando · .+ · \d+ de \d+/);
-    // Avança o tempo das pausas até o fim do episódio.
-    for (let n = 0; n < 40 && !(await page.textContent("#pl-status")).includes("concluído"); n++) {
-      await page.clock.runFor(6000);
-    }
-    assert.equal(await page.textContent("#pl-status"), "Episódio concluído");
-    assert.equal(await page.textContent("#pl-toggle"), "Ouvir de novo");
-    const falas = await page.evaluate(() => window.__falas.map((f) => f.text).join(" "));
-    assert.match(falas, /(tá\?|episódio!|repertório!)$/, "termina com a despedida do Thiago");
-    assert.deepEqual(errors, []);
-  });
-
-  it("PC06 · pausar, continuar, mudar velocidade e parar", async () => {
-    const { page } = await env.open({ init: vozFalsa });
-    await page.click("#ouvir");
-    await page.waitForFunction(() => window.__falas.length >= 1);
-    await page.click("#pl-toggle");
-    assert.match(await page.textContent("#pl-status"), /^Pausado/);
-    assert.equal(await page.textContent("#pl-toggle"), "Continuar");
-    const antes = await page.evaluate(() => window.__falas.length);
-    await page.clock.runFor(10000);
-    assert.equal(await page.evaluate(() => window.__falas.length), antes, "nada é falado pausado");
-    await page.click("#pl-vel");
-    assert.equal(await page.textContent("#pl-vel"), "1,25x");
-    await page.click("#pl-toggle");
-    await page.waitForFunction((n) => window.__falas.length > n, antes);
-    assert.equal(await page.evaluate(() => window.__falas[window.__falas.length - 1].rate), 1.25);
-    await page.click("#pl-stop");
-    assert.ok(await page.isHidden("#player"));
-    assert.ok(await page.isVisible("#ouvir"));
-  });
-
-  it("PC07 · trocar de tela para o episódio", async () => {
-    const { page } = await env.open({ init: vozFalsa });
-    await page.click("#ouvir");
-    await page.waitForFunction(() => window.__falas.length >= 1);
-    await page.evaluate(() => { location.hash = "#/kit"; });
-    await page.waitForSelector("#kit-competencias");
-    const n = await page.evaluate(() => window.__falas.length);
-    await page.clock.runFor(10000);
-    assert.equal(await page.evaluate(() => window.__falas.length), n);
-    assert.ok(await page.evaluate(() => window.__canceladas) > 0);
-  });
-
-  it("PC08 · episódio especial na página da aposta", async () => {
-    const { page } = await env.open({ init: vozFalsa, fixed: br("2026-11-07", "10:00"), hash: "#/aposta" });
-    await page.click("#ouvir");
-    await page.waitForFunction(() => window.__falas.length >= 1);
-    assert.match(await page.evaluate(() => window.__falas[0].text), /Episódio especial do Redação 1000/);
-  });
-
-  it("PC11 · com uma só voz em português, Thiago e Isa falam em tons diferentes", async () => {
-    const { page } = await env.open({ init: vozFalsaInit, initArg: [{ lang: "pt-BR", name: "Unica" }] });
-    await page.click("#ouvir");
-    await page.waitForFunction(() => window.__falas.length >= 3);
-    const tons = await page.evaluate(() => Array.from(new Set(window.__falas.map((f) => f.pitch))).sort());
-    assert.deepEqual(tons, [0.8, 1.2]);
-  });
-
-  it("PC09 · sem voz no navegador, o botão Ouvir não aparece", async () => {
-    const { page, errors } = await env.open({
-      init: () => { Object.defineProperty(window, "speechSynthesis", { configurable: true, value: undefined }); }
-    });
-    assert.equal(await page.$("#ouvir"), null);
+  it("PC05 · Ouvir leva ao Spotify em nova aba, no dia e na aposta", async () => {
+    const { page } = await env.open({ hash: "#/dia/1" });
+    const a = page.locator("#spotify");
+    assert.match(await a.getAttribute("href"), /^https:\/\/open\.spotify\.com\//);
+    assert.equal(await a.getAttribute("target"), "_blank");
+    assert.match(await a.getAttribute("rel"), /noopener/);
     assert.equal(await page.$("#player"), null);
+    const v = await env.open({ hash: "#/aposta", time: br("2026-11-07", "09:00") });
+    assert.ok(await v.page.$("#spotify"));
+  });
+
+  it("PC06 · Ideia-chave tem botão de Instagram que gera e compartilha a imagem", async () => {
+    const { page, errors } = await env.open({
+      hash: "#/dia/1",
+      init: () => {
+        window.__shared = null;
+        Object.defineProperty(navigator, "canShare", { configurable: true, value: () => true });
+        Object.defineProperty(navigator, "share", { configurable: true, value: (d) => { window.__shared = { n: d.files[0].name, t: d.files[0].type, s: d.files[0].size }; return Promise.resolve(); } });
+      }
+    });
+    await page.click("#insta");
+    await page.waitForFunction(() => window.__shared);
+    const r = await page.evaluate(() => window.__shared);
+    assert.equal(r.n, "redacao1000-dia1.png");
+    assert.equal(r.t, "image/png");
+    assert.ok(r.s > 5000);
     assert.deepEqual(errors, []);
+  });
+
+  it("PC07 · sem compartilhamento nativo, a imagem é baixada", async () => {
+    const { page } = await env.open({ hash: "#/dia/1" });
+    const [dl] = await Promise.all([page.waitForEvent("download"), page.click("#insta")]);
+    assert.equal(dl.suggestedFilename(), "redacao1000-dia1.png");
+    assert.match(await page.textContent(".toast"), /Instagram/);
   });
 });

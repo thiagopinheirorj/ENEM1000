@@ -482,3 +482,6 @@ body.plain { padding-bottom: 0; }
 .conn-ex { margin-top: 8px; }
 .conn-ex[hidden], #t-modelo[hidden] { display: none; }
 #t-modelo { margin-top: 10px; }
+
+a.icon-btn { text-decoration: none; display: inline-flex; align-items: center; }
+.btn.insta { margin-top: 12px; width: auto; background: rgba(255,255,255,.16); color: inherit; border: 1px solid rgba(255,255,255,.4); }

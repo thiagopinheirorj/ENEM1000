@@ -212,6 +212,76 @@
         '<button class="btn small ghost" id="pl-stop">Parar</button>' +
       "</div></div>";
   }
+  /* Link do podcast no Spotify. Cole aqui o endereço do programa depois de publicar (open.spotify.com/show/...). */
+  var SPOTIFY_URL = "";
+  function spotifyHref() { return SPOTIFY_URL || "https://open.spotify.com/search/" + encodeURIComponent("Redação 1000"); }
+  function spotifyBtn(rotulo) {
+    return '<a class="icon-btn" id="spotify" href="' + esc(spotifyHref()) + '" target="_blank" rel="noopener">' + rotulo + "</a>";
+  }
+
+  /* Gera a imagem 1080x1920 (formato de stories) com a ideia-chave do dia. */
+  function imagemIdeia(d) {
+    var W = 1080, H = 1920, c = document.createElement("canvas");
+    c.width = W; c.height = H;
+    var x = c.getContext("2d");
+    var g = x.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, "#1f3a5f"); g.addColorStop(1, "#12223a");
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    function quebrar(texto, fonte, largura) {
+      x.font = fonte;
+      var linhas = [], atual = "";
+      texto.split(/\s+/).forEach(function (w) {
+        var t = atual ? atual + " " + w : w;
+        if (x.measureText(t).width > largura && atual) { linhas.push(atual); atual = w; } else atual = t;
+      });
+      if (atual) linhas.push(atual);
+      return linhas;
+    }
+    x.textAlign = "left"; x.textBaseline = "alphabetic";
+    x.fillStyle = "#e3a956"; x.font = "600 44px system-ui, sans-serif";
+    x.fillText("REDAÇÃO 1000 · DIA " + d.id, 90, 220);
+    x.fillStyle = "#ffffff";
+    var corpo = '"' + d.chave + '"';
+    var tam = 76, linhas;
+    do { tam -= 4; linhas = quebrar(corpo, "700 " + tam + 'px Georgia, "Times New Roman", serif', W - 180); } while (linhas.length * tam * 1.3 > 1000 && tam > 40);
+    x.font = "700 " + tam + 'px Georgia, "Times New Roman", serif';
+    var y = 560;
+    linhas.forEach(function (l) { x.fillText(l, 90, y); y += tam * 1.3; });
+    x.fillStyle = "#e3a956"; x.font = "italic 46px Georgia, serif";
+    quebrar("— " + d.fonte, "italic 46px Georgia, serif", W - 180).forEach(function (l) { y += 30; x.fillText(l, 90, y); y += 30; });
+    x.fillStyle = "#ffffff"; x.font = "500 40px system-ui, sans-serif";
+    x.fillText("Repertório para o ENEM, todo dia", 90, H - 190);
+    x.fillStyle = "#e3a956"; x.font = "600 38px system-ui, sans-serif";
+    x.fillText(APP_URL.replace("https://", ""), 90, H - 130);
+    return new Promise(function (res, rej) {
+      c.toBlob(function (b) { if (b) res(b); else rej(new Error("toBlob")); }, "image/png");
+    });
+  }
+  /* Compartilha a ideia-chave como imagem: no celular abre a folha de compartilhamento (Instagram incluso). */
+  function ligarInstagram(d) {
+    var b = document.getElementById("insta");
+    if (!b) return;
+    b.addEventListener("click", function () {
+      b.disabled = true;
+      imagemIdeia(d).then(function (blob) {
+        var arq;
+        try { arq = new File([blob], "redacao1000-dia" + d.id + ".png", { type: "image/png" }); } catch (e) { arq = null; }
+        if (arq && navigator.canShare && navigator.canShare({ files: [arq] }) && navigator.share) {
+          return navigator.share({ files: [arq], title: d.titulo, text: "Ideia-chave do dia: " + d.titulo + " " + APP_URL }).catch(function (e) {
+            if (e && e.name === "AbortError") return;
+            throw e;
+          });
+        }
+        var url = URL.createObjectURL(blob), a = document.createElement("a");
+        a.href = url; a.download = "redacao1000-dia" + d.id + ".png";
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+        toast("Imagem salva. Abra o Instagram e poste nos stories ou no feed.");
+      }).catch(function () { toast("Não foi possível gerar a imagem"); })
+        .then(function () { b.disabled = false; });
+    });
+  }
+
   /* Liga o botão "Ouvir" ao player da tela. */
   function ligarPlayer(titulo, gerarTrechos) {
     var btn = document.getElementById("ouvir");
@@ -413,15 +483,15 @@
           "<span>Dia " + id + " de " + N + " · ~5 min</span>" +
           (done ? '<span class="chip ok">✓ Concluído</span>' : "") +
           '<button class="icon-btn" id="fav" aria-pressed="' + fav + '">' + (fav ? "★ Favorito" : "☆ Favoritar") + "</button>" +
-          (temVoz ? '<button class="icon-btn" id="ouvir">🎧 Ouvir episódio</button>' : "") +
+          spotifyBtn("🎧 Ouvir no Spotify") +
         "</div>" +
       "</section>" +
-      (temVoz ? playerHtml() : "") +
 
       '<article class="card key">' +
         '<p class="eyebrow" style="color:inherit;opacity:.75">Ideia-chave</p>' +
         "<blockquote>" + esc(d.chave) + "</blockquote>" +
         '<div class="source">— ' + esc(d.fonte) + "</div>" +
+        '<button class="btn insta" id="insta">📸 Compartilhar no Instagram</button>' +
       "</article>" +
 
       '<article class="card">' +
@@ -480,7 +550,7 @@
         '<a class="btn ghost" style="text-align:center;text-decoration:none" href="#/dia/' + (id === N ? 1 : id + 1) + '">Próximo →</a>' +
       "</div>";
 
-    ligarPlayer("Episódio " + id, function () { return Podcast.roteiroDia(d, (window.CONVERSAS || {})[id]); });
+    ligarInstagram(d);
 
     // Favorito
     document.getElementById("fav").addEventListener("click", function () {
@@ -655,10 +725,9 @@
         '<p class="eyebrow">Véspera da prova · dia especial</p>' +
         "<h1>A aposta do tema</h1>" +
         '<div class="day-meta"><span>Pesquisa feita em ' + esc(a.pesquisaEm) + " com cursinhos, professores e o histórico do Inep</span>" +
-          (temVoz ? '<button class="icon-btn" id="ouvir">🎧 Ouvir episódio especial</button>' : "") +
+          spotifyBtn("🎧 Ouvir no Spotify") +
         "</div>" +
       "</section>" +
-      (temVoz ? playerHtml() : "") +
 
       '<article class="card key">' +
         '<p class="eyebrow" style="color:inherit;opacity:.75">Tema mais provável</p>' +
@@ -709,7 +778,6 @@
       "</ul></details>" +
 
       '<a class="btn ghost" style="display:block;text-align:center;text-decoration:none" href="#/dia/' + todayId() + '">Ver também o devocional de hoje</a>';
-    ligarPlayer("Episódio especial", function () { return Podcast.roteiroAposta(a); });
   }
 
   /* ---------- Tela: trilha ---------- */
