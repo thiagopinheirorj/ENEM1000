@@ -5,6 +5,9 @@
   var APOSTA = window.APOSTA;
   var Podcast = window.Podcast;
   var KIT = window.KIT;
+  var TREINO = window.TREINO;
+  var CONN_EX = window.CONECTIVOS_EX;
+  var RED = window.REDACOES1000;
   var N = DEV.length;
   var STORE_KEY = "enem1000:v1";
   var app = document.getElementById("app");
@@ -45,7 +48,7 @@
 
   /* ---------- Armazenamento local ---------- */
   function emptyState() {
-    return { inicio: today, done: {}, quiz: {}, textos: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO };
+    return { inicio: today, done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO };
   }
   function load() {
     try {
@@ -762,7 +765,7 @@
       '<p class="eyebrow">Consulta rápida</p>' +
       "<h1>Kit da redação nota 1000</h1>" +
       '<div class="kit-nav">' +
-        ["competencias:Competências", "estrutura:Estrutura", "conectivos:Conectivos", "proposta:Proposta", "temas:Temas anteriores", "zeram:O que zera"]
+        ["competencias:Competências", "estrutura:Estrutura", "conectivos:Conectivos", "proposta:Proposta", "temas:Temas anteriores", "redacoes:Redações 1000", "zeram:O que zera"]
           .map(function (p) { var s = p.split(":"); return '<a class="chip outline" href="#kit-' + s[0] + '">' + s[1] + "</a>"; }).join("") +
       "</div>" +
 
@@ -783,8 +786,9 @@
       '<section class="card" id="kit-conectivos"><h2>Banco de conectivos</h2>' +
         KIT.conectivos.map(function (c) {
           return '<div class="kit-item"><strong>' + esc(c.funcao) + '</strong><div class="pill-list">' +
-            c.lista.map(function (l) { return "<span>" + esc(l) + "</span>"; }).join("") + "</div></div>";
+            c.lista.map(function (l) { return '<button type="button" class="conn" aria-expanded="false" data-c="' + esc(l) + '">' + esc(l) + "</button>"; }).join("") + '</div><p class="conn-ex example" hidden></p></div>';
         }).join("") +
+        '<p class="empty">Toque em um conectivo para ver um exemplo em frase real.</p>' +
       "</section>" +
 
       '<section class="card" id="kit-proposta"><h2>Proposta de intervenção</h2>' +
@@ -799,11 +803,103 @@
         }).join("") +
       "</section>" +
 
+      '<section class="card" id="kit-redacoes"><h2>Redações nota 1000 de cada ano</h2>' +
+        '<p class="empty">Temas das provas e o que cada ano ensina. Os textos nota 1000 pertencem aos autores e ao Inep: leia-os no material oficial.</p>' +
+        '<a class="btn ghost small" href="' + RED.link + '" target="_blank" rel="noopener">Abrir o site do Inep</a>' +
+        '<div class="kit-item"><strong>O que as redações 1000 têm em comum</strong><ul>' +
+          RED.padroes.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></div>" +
+        RED.anos.map(function (a) {
+          return '<div class="kit-item"><strong>' + a.ano + '</strong><span class="muted">' + esc(a.tema) + '</span><span class="muted" style="display:block">Para treinar: ' + esc(a.foco) + "</span></div>";
+        }).join("") +
+      "</section>" +
+
       '<section class="card" id="kit-zeram"><h2>O que zera a redação</h2><ul style="margin:0;padding-left:20px">' +
         KIT.zeram.map(function (z) { return "<li>" + esc(z) + "</li>"; }).join("") +
       '</ul><p class="empty" style="margin-top:10px">Desrespeitar os direitos humanos na proposta pode zerar a Competência 5.</p></section>' +
       AVISO;
   }
+
+  /* ---------- Tela: treino ---------- */
+  function treinoFeitas(id) {
+    var t = state.treino[id];
+    return t && typeof t === "object" ? Object.keys(t).length : 0;
+  }
+  function renderTreino() {
+    app.innerHTML =
+      '<p class="eyebrow">Pratique</p><h1>Treino</h1>' +
+      '<p class="empty">Oficinas rápidas para as dúvidas mais comuns da redação. Leia, responda e escreva.</p>' +
+      TREINO.map(function (o) {
+        var f = treinoFeitas(o.id);
+        return '<a class="card oficina" href="#/treino/' + o.id + '"><span class="oficina-ico" aria-hidden="true">' + o.icone + "</span><span><strong>" +
+          esc(o.titulo) + '</strong><span class="muted" style="display:block">' + esc(o.resumo) + "</span>" +
+          '<span class="chip ' + (f >= o.questoes.length ? "ok" : "outline") + '">' + f + "/" + o.questoes.length + " questões</span></span></a>";
+      }).join("") + AVISO;
+  }
+  function renderOficina(id) {
+    var o = TREINO.filter(function (x) { return x.id === id; })[0];
+    if (!o) { renderTreino(); return; }
+    var prog = state.treino[id] && typeof state.treino[id] === "object" ? state.treino[id] : {};
+    app.innerHTML =
+      '<a class="back" href="#/treino">‹ Treino</a>' +
+      '<p class="eyebrow">Oficina ' + o.id + " de " + TREINO.length + "</p><h1>" + esc(o.titulo) + "</h1>" +
+      '<section class="card"><p>' + esc(o.ideia) + '</p><ol class="passos">' +
+        o.passos.map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("") + "</ol></section>" +
+      '<section class="card"><h2>Compare</h2>' +
+        '<div class="feedback bad"><strong>Fraco: </strong>' + esc(o.fraco) + "</div>" +
+        '<div class="feedback ok" style="margin-top:8px"><strong>Melhor: </strong>' + esc(o.forte) + "</div>" +
+        '<p class="empty" style="margin-top:8px">' + esc(o.porque) + "</p></section>" +
+      o.questoes.map(function (q, qi) {
+        var resp = prog[qi];
+        return '<section class="card quest" data-q="' + qi + '"><h2>Questão ' + (qi + 1) + "</h2><p>" + esc(q.p) + '</p><div class="options">' +
+          q.o.map(function (txt, i) {
+            var cls = resp === undefined ? "" : (i === q.c ? " correct" : (i === resp ? " wrong" : ""));
+            return '<button class="option' + cls + '" data-i="' + i + '"' + (resp === undefined ? "" : " disabled") + ">" + String.fromCharCode(65 + i) + ") " + esc(txt) + "</button>";
+          }).join("") + "</div>" +
+          '<div class="fb">' + (resp === undefined ? "" : '<div class="feedback ' + (resp === q.c ? "ok" : "bad") + '"><strong>' + (resp === q.c ? "Acertou! " : "Quase. ") + "</strong>" + esc(q.e) + "</div>") + "</div></section>";
+      }).join("") +
+      '<section class="card"><h2>Escreva</h2><p>' + esc(o.escreva) + '</p><textarea id="t-resp" rows="4" placeholder="Escreva aqui. Nada sai do seu aparelho."></textarea>' +
+        '<button class="btn ghost" id="t-ver" style="margin-top:8px">Ver uma resposta possível</button>' +
+        '<div class="example" id="t-modelo" hidden>' + esc(o.modelo) + "</div></section>" +
+      (id < TREINO.length ? '<a class="btn" href="#/treino/' + (id + 1) + '">Próxima oficina ›</a>' : '<a class="btn" href="#/treino">Voltar ao Treino</a>') +
+      AVISO;
+    app.querySelectorAll(".quest").forEach(function (box) {
+      var qi = +box.getAttribute("data-q"), q = o.questoes[qi];
+      box.querySelectorAll(".option").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var i = +b.getAttribute("data-i");
+          if (!state.treino[id] || typeof state.treino[id] !== "object") state.treino[id] = {};
+          state.treino[id][qi] = i;
+          save();
+          box.querySelectorAll(".option").forEach(function (x) {
+            var xi = +x.getAttribute("data-i");
+            x.disabled = true;
+            if (xi === q.c) x.classList.add("correct"); else if (xi === i) x.classList.add("wrong");
+          });
+          box.querySelector(".fb").innerHTML = '<div class="feedback ' + (i === q.c ? "ok" : "bad") + '"><strong>' + (i === q.c ? "Acertou! " : "Quase. ") + "</strong>" + esc(q.e) + "</div>";
+        });
+      });
+    });
+    document.getElementById("t-ver").addEventListener("click", function () {
+      var m = document.getElementById("t-modelo");
+      m.hidden = !m.hidden;
+      this.textContent = m.hidden ? "Ver uma resposta possível" : "Esconder a resposta";
+    });
+  }
+
+  /* Exemplos dos conectivos: toque para ver a frase */
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest(".conn");
+    if (!b) return;
+    var item = b.closest(".kit-item");
+    var box = item.querySelector(".conn-ex");
+    var aberto = b.getAttribute("aria-expanded") === "true";
+    item.querySelectorAll(".conn").forEach(function (x) { x.setAttribute("aria-expanded", "false"); x.classList.remove("on"); });
+    if (aberto) { box.hidden = true; return; }
+    b.setAttribute("aria-expanded", "true");
+    b.classList.add("on");
+    box.hidden = false;
+    box.textContent = CONN_EX[b.getAttribute("data-c")] || "";
+  });
 
   /* ---------- Tela: progresso ---------- */
   function renderProgresso() {
@@ -948,6 +1044,8 @@
       renderDay(id, id === todayId());
     } else if (h === "#/aposta") { tab = apostaLiberada() ? "hoje" : "trilha"; renderAposta(); }
     else if (h === "#/trilha") { tab = "trilha"; renderTrilha(); }
+    else if (h === "#/treino") { tab = "treino"; renderTreino(); }
+    else if ((m = h.match(/^#\/treino\/(\d+)$/))) { tab = "treino"; renderOficina(+m[1]); }
     else if (h === "#/kit") { tab = "kit"; renderKit(); }
     else if (h === "#/progresso") { tab = "progresso"; renderProgresso(); }
     else if (apostaLiberada() && today <= (state.prova || PROVA_PADRAO)) { renderAposta(); } // Hoje mostra a aposta só na véspera e no dia da prova

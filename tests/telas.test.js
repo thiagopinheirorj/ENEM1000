@@ -1,4 +1,4 @@
-/* Telas Trilha, Kit e Progresso. */
+/* Telas Trilha, Treino, Kit e Progresso. */
 "use strict";
 
 const { describe, it, before, after } = require("node:test");
@@ -84,7 +84,7 @@ describe("T · Trilha", () => {
 describe("K · Kit", () => {
   it("K01 · seções presentes, 5 competências, temas anteriores com 2025 e aviso com privacidade", async () => {
     const { page } = await env.open({ hash: "#/kit" });
-    for (const s of ["competencias", "estrutura", "conectivos", "proposta", "temas", "zeram"]) {
+    for (const s of ["competencias", "estrutura", "conectivos", "proposta", "temas", "redacoes", "zeram"]) {
       assert.equal(await page.locator("#kit-" + s).count(), 1, s);
       assert.equal(await page.locator('.kit-nav a[href="#kit-' + s + '"]').count(), 1, s);
     }
@@ -196,7 +196,7 @@ describe("P · Progresso", () => {
     await page.waitForSelector(".toast");
     assert.equal(await page.textContent(".toast"), "Trilha reiniciada");
     const s = await getState(page);
-    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08" });
+    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08" });
     assert.equal(await page.textContent("#streak-count"), "0");
     const stats = await page.$$eval(".stat .v", (v) => v.map((x) => x.textContent));
     assert.deepEqual(stats, ["0", "0", "0/30", "—"]);
@@ -225,3 +225,67 @@ describe("P · Progresso", () => {
   });
 });
 
+
+describe("TR · Treino, exemplos de conectivos e redações 1000", () => {
+  it("TR01 · aba Treino lista as oficinas e abre uma", async () => {
+    const { page } = await env.open({ hash: "#/treino" });
+    assert.equal(await page.getAttribute('.tabbar a[data-tab="treino"]', "aria-current"), "page");
+    assert.ok((await page.locator("a.oficina").count()) >= 6);
+    await page.click("a.oficina >> nth=0");
+    await page.waitForFunction(() => /tese/i.test(document.querySelector("h1").textContent));
+    assert.match(await page.textContent("h1"), /tese/i);
+    assert.equal(await page.locator(".quest").count(), 3);
+  });
+
+  it("TR02 · responder uma questão mostra o gabarito e guarda o progresso", async () => {
+    const { page } = await env.open({ hash: "#/treino/1" });
+    await page.click(".quest >> nth=0 >> .option >> nth=0");
+    assert.equal(await page.locator(".quest >> nth=0 >> .option.correct").count(), 1);
+    assert.equal(await page.locator(".quest >> nth=0 >> .option:not([disabled])").count(), 0);
+    assert.ok(await page.locator(".quest >> nth=0 >> .feedback").count());
+    const salvo = await page.evaluate(() => JSON.parse(localStorage.getItem("enem1000:v1")).treino);
+    assert.equal(salvo[1][0], 0);
+    await page.reload();
+    assert.equal(await page.locator(".quest >> nth=0 >> .option:not([disabled])").count(), 0);
+  });
+
+  it("TR03 · resposta possível aparece e some; oficina inexistente volta à lista", async () => {
+    const { page } = await env.open({ hash: "#/treino/2" });
+    assert.equal(await page.isVisible("#t-modelo"), false);
+    await page.click("#t-ver");
+    assert.equal(await page.isVisible("#t-modelo"), true);
+    await page.click("#t-ver");
+    assert.equal(await page.isVisible("#t-modelo"), false);
+    await page.goto(page.url().split("#")[0] + "#/treino/99");
+    assert.equal(await page.textContent("h1"), "Treino");
+  });
+
+  it("TR04 · tocar num conectivo mostra frase de exemplo", async () => {
+    const { page } = await env.open({ hash: "#/kit" });
+    await page.click('.conn[data-c="contudo"]');
+    assert.match(await page.textContent("#kit-conectivos .conn-ex:not([hidden])"), /contudo/i);
+    await page.click('.conn[data-c="contudo"]');
+    assert.equal(await page.locator("#kit-conectivos .conn-ex:not([hidden])").count(), 0);
+  });
+
+  it("TR05 · todo conectivo do Kit tem exemplo com o próprio conectivo", async () => {
+    const { page } = await env.open({ hash: "#/kit" });
+    const falhas = await page.evaluate(() => {
+      const out = [];
+      document.querySelectorAll(".conn").forEach((b) => {
+        const c = b.dataset.c.replace(/ \(.*\)/, "").toLowerCase();
+        const ex = (window.CONECTIVOS_EX[b.dataset.c] || "").toLowerCase();
+        if (!ex || ex.indexOf(c) < 0) out.push(c);
+      });
+      return out;
+    });
+    assert.deepEqual(falhas, []);
+  });
+
+  it("TR06 · Kit traz as redações de cada ano de 2009 a 2025 com link oficial", async () => {
+    const { page } = await env.open({ hash: "#/kit" });
+    const t = await page.textContent("#kit-redacoes");
+    for (let a = 2009; a <= 2025; a++) assert.match(t, new RegExp(String(a)));
+    assert.match(await page.getAttribute("#kit-redacoes a.btn", "href"), /^https:\/\/www\.gov\.br\/inep/);
+  });
+});
