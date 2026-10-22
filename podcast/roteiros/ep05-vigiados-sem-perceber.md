@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** E aí, pessoal! Tá no ar mais um Redação 1000. Aqui é a Isa, vestibulanda oficial do programa. E comigo, como sempre...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Vigiados sem perceber.
 
-**Thiago:** O Thiago, professor de redação. Pega o caderno, que hoje tem coisa boa.
-
-**Isa:** Episódio 5: Vigiados sem perceber. O assunto de hoje é tecnologia e sociedade.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 5, e o assunto de hoje é tecnologia e sociedade.
 
 **Isa:** Thiago, eu comentei sobre tênis com um amigo e no outro dia só me aparecia anúncio de tênis.
 

@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Fala, meu povo! Mais um Redação 1000 saindo do forno. Eu sou a Isa, a aluna da casa. E quem segura a parte inteligente é ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Racismo que está na estrutura.
 
-**Thiago:** O Thiago, professor de redação. Bom dia, boa tarde ou boa noite, onde quer que você esteja ouvindo.
-
-**Isa:** Episódio 19: Racismo que está na estrutura. O assunto de hoje é questões étnico-raciais.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 19, e o assunto de hoje é questões étnico-raciais.
 
 **Isa:** Ouvi alguém dizer: eu não sou racista, então o problema não é comigo.
 

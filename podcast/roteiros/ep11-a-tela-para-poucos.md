@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Fala, meu povo! Mais um Redação 1000 saindo do forno. Aqui é a Isa, vestibulanda oficial do programa. E comigo, como sempre...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: A tela para poucos.
 
-**Thiago:** O Thiago, professor de redação. Bom dia, boa tarde ou boa noite, onde quer que você esteja ouvindo.
-
-**Isa:** Episódio 11: A tela para poucos. O assunto de hoje é cultura e arte.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 11, e o assunto de hoje é cultura e arte.
 
 **Isa:** Na minha cidade não tem cinema. Pra ver filme na tela grande, é uma hora de ônibus.
 

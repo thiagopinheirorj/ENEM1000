@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Salve, salve! Bem-vindos a mais um Redação 1000. Eu sou a Isa, tô na luta pro ENEM igual a você. E aqui do lado está ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Dentro da bolha.
 
-**Thiago:** O Thiago! E hoje o papo está bom, viu?
-
-**Isa:** Episódio 6: Dentro da bolha. O assunto de hoje é tecnologia e sociedade.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 6, e o assunto de hoje é tecnologia e sociedade.
 
 **Isa:** Meu tio jura que todo mundo pensa igual a ele. Diz que na internet só vê gente concordando.
 

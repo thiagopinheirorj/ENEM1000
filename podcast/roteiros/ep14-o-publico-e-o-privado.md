@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Salve, salve! Bem-vindos a mais um Redação 1000. Aqui é a Isa, vestibulanda oficial do programa. E comigo, como sempre...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: O público e o privado.
 
-**Thiago:** O Thiago! E hoje o papo está bom, viu?
-
-**Isa:** Episódio 14: O público e o privado. O assunto de hoje é cidadania e política.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 14, e o assunto de hoje é cidadania e política.
 
 **Isa:** Thiago, eu sou uma pessoa cordial.
 

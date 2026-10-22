@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Fala, galera! Começando mais um Redação 1000. Aqui é a Isa, vestibulanda oficial do programa. E comigo, como sempre...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: A África que nos forma.
 
-**Thiago:** O Thiago! Professor de redação e responsável por fazer a Isa parar de escrever nos dias de hoje.
-
-**Isa:** Episódio 20: A África que nos forma. O assunto de hoje é questões étnico-raciais.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 20, e o assunto de hoje é questões étnico-raciais.
 
 **Isa:** Thiago, sabia que a palavra cafuné vem de uma língua africana?
 

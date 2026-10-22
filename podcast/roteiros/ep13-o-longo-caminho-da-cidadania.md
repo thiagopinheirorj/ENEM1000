@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** E aí, pessoal! Tá no ar mais um Redação 1000. Eu sou a Isa, a aluna da casa. E quem segura a parte inteligente é ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: O longo caminho da cidadania.
 
-**Thiago:** O Thiago, professor de redação. Pega o caderno, que hoje tem coisa boa.
-
-**Isa:** Episódio 13: O longo caminho da cidadania. O assunto de hoje é cidadania e política.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 13, e o assunto de hoje é cidadania e política.
 
 **Isa:** Vou votar pela primeira vez e confesso: nem sei quem são os vereadores da minha cidade.
 

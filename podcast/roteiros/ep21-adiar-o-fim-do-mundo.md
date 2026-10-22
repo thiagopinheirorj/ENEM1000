@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** E aí, pessoal! Tá no ar mais um Redação 1000. Eu sou a Isa, tô na luta pro ENEM igual a você. E aqui do lado está ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Adiar o fim do mundo.
 
-**Thiago:** O Thiago, professor de redação. Pega o caderno, que hoje tem coisa boa.
-
-**Isa:** Episódio 21: Adiar o fim do mundo. O assunto de hoje é meio ambiente e povos tradicionais.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 21, e o assunto de hoje é meio ambiente e povos tradicionais.
 
 **Isa:** Thiago, pra você, um rio é o quê?
 

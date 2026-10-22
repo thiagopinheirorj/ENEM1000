@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Salve, salve! Bem-vindos a mais um Redação 1000. Eu sou a Isa, a aluna da casa. E quem segura a parte inteligente é ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Uma língua que precisa de lugar.
 
-**Thiago:** O Thiago! E hoje o papo está bom, viu?
-
-**Isa:** Episódio 10: Uma língua que precisa de lugar. O assunto de hoje é inclusão e direitos.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 10, e o assunto de hoje é inclusão e direitos.
 
 **Isa:** Thiago, aprendi a dar bom-dia em Libras essa semana.
 

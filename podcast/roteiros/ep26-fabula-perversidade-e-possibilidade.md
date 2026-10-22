@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Salve, salve! Bem-vindos a mais um Redação 1000. Aqui é a Isa, vestibulanda oficial do programa. E comigo, como sempre...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Fábula, perversidade e possibilidade.
 
-**Thiago:** O Thiago! E hoje o papo está bom, viu?
-
-**Isa:** Episódio 26: Fábula, perversidade e possibilidade. O assunto de hoje é desigualdade social.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 26, e o assunto de hoje é desigualdade social.
 
 **Isa:** Thiago, a globalização não era pra deixar todo mundo conectado e igual?
 

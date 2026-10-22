@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Fala, galera! Começando mais um Redação 1000. Eu sou a Isa, a aluna da casa. E quem segura a parte inteligente é ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Atrás do véu.
 
-**Thiago:** O Thiago! Professor de redação e responsável por fazer a Isa parar de escrever nos dias de hoje.
-
-**Isa:** Episódio 28: Atrás do véu. O assunto de hoje é inclusão e direitos.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 28, e o assunto de hoje é inclusão e direitos.
 
 **Isa:** Thiago, imagina que você vai nascer de novo, mas não sabe onde.
 

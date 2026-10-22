@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Fala, galera! Começando mais um Redação 1000. Eu sou a Isa, tô na luta pro ENEM igual a você. E aqui do lado está ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: A fome é política.
 
-**Thiago:** O Thiago! Professor de redação e responsável por fazer a Isa parar de escrever nos dias de hoje.
-
-**Isa:** Episódio 24: A fome é política. O assunto de hoje é desigualdade social.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 24, e o assunto de hoje é desigualdade social.
 
 **Isa:** Thiago, o Brasil não é um dos maiores produtores de comida do mundo?
 

@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Salve, salve! Bem-vindos a mais um Redação 1000. Eu sou a Isa, tô na luta pro ENEM igual a você. E aqui do lado está ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Quando as regras perdem a força.
 
-**Thiago:** O Thiago! E hoje o papo está bom, viu?
-
-**Isa:** Episódio 30: Quando as regras perdem a força. O assunto de hoje é violência e ética.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 30, e o assunto de hoje é violência e ética.
 
 **Isa:** Thiago, por que parece que tem tanta briga na escola ultimamente?
 

@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Fala, meu povo! Mais um Redação 1000 saindo do forno. Aqui é a Isa, vestibulanda oficial do programa. E comigo, como sempre...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Riscos que nós mesmos criamos.
 
-**Thiago:** O Thiago, professor de redação. Bom dia, boa tarde ou boa noite, onde quer que você esteja ouvindo.
-
-**Isa:** Episódio 23: Riscos que nós mesmos criamos. O assunto de hoje é meio ambiente e povos tradicionais.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 23, e o assunto de hoje é meio ambiente e povos tradicionais.
 
 **Isa:** Thiago, choveu forte ontem e alagou a rua da minha avó. De novo.
 

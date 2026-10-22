@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Fala, galera! Começando mais um Redação 1000. Aqui é a Isa, vestibulanda oficial do programa. E comigo, como sempre...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Educar é transformar.
 
-**Thiago:** O Thiago! Professor de redação e responsável por fazer a Isa parar de escrever nos dias de hoje.
-
-**Isa:** Episódio 8: Educar é transformar. O assunto de hoje é educação.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 8, e o assunto de hoje é educação.
 
 **Isa:** Thiago, tem gente que diz que educação não resolve nada. Que é discurso bonito.
 

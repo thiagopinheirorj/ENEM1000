@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Fala, meu povo! Mais um Redação 1000 saindo do forno. Eu sou a Isa, tô na luta pro ENEM igual a você. E aqui do lado está ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Desenvolvimento é liberdade.
 
-**Thiago:** O Thiago, professor de redação. Bom dia, boa tarde ou boa noite, onde quer que você esteja ouvindo.
-
-**Isa:** Episódio 27: Desenvolvimento é liberdade. O assunto de hoje é desigualdade social.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 27, e o assunto de hoje é desigualdade social.
 
 **Isa:** Thiago, se o PIB cresce, o país tá melhor, certo?
 

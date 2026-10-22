@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Salve, salve! Bem-vindos a mais um Redação 1000. Eu sou a Isa, tô na luta pro ENEM igual a você. E aqui do lado está ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Uma lei com nome de mulher.
 
-**Thiago:** O Thiago! E hoje o papo está bom, viu?
-
-**Isa:** Episódio 18: Uma lei com nome de mulher. O assunto de hoje é gênero.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 18, e o assunto de hoje é gênero.
 
 **Isa:** Thiago, eu achava que Maria da Penha era só o nome de uma lei.
 

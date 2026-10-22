@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Salve, salve! Bem-vindos a mais um Redação 1000. Eu sou a Isa, a aluna da casa. E quem segura a parte inteligente é ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Responsáveis pelo amanhã.
 
-**Thiago:** O Thiago! E hoje o papo está bom, viu?
-
-**Isa:** Episódio 22: Responsáveis pelo amanhã. O assunto de hoje é meio ambiente e povos tradicionais.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 22, e o assunto de hoje é meio ambiente e povos tradicionais.
 
 **Isa:** Tem gente que fala: quando o planeta esquentar de vez, eu nem vou estar aqui.
 

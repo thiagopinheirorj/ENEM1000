@@ -2,7 +2,9 @@
 
 ## Abertura
 
-**Isa:** Fala, galera! Episódio especial do Redação 1000. Véspera da prova! Thiago, eu tô tremendo.
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: a aposta do tema da redação.
+
+**Isa:** E eu sou a Isa. Episódio especial, véspera da prova! Thiago, eu tô tremendo.
 
 **Thiago:** Respira, Isa. Hoje é dia de revisar com calma. E de contar a nossa aposta pro tema da redação.
 

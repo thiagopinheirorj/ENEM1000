@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** E aí, pessoal! Tá no ar mais um Redação 1000. Aqui é a Isa, vestibulanda oficial do programa. E comigo, como sempre...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: O trabalho que ninguém vê.
 
-**Thiago:** O Thiago, professor de redação. Pega o caderno, que hoje tem coisa boa.
-
-**Isa:** Episódio 17: O trabalho que ninguém vê. O assunto de hoje é gênero.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 17, e o assunto de hoje é gênero.
 
 **Isa:** Thiago, minha mãe trabalha fora, chega em casa e ainda faz janta, lava louça, confere meu dever...
 

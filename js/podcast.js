@@ -61,6 +61,7 @@
   /* Chamada para a correção de redação, falada no fim dos episódios (número dito em grupos). */
   var CHAMADA_CORRECAO = "E se você quer subir a sua nota de verdade, eu corrijo a sua redação com comentários detalhados e dicas pra você evoluir. É só me chamar no WhatsApp: vinte e um, nove sete dois zero três, dois dois sete cinco. O link também tá na descrição.";
   var NOMES = { thiago: "Thiago", isa: "Isa" };
+  var ABERTURA_THIAGO = "Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: ";
 
   /* Falas de apoio: variam por episódio para a conversa não soar repetida. */
   var POOL = {
@@ -109,9 +110,15 @@
     var letra = function (pos) { return String.fromCharCode(65 + pos); };
     var posCorreta = ordem.indexOf(d.quiz.correta);
     var t = [];
-    t.push(trecho("isa", "Abertura", escolhe(POOL.abertura, n) + " " + escolhe(POOL.apresenta, n, 2)));
-    t.push(trecho("thiago", "", escolhe(POOL.thiago, n, 3)));
-    t.push(trecho("isa", "", "Episódio " + d.id + ": " + d.titulo + ". O assunto de hoje é " + d.eixo.toLowerCase() + "."));
+    if (n >= 5) {
+      /* A partir do episódio 5, o Thiago abre o programa. */
+      t.push(trecho("thiago", "Abertura", ABERTURA_THIAGO + d.titulo + "."));
+      t.push(trecho("isa", "", "E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio " + d.id + ", e o assunto de hoje é " + d.eixo.toLowerCase() + "."));
+    } else {
+      t.push(trecho("isa", "Abertura", escolhe(POOL.abertura, n) + " " + escolhe(POOL.apresenta, n, 2)));
+      t.push(trecho("thiago", "", escolhe(POOL.thiago, n, 3)));
+      t.push(trecho("isa", "", "Episódio " + d.id + ": " + d.titulo + ". O assunto de hoje é " + d.eixo.toLowerCase() + "."));
+    }
     (c.gancho || []).forEach(function (f) { t.push(trecho(f[0], "", f[1])); });
 
     t.push(trecho("thiago", "Ideia-chave", "A ideia-chave de hoje é esta: " + d.chave + " Isso vem de " + semPonto(d.fonte) + "."));
@@ -157,7 +164,8 @@
   /* Roteiro do episódio especial da aposta (window.APOSTA), também em conversa. */
   function roteiroAposta(a) {
     var t = [];
-    t.push(trecho("isa", "Abertura", "Fala, galera! Episódio especial do Redação 1000. Véspera da prova! Thiago, eu tô tremendo."));
+    t.push(trecho("thiago", "Abertura", ABERTURA_THIAGO + "a aposta do tema da redação."));
+    t.push(trecho("isa", "", "E eu sou a Isa. Episódio especial, véspera da prova! Thiago, eu tô tremendo."));
     t.push(trecho("thiago", "", "Respira, Isa. Hoje é dia de revisar com calma. E de contar a nossa aposta pro tema da redação."));
     t.push(trecho("isa", "", "Então fala logo. Qual é?"));
     t.push(trecho("thiago", "A aposta", "O tema mais provável, na nossa pesquisa, é: " + a.tema + "."));

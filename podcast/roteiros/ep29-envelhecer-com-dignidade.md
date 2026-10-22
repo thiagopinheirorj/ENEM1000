@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** E aí, pessoal! Tá no ar mais um Redação 1000. Aqui é a Isa, vestibulanda oficial do programa. E comigo, como sempre...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Envelhecer com dignidade.
 
-**Thiago:** O Thiago, professor de redação. Pega o caderno, que hoje tem coisa boa.
-
-**Isa:** Episódio 29: Envelhecer com dignidade. O assunto de hoje é inclusão e direitos.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 29, e o assunto de hoje é inclusão e direitos.
 
 **Isa:** Minha avó tentou pedir um remédio pelo aplicativo e desistiu.
 

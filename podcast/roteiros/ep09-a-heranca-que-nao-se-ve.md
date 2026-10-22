@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** E aí, pessoal! Tá no ar mais um Redação 1000. Eu sou a Isa, tô na luta pro ENEM igual a você. E aqui do lado está ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: A herança que não se vê.
 
-**Thiago:** O Thiago, professor de redação. Pega o caderno, que hoje tem coisa boa.
-
-**Isa:** Episódio 9: A herança que não se vê. O assunto de hoje é educação.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 9, e o assunto de hoje é educação.
 
 **Isa:** Tem um colega meu que já leu Machado de Assis inteiro. Com quinze anos.
 

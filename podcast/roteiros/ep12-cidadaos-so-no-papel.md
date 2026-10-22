@@ -4,11 +4,9 @@
 
 ## Abertura
 
-**Isa:** Fala, galera! Começando mais um Redação 1000. Eu sou a Isa, tô na luta pro ENEM igual a você. E aqui do lado está ele...
+**Thiago:** Fala, galera! Meu nome é Thiago, professor de redação, e hoje iremos ver: Cidadãos só no papel.
 
-**Thiago:** O Thiago! Professor de redação e responsável por fazer a Isa parar de escrever nos dias de hoje.
-
-**Isa:** Episódio 12: Cidadãos só no papel. O assunto de hoje é cidadania e política.
+**Isa:** E eu sou a Isa, tô na luta pro ENEM igual a você. Episódio 12, e o assunto de hoje é cidadania e política.
 
 **Isa:** Thiago, sabia que tem brasileiro que não tem nem certidão de nascimento?
 
