@@ -1,8 +1,9 @@
-/* Estatísticas anônimas de uso, gravadas no Supabase.
+/* Estatísticas anônimas de uso, enviadas ao GoatCounter (grátis) e/ou ao Supabase.
  * Cada aparelho recebe um código aleatório; nenhum nome, telefone ou texto do aluno é enviado.
  * Sem URL e chave preenchidas, nada é enviado. */
 (function () {
   "use strict";
+  var GOATCOUNTER = ""; // ex.: "redacao1000" → painel em https://redacao1000.goatcounter.com
   var SUPABASE_URL = "";
   var SUPABASE_KEY = ""; // chave pública (publishable): só permite inserir eventos
 
@@ -22,8 +23,18 @@
     try { return document.referrer ? new URL(document.referrer).hostname : "direto"; } catch (e) { return "direto"; }
   })();
 
+  /* GoatCounter: telas viram páginas (/hoje, /treino…) e o resto vira evento. */
+  function goat(evento, rota) {
+    var p = evento === "tela" ? rota.replace("#", "") : "evento/" + evento;
+    var q = "p=" + encodeURIComponent(p) + "&e=" + (evento === "tela" ? "false" : "true") +
+      "&r=" + encodeURIComponent(origem === "direto" ? "" : origem) + "&s=" + screen.width + "&rnd=" + Math.random().toString(36).slice(2);
+    new Image().src = "https://" + GOATCOUNTER + ".goatcounter.com/count?" + q;
+  }
+
   function track(evento, dados) {
-    if (!SUPABASE_URL || !SUPABASE_KEY || navigator.webdriver) return;
+    if (navigator.webdriver) return;
+    if (GOATCOUNTER && evento !== "abertura") { try { goat(evento, (location.hash || "#/hoje").replace(/\/\d+$/, "/n")); } catch (e) {} }
+    if (!SUPABASE_URL || !SUPABASE_KEY) return;
     var corpo = {
       dispositivo: dispositivo(),
       evento: String(evento).slice(0, 40),
