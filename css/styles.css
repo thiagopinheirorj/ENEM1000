@@ -485,3 +485,9 @@ body.plain { padding-bottom: 0; }
 
 a.icon-btn { text-decoration: none; display: inline-flex; align-items: center; }
 .btn.insta { margin-top: 12px; width: auto; background: rgba(255,255,255,.16); color: inherit; border: 1px solid rgba(255,255,255,.4); }
+
+/* Simulado */
+.sim-tempo { font-size: 2.2rem; font-weight: 700; text-align: center; margin: 8px 0 0; font-variant-numeric: tabular-nums; }
+.sim-tempo.alerta { color: #b45309; }
+.sim-tempo.fim { color: #b91c1c; font-size: 1.3rem; }
+textarea.folha { width: 100%; line-height: 1.9; background-image: repeating-linear-gradient(transparent, transparent calc(1.9em - 1px), rgba(31,58,95,.18) calc(1.9em - 1px), rgba(31,58,95,.18) 1.9em); background-attachment: local; }

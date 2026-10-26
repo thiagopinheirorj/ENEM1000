@@ -1,9 +1,10 @@
 /* Service worker: guarda os arquivos do app para uso offline. */
-var CACHE = "enem1000-v10";
+var CACHE = "enem1000-v11";
 var ASSETS = [
   "./",
   "index.html",
   "css/styles.css",
+  "js/analytics.js",
   "js/content.js",
   "js/conversa.js",
   "js/podcast.js",
@@ -42,4 +43,13 @@ self.addEventListener("fetch", function (e) {
         return caches.match(e.request, { ignoreSearch: true }).then(function (r) { return r || caches.match("index.html"); });
       })
   );
+});
+
+/* Toque no lembrete abre o app. */
+self.addEventListener("notificationclick", function (e) {
+  e.notification.close();
+  e.waitUntil(self.clients.matchAll({ type: "window" }).then(function (cs) {
+    if (cs.length) return cs[0].focus();
+    return self.clients.openWindow("./#/hoje");
+  }));
 });

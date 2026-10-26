@@ -77,7 +77,7 @@ Ao publicar uma versão nova, altere `CACHE` em `sw.js` (ex.: `enem1000-v5`).
 npm test
 ```
 
-São 112 testes (Node `node:test` + Playwright/Chromium) cobrindo conteúdo, fluxo do dia, trilha,
+São 116 testes (Node `node:test` + Playwright/Chromium) cobrindo conteúdo, fluxo do dia, trilha,
 kit, progresso, datas com relógio simulado (sequência, contagem, aposta, virada da meia-noite),
 foto, compartilhamento, podcast (roteiros, player e geração de MP3), segurança, offline e visual/acessibilidade. Resultados, casos e bugs
 corrigidos estão em [`tests/RELATORIO-DE-TESTES.md`](tests/RELATORIO-DE-TESTES.md).

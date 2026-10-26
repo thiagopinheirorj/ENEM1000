@@ -7,6 +7,7 @@
   var KIT = window.KIT;
   var TREINO = window.TREINO;
   var CONN_EX = window.CONECTIVOS_EX;
+  var SIM_TEMAS = window.SIMULADO_TEMAS || [];
   var RED = window.REDACOES1000;
   var N = DEV.length;
   var STORE_KEY = "enem1000:v1";
@@ -46,9 +47,14 @@
   var PROVA_PADRAO = "2026-11-08";
   var HORA_PROVA = "T13:30:00-03:00";
 
+  /* Estatísticas anônimas de uso (js/analytics.js). Sem configuração, não faz nada. */
+  function track(evento, dados) {
+    try { if (window.R1000Analytics) window.R1000Analytics.track(evento, dados); } catch (e) {}
+  }
+
   /* ---------- Armazenamento local ---------- */
   function emptyState() {
-    return { inicio: today, done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO };
+    return { inicio: today, done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO, simulados: [], sim: {}, lembrete: {} };
   }
   function load() {
     try {
@@ -697,6 +703,7 @@
       btn.addEventListener("click", function () {
         atualizarHoje();
         state.done[id] = today;
+        track("dia_concluido", { dia: id });
         if (state.dias.indexOf(today) < 0) state.dias.push(today);
         save();
         updateStreakBadge();
@@ -901,8 +908,82 @@
         return '<a class="card oficina" href="#/treino/' + o.id + '"><span class="oficina-ico" aria-hidden="true">' + o.icone + "</span><span><strong>" +
           esc(o.titulo) + '</strong><span class="muted" style="display:block">' + esc(o.resumo) + "</span>" +
           '<span class="chip ' + (f >= o.questoes.length ? "ok" : "outline") + '">' + f + "/" + o.questoes.length + " questões</span></span></a>";
-      }).join("") + AVISO;
+      }).join("") +
+      '<a class="card oficina" href="#/simulado"><span class="oficina-ico" aria-hidden="true">⏱️</span><span><strong>Simulado</strong>' +
+        '<span class="muted" style="display:block">Tema surpresa, 60 minutos e folha de 30 linhas, como na prova.</span>' +
+        '<span class="chip outline">' + state.simulados.length + " feitos</span></span></a>" + AVISO;
   }
+
+  /* ---------- Tela: simulado (tema surpresa, 60 min, 30 linhas) ---------- */
+  var SIM_MS = 60 * 60 * 1000, simTimer = null;
+  function simLinhas(txt) {
+    /* Estimativa: ~70 caracteres por linha manuscrita da folha oficial. */
+    return (txt || "").split("\n").reduce(function (n, l) { return n + Math.max(1, Math.ceil(l.length / 70)); }, 0) - (txt ? 0 : 1);
+  }
+  function renderSimulado() {
+    clearInterval(simTimer);
+    var s = state.sim;
+    if (!s.tema) {
+      var feitos = state.simulados.slice().reverse();
+      app.innerHTML =
+        '<a class="back" href="#/treino">‹ Treino</a><p class="eyebrow">Treino de prova</p><h1>Simulado</h1>' +
+        '<section class="card"><p>Você recebe um tema surpresa e tem <strong>60 minutos</strong> para escrever um texto dissertativo-argumentativo de até <strong>30 linhas</strong>.</p>' +
+        '<ol class="passos"><li>Leia o tema e planeje em 10 minutos.</li><li>Escreva a introdução com tese.</li><li>Dois parágrafos de desenvolvimento com repertório.</li><li>Conclusão com proposta completa: agente, ação, meio, finalidade e detalhamento.</li></ol>' +
+        '<button class="btn" id="sim-start">Sortear tema e começar</button></section>' +
+        (feitos.length ? '<section class="card"><h2>Seus simulados</h2>' + feitos.map(function (f, i) {
+          return '<details class="kit-item"><summary><strong>' + esc(f.tema) + '</strong> <span class="muted">' + esc(f.data) + " · " + Math.round(f.seg / 60) + " min · " + simLinhas(f.texto) + " linhas</span></summary><p style=\"white-space:pre-wrap\">" + esc(f.texto) + "</p></details>";
+        }).join("") + "</section>" : "") +
+        '<a class="btn ghost" href="https://wa.me/5521972032275?text=' + encodeURIComponent("Oi, Thiago! Fiz um simulado no app Redação 1000 e quero a correção.") + '" target="_blank" rel="noopener">✍️ Mandar para correção</a>' + AVISO;
+      document.getElementById("sim-start").addEventListener("click", function () {
+        var usados = state.simulados.map(function (f) { return f.tema; });
+        var livres = SIM_TEMAS.filter(function (t) { return usados.indexOf(t) < 0; });
+        var pool = livres.length ? livres : SIM_TEMAS;
+        state.sim = { tema: pool[Math.floor(Math.random() * pool.length)], inicio: Date.now(), texto: "" };
+        save();
+        track("simulado_inicio");
+        renderSimulado();
+      });
+      return;
+    }
+    app.innerHTML =
+      '<p class="eyebrow">Simulado em andamento</p><h1>Tema surpresa</h1>' +
+      '<section class="card"><blockquote>' + esc(s.tema) + '</blockquote>' +
+        '<p class="sim-tempo" id="sim-tempo" aria-live="off">60:00</p></section>' +
+      '<section class="card"><textarea id="sim-txt" class="folha" rows="30" placeholder="Escreva sua redação aqui. Fica salva no seu aparelho."></textarea>' +
+        '<p class="empty" id="sim-lin">0 / 30 linhas</p>' +
+        '<button class="btn" id="sim-fim">Entregar redação</button>' +
+        '<button class="btn ghost" id="sim-sair" style="margin-top:8px">Desistir deste tema</button></section>';
+    var ta = document.getElementById("sim-txt"), lin = document.getElementById("sim-lin"), tempo = document.getElementById("sim-tempo");
+    ta.value = s.texto || "";
+    function contar() {
+      var n = simLinhas(ta.value);
+      lin.textContent = n + " / 30 linhas" + (n > 30 ? " · passou do limite!" : n < 7 && ta.value ? " · menos de 7 linhas zera" : "");
+      lin.className = n > 30 ? "feedback bad" : "empty";
+    }
+    function tick() {
+      var resta = SIM_MS - (Date.now() - s.inicio);
+      if (resta <= 0) { tempo.textContent = "00:00 · tempo esgotado"; tempo.classList.add("fim"); clearInterval(simTimer); return; }
+      var m = Math.floor(resta / 60000), sg = Math.floor((resta % 60000) / 1000);
+      tempo.textContent = (m < 10 ? "0" : "") + m + ":" + (sg < 10 ? "0" : "") + sg;
+      tempo.classList.toggle("alerta", resta < 10 * 60000);
+    }
+    ta.addEventListener("input", function () { s.texto = ta.value; save(); contar(); });
+    contar(); tick();
+    simTimer = setInterval(function () { if (!document.getElementById("sim-tempo")) { clearInterval(simTimer); return; } tick(); }, 1000);
+    document.getElementById("sim-fim").addEventListener("click", function () {
+      if (!ta.value.trim()) { toast("Escreva antes de entregar"); return; }
+      state.simulados.push({ tema: s.tema, texto: ta.value, data: today, seg: Math.min(SIM_MS, Date.now() - s.inicio) / 1000 | 0 });
+      state.sim = {};
+      save();
+      track("simulado_entregue", { linhas: simLinhas(ta.value) });
+      toast("Simulado entregue!");
+      renderSimulado();
+    });
+    document.getElementById("sim-sair").addEventListener("click", function () {
+      state.sim = {}; save(); renderSimulado();
+    });
+  }
+
   function renderOficina(id) {
     var o = TREINO.filter(function (x) { return x.id === id; })[0];
     if (!o) { renderTreino(); return; }
@@ -1027,8 +1108,18 @@
         }).join("") : '<p class="empty">Toque em ☆ Favoritar em um devocional para montar seu banco de repertórios.</p>') +
       "</section>" +
 
+      '<section class="card" id="lembrete"><h2>Lembrete diário</h2>' +
+        '<p class="empty">Escolha um horário para lembrar do devocional de 5 minutos.</p>' +
+        '<div class="row" style="margin-top:10px;flex-wrap:wrap">' +
+          '<input type="time" id="lem-hora" aria-label="Horário do lembrete" value="' + esc(state.lembrete.hora || "19:00") + '">' +
+          '<button class="btn small" id="lem-cal" style="flex:none">📅 Pôr na agenda do celular</button>' +
+          '<button class="btn ghost small" id="lem-notif" style="flex:none">' + (state.lembrete.notif ? "🔔 Notificação ativa" : "🔔 Ativar notificação") + "</button>" +
+        "</div>" +
+        '<p class="empty" style="margin-top:8px">A agenda avisa todo dia, mesmo com o app fechado. A notificação aparece quando o app estiver aberto ou em segundo plano.</p>' +
+      "</section>" +
+
       '<section class="card"><h2>Dados</h2>' +
-        '<p class="empty">Tudo fica salvo apenas neste aparelho. Você começou a trilha em ' + esc(parseIso(state.inicio).toLocaleDateString("pt-BR")) + ".</p>" +
+        '<p class="empty">Seus textos e respostas ficam salvos apenas neste aparelho. O app conta acessos de forma anônima, sem nome nem telefone, para melhorar o conteúdo. Você começou a trilha em ' + esc(parseIso(state.inicio).toLocaleDateString("pt-BR")) + ".</p>" +
         '<div class="row" style="margin-top:10px;flex-wrap:wrap">' +
           '<button class="btn ghost small" id="exportar">Copiar caderno</button>' +
           '<button class="btn danger small" id="zerar">Recomeçar do zero</button>' +
@@ -1056,6 +1147,42 @@
         img.src = URL.createObjectURL(b);
         img.hidden = false;
       }).catch(function () {});
+    });
+
+    var lemHora = document.getElementById("lem-hora");
+    lemHora.addEventListener("change", function () {
+      if (!/^\d{2}:\d{2}$/.test(lemHora.value)) return;
+      state.lembrete.hora = lemHora.value; save(); toast("Horário salvo");
+    });
+    document.getElementById("lem-cal").addEventListener("click", function () {
+      var hora = /^\d{2}:\d{2}$/.test(lemHora.value) ? lemHora.value : "19:00";
+      state.lembrete.hora = hora; save();
+      var ini = today.replace(/-/g, "") + "T" + hora.replace(":", "") + "00";
+      var fim = today.replace(/-/g, "") + "T" + hora.replace(":", "") + "00";
+      var ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Redacao1000//PT", "BEGIN:VEVENT",
+        "UID:redacao1000-lembrete@thiagopinheirorj", "DTSTAMP:" + ini + "Z",
+        "DTSTART;TZID=America/Sao_Paulo:" + ini, "DTEND;TZID=America/Sao_Paulo:" + fim,
+        "RRULE:FREQ=DAILY", "SUMMARY:✦ Redação 1000: devocional de 5 minutos",
+        "DESCRIPTION:Seu repertório de hoje está pronto: " + APP_URL, "URL:" + APP_URL,
+        "BEGIN:VALARM", "TRIGGER:PT0M", "ACTION:DISPLAY", "DESCRIPTION:Hora do devocional de redação", "END:VALARM",
+        "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+      a.download = "lembrete-redacao1000.ics";
+      document.body.appendChild(a); a.click(); a.remove();
+      track("lembrete_agenda");
+      toast("Abra o arquivo para salvar na agenda");
+    });
+    document.getElementById("lem-notif").addEventListener("click", function () {
+      var b = this;
+      if (!("Notification" in window)) { toast("Este navegador não tem notificações. Use a agenda."); return; }
+      Notification.requestPermission().then(function (p) {
+        if (p !== "granted") { toast("Permissão negada. Use a agenda."); return; }
+        state.lembrete.notif = true; state.lembrete.hora = lemHora.value || "19:00"; save();
+        b.textContent = "🔔 Notificação ativa";
+        track("lembrete_notif");
+        toast("Notificação ativada");
+      });
     });
 
     var provaInput = document.getElementById("prova-data");
@@ -1114,6 +1241,7 @@
     else if (h === "#/trilha") { tab = "trilha"; renderTrilha(); }
     else if (h === "#/treino") { tab = "treino"; renderTreino(); }
     else if ((m = h.match(/^#\/treino\/(\d+)$/))) { tab = "treino"; renderOficina(+m[1]); }
+    else if (h === "#/simulado") { tab = "treino"; renderSimulado(); }
     else if (h === "#/kit") { tab = "kit"; renderKit(); }
     else if (h === "#/progresso") { tab = "progresso"; renderProgresso(); }
     else if (apostaLiberada() && today <= (state.prova || PROVA_PADRAO)) { renderAposta(); } // Hoje mostra a aposta só na véspera e no dia da prova
@@ -1123,6 +1251,7 @@
       if (a.getAttribute("data-tab") === tab) a.setAttribute("aria-current", "page");
       else a.removeAttribute("aria-current");
     });
+    track("tela", { rota: h.replace(/\/\d+$/, "/n") });
     window.scrollTo(0, 0);
     app.focus({ preventScroll: true });
   }
@@ -1135,6 +1264,23 @@
     var el = document.getElementById(a.getAttribute("href").slice(1));
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   });
+
+  /* Lembrete: com o app aberto ou em segundo plano, avisa no horário se o dia ainda não foi feito. */
+  function checarLembrete() {
+    var L = state.lembrete;
+    if (!L.notif || !L.hora || L.ultimo === today || !("Notification" in window) || Notification.permission !== "granted") return;
+    var agora = new Date(), hm = (agora.getHours() < 10 ? "0" : "") + agora.getHours() + ":" + (agora.getMinutes() < 10 ? "0" : "") + agora.getMinutes();
+    if (hm < L.hora || state.done[todayId()]) return;
+    L.ultimo = today; save();
+    var d = byId(todayId());
+    var corpo = d ? "Hoje: " + d.titulo + ". São só 5 minutos." : "Seu devocional de hoje está pronto.";
+    var opc = { body: corpo, icon: "icons/icon.svg", tag: "redacao1000" };
+    if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+      navigator.serviceWorker.ready.then(function (r) { r.showNotification("✦ Redação 1000", opc); }).catch(function () {});
+    } else { try { new Notification("✦ Redação 1000", opc); } catch (e) {} }
+  }
+  setInterval(checarLembrete, 60000);
+  checarLembrete();
 
   window.addEventListener("hashchange", route);
   updateStreakBadge();

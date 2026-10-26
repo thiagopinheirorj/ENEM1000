@@ -198,3 +198,27 @@ window.REDACOES1000 = {
     "Proposta com agente, ação, meio, finalidade e detalhamento, sem ferir os direitos humanos."
   ]
 };
+
+/* Simulado: temas inéditos no estilo do ENEM (problema social brasileiro + recorte). */
+window.SIMULADO_TEMAS = [
+  "Desafios para a valorização do trabalho de cuidado no Brasil",
+  "Caminhos para combater a desinformação em saúde na sociedade brasileira",
+  "O impacto da inteligência artificial no mercado de trabalho brasileiro",
+  "Desafios para garantir a mobilidade urbana nas grandes cidades brasileiras",
+  "A persistência do trabalho infantil no Brasil",
+  "Caminhos para enfrentar o abandono escolar no ensino médio brasileiro",
+  "Os efeitos das mudanças climáticas sobre as populações vulneráveis no Brasil",
+  "Desafios para a inclusão digital de idosos no Brasil",
+  "A insegurança alimentar como desafio para a sociedade brasileira",
+  "Caminhos para combater o racismo ambiental no Brasil",
+  "O desafio da saúde mental dos jovens em ambiente escolar",
+  "A exposição de crianças e adolescentes nas redes sociais",
+  "Desafios para o acesso à cultura nas periferias brasileiras",
+  "O endividamento das famílias brasileiras em questão",
+  "Caminhos para valorizar a leitura entre os jovens brasileiros",
+  "Desafios para a preservação da Amazônia no século XXI",
+  "A violência contra a mulher no ambiente digital",
+  "O acesso à moradia digna nas cidades brasileiras",
+  "Apostas on-line e seus impactos na sociedade brasileira",
+  "Desafios para a doação de órgãos no Brasil"
+];

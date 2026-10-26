@@ -3,7 +3,7 @@
 
 const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
-const { setup, getState, loadContent } = require("./helpers");
+const { setup, getState, loadContent, br } = require("./helpers");
 
 const { DEVOCIONAIS: DEV, KIT } = loadContent();
 let env;
@@ -196,7 +196,7 @@ describe("P · Progresso", () => {
     await page.waitForSelector(".toast");
     assert.equal(await page.textContent(".toast"), "Trilha reiniciada");
     const s = await getState(page);
-    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08" });
+    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08", simulados: [], sim: {}, lembrete: {} });
     assert.equal(await page.textContent("#streak-count"), "0");
     const stats = await page.$$eval(".stat .v", (v) => v.map((x) => x.textContent));
     assert.deepEqual(stats, ["0", "0", "0/30", "—"]);
@@ -287,5 +287,53 @@ describe("TR · Treino, exemplos de conectivos e redações 1000", () => {
     const t = await page.textContent("#kit-redacoes");
     for (let a = 2009; a <= 2025; a++) assert.match(t, new RegExp(String(a)));
     assert.match(await page.getAttribute("#kit-redacoes a.btn", "href"), /^https:\/\/www\.gov\.br\/inep/);
+  });
+});
+
+describe("S · Simulado e lembrete", () => {
+  it("S01 · Treino tem o card do simulado e sorteia um tema com 60 minutos", async () => {
+    const { page } = await env.open({ hash: "#/treino" });
+    await page.click('a[href="#/simulado"]');
+    await page.waitForSelector("#sim-start");
+    await page.click("#sim-start");
+    await page.waitForSelector("#sim-tempo");
+    assert.match(await page.textContent("#sim-tempo"), /^(60:00|59:5\d)$/);
+    const s = await getState(page);
+    assert.ok(s.sim.tema && s.sim.inicio);
+    assert.equal(await page.getAttribute('.tabbar a[data-tab="treino"]', "aria-current"), "page");
+  });
+
+  it("S02 · conta linhas, avisa acima de 30 e entrega para o histórico", async () => {
+    const { page } = await env.open({ hash: "#/simulado" });
+    await page.click("#sim-start");
+    await page.fill("#sim-txt", Array(31).fill("linha").join("\n"));
+    assert.match(await page.textContent("#sim-lin"), /31 \/ 30 linhas · passou do limite/);
+    await page.fill("#sim-txt", "Introdução com tese.\nDesenvolvimento.\nConclusão.");
+    assert.match(await page.textContent("#sim-lin"), /^3 \/ 30 linhas/);
+    await page.click("#sim-fim");
+    await page.waitForSelector("#sim-start");
+    const s = await getState(page);
+    assert.equal(s.simulados.length, 1);
+    assert.deepEqual(s.sim, {});
+    assert.match(await page.textContent("#app"), /Seus simulados/);
+  });
+
+  it("S03 · tempo continua contando depois de recarregar", async () => {
+    const inicio = br("2026-10-15", "09:10").getTime(); // relógio simulado: 10h → faltam 10 min
+    const { page } = await env.open({ hash: "#/simulado", state: { sim: { tema: "Tema X", inicio, texto: "rascunho" } } });
+    await page.waitForSelector("#sim-tempo");
+    assert.match(await page.textContent("#sim-tempo"), /^(0\d):\d\d$/);
+    assert.equal(await page.inputValue("#sim-txt"), "rascunho");
+  });
+
+  it("S04 · lembrete gera arquivo de agenda diário com o horário escolhido", async () => {
+    const { page } = await env.open({ hash: "#/progresso" });
+    await page.fill("#lem-hora", "07:30");
+    const [dl] = await Promise.all([page.waitForEvent("download"), page.click("#lem-cal")]);
+    assert.equal(dl.suggestedFilename(), "lembrete-redacao1000.ics");
+    const txt = require("fs").readFileSync(await dl.path(), "utf8");
+    assert.match(txt, /RRULE:FREQ=DAILY/);
+    assert.match(txt, /T073000/);
+    assert.equal((await getState(page)).lembrete.hora, "07:30");
   });
 });
