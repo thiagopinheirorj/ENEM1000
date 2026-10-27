@@ -1233,6 +1233,8 @@
     if (atualizarHoje()) updateStreakBadge();
     var t = document.querySelector(".toast");
     if (t) t.remove();
+    var ps = document.getElementById("prof-sheet");
+    if (ps) ps.remove();
     if ((m = h.match(/^#\/dia\/(\d+)$/))) {
       var id = +m[1];
       tab = id === todayId() ? "hoje" : "trilha";
@@ -1281,6 +1283,54 @@
   }
   setInterval(checarLembrete, 60000);
   checarLembrete();
+
+  /* ---------- Fale com o professor: WhatsApp com o contexto do aluno ---------- */
+  var MOTIVOS = [
+    ["duvida", "❓ Tirar uma dúvida", "Tenho uma dúvida sobre redação: "],
+    ["correcao", "✍️ Corrigir uma redação", "Quero a correção comentada de uma redação."],
+    ["simulado", "⏱️ Corrigir meu simulado", "Fiz um simulado no app e quero a correção."],
+    ["plano", "🎯 Montar um plano até a prova", "Quero ajuda para montar um plano de estudos até a prova."]
+  ];
+  function contextoAluno() {
+    var partes = ["dia " + todayId() + " da trilha", Object.keys(state.done).length + " dias concluídos"];
+    var st = streak();
+    if (st > 1) partes.push(st + " dias seguidos");
+    if (state.simulados.length) partes.push(state.simulados.length + " simulado(s) feito(s)");
+    return partes.join(", ");
+  }
+  function mensagemProfessor(motivo) {
+    var m = MOTIVOS.filter(function (x) { return x[0] === motivo; })[0] || MOTIVOS[0];
+    var txt = "Oi, professor Thiago! Vim pelo app Redação 1000 (" + contextoAluno() + "). " + m[2];
+    if (motivo === "simulado" && state.simulados.length) txt += " Tema: " + state.simulados[state.simulados.length - 1].tema + ".";
+    return txt;
+  }
+  var fab = document.createElement("button");
+  fab.className = "fab-prof";
+  fab.id = "fab-prof";
+  fab.setAttribute("aria-label", "Fale com o professor");
+  fab.innerHTML = '<span aria-hidden="true">💬</span><span class="fab-txt">Fale com o professor</span>';
+  document.body.appendChild(fab);
+  fab.addEventListener("click", function () {
+    var velho = document.getElementById("prof-sheet");
+    if (velho) { velho.remove(); return; }
+    var sh = document.createElement("div");
+    sh.className = "prof-sheet card";
+    sh.id = "prof-sheet";
+    sh.setAttribute("role", "dialog");
+    sh.setAttribute("aria-label", "Fale com o professor Thiago");
+    sh.innerHTML = '<h2>Fale com o professor Thiago</h2><p class="empty">Escolha o assunto. A mensagem já vai com o seu progresso no app.</p>' +
+      MOTIVOS.map(function (m) {
+        return '<a class="btn ghost" data-motivo="' + m[0] + '" target="_blank" rel="noopener" href="https://wa.me/5521972032275?text=' +
+          encodeURIComponent(mensagemProfessor(m[0])) + '">' + m[1] + "</a>";
+      }).join("") +
+      '<button class="btn small ghost" id="prof-fechar">Fechar</button>';
+    document.body.appendChild(sh);
+    track("professor_abriu");
+    sh.addEventListener("click", function (e) {
+      if (e.target.id === "prof-fechar") sh.remove();
+      else if (e.target.closest && e.target.closest("a[data-motivo]")) setTimeout(function () { sh.remove(); }, 0);
+    });
+  });
 
   window.addEventListener("hashchange", route);
   updateStreakBadge();

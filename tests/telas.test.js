@@ -337,3 +337,27 @@ describe("S · Simulado e lembrete", () => {
     assert.equal((await getState(page)).lembrete.hora, "07:30");
   });
 });
+
+describe("F · Fale com o professor", () => {
+  it("F01 · botão em todas as telas abre os assuntos com o progresso do aluno na mensagem", async () => {
+    const st = { inicio: "2026-10-11", done: { 1: "2026-10-11", 2: "2026-10-12" }, dias: ["2026-10-14", "2026-10-15"],
+      simulados: [{ tema: "Tema Y", texto: "x", data: "2026-10-14", seg: 3000 }] };
+    const { page } = await env.open({ hash: "#/kit", state: st });
+    await page.click("#fab-prof");
+    await page.waitForSelector("#prof-sheet");
+    assert.equal(await page.locator("#prof-sheet a[data-motivo]").count(), 4);
+    const href = decodeURIComponent(await page.getAttribute('#prof-sheet a[data-motivo="simulado"]', "href"));
+    assert.match(href, /^https:\/\/wa\.me\/5521972032275\?text=/);
+    assert.match(href, /dia 5 da trilha, 2 dias concluídos, 2 dias seguidos, 1 simulado\(s\) feito\(s\)/);
+    assert.match(href, /Tema: Tema Y\./);
+    await page.click("#prof-fechar");
+    assert.equal(await page.locator("#prof-sheet").count(), 0);
+  });
+
+  it("F02 · trocar de tela fecha a janela", async () => {
+    const { page } = await env.open({ hash: "#/hoje" });
+    await page.click("#fab-prof");
+    await page.evaluate(() => { location.hash = "#/trilha"; });
+    await page.waitForFunction(() => !document.getElementById("prof-sheet"));
+  });
+});
