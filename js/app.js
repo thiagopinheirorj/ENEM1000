@@ -54,7 +54,7 @@
 
   /* ---------- Armazenamento local ---------- */
   function emptyState() {
-    return { inicio: today, done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO, simulados: [], sim: {}, lembrete: {} };
+    return { inicio: today, done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO, simulados: [], sim: {}, lembrete: {}, envios: [] };
   }
   function load() {
     try {
@@ -909,6 +909,8 @@
           esc(o.titulo) + '</strong><span class="muted" style="display:block">' + esc(o.resumo) + "</span>" +
           '<span class="chip ' + (f >= o.questoes.length ? "ok" : "outline") + '">' + f + "/" + o.questoes.length + " questões</span></span></a>";
       }).join("") +
+      '<a class="card oficina" href="#/enviar"><span class="oficina-ico" aria-hidden="true">📷</span><span><strong>Enviar redação por foto</strong>' +
+        '<span class="muted" style="display:block">Fotografe sua redação escrita à mão e mande para a correção do professor Thiago.</span></span></a>' +
       '<a class="card oficina" href="#/simulado"><span class="oficina-ico" aria-hidden="true">⏱️</span><span><strong>Simulado</strong>' +
         '<span class="muted" style="display:block">Tema surpresa, 60 minutos e folha de 30 linhas, como na prova.</span>' +
         '<span class="chip outline">' + state.simulados.length + " feitos</span></span></a>" + AVISO;
@@ -933,7 +935,7 @@
         (feitos.length ? '<section class="card"><h2>Seus simulados</h2>' + feitos.map(function (f, i) {
           return '<details class="kit-item"><summary><strong>' + esc(f.tema) + '</strong> <span class="muted">' + esc(f.data) + " · " + Math.round(f.seg / 60) + " min · " + simLinhas(f.texto) + " linhas</span></summary><p style=\"white-space:pre-wrap\">" + esc(f.texto) + "</p></details>";
         }).join("") + "</section>" : "") +
-        '<a class="btn ghost" href="https://wa.me/5521972032275?text=' + encodeURIComponent("Oi, Thiago! Fiz um simulado no app Redação 1000 e quero a correção.") + '" target="_blank" rel="noopener">✍️ Mandar para correção</a>' + AVISO;
+        '<a class="btn ghost" href="#/enviar">📷 Enviar foto do simulado para correção</a>' + AVISO;
       document.getElementById("sim-start").addEventListener("click", function () {
         var usados = state.simulados.map(function (f) { return f.tema; });
         var livres = SIM_TEMAS.filter(function (t) { return usados.indexOf(t) < 0; });
@@ -982,6 +984,68 @@
     document.getElementById("sim-sair").addEventListener("click", function () {
       state.sim = {}; save(); renderSimulado();
     });
+  }
+
+  /* ---------- Tela: enviar redação por foto para correção ---------- */
+  var WHATS_PROF = "5521972032275";
+  function renderEnviar() {
+    var fotosSel = [];
+    var ult = state.simulados.length ? state.simulados[state.simulados.length - 1].tema : "";
+    app.innerHTML =
+      '<a class="back" href="#/treino">‹ Treino</a><p class="eyebrow">Correção com o professor</p><h1>Enviar redação por foto</h1>' +
+      '<section class="card"><ol class="passos"><li>Escreva à mão, de preferência na folha de 30 linhas.</li>' +
+        "<li>Fotografe de cima, com boa luz e a folha inteira aparecendo.</li><li>Envie pelo WhatsApp. O professor Thiago responde com a correção comentada.</li></ol></section>" +
+      '<section class="card"><label for="env-tema"><strong>Tema da redação</strong></label>' +
+        '<input type="text" id="env-tema" maxlength="160" placeholder="Ex.: Desafios para a doação de órgãos no Brasil" value="' + esc(ult) + '" style="width:100%;margin-top:6px">' +
+        '<label class="btn ghost" for="env-foto" style="margin-top:12px">📷 Tirar ou escolher foto (até 3 páginas)</label>' +
+        '<input type="file" id="env-foto" class="sr-only" accept="image/*" multiple>' +
+        '<div class="env-thumbs" id="env-thumbs"></div>' +
+        '<button class="btn" id="env-enviar" disabled style="margin-top:12px">Enviar pelo WhatsApp</button>' +
+        '<p class="empty" id="env-info" style="margin-top:8px">A foto só sai do seu aparelho quando você envia.</p></section>' +
+      (state.envios.length ? '<section class="card"><h2>Redações enviadas</h2>' + state.envios.slice().reverse().map(function (e) {
+        return '<div class="kit-item"><strong>' + esc(e.tema || "Sem tema") + '</strong><span class="muted">' + esc(parseIso(e.data).toLocaleDateString("pt-BR")) + " · " + e.paginas + " foto(s)</span></div>";
+      }).join("") + "</section>" : "") + AVISO;
+    var input = document.getElementById("env-foto"), thumbs = document.getElementById("env-thumbs"), btn = document.getElementById("env-enviar");
+    function texto() {
+      var tema = document.getElementById("env-tema").value.trim();
+      return "Oi, professor Thiago! Vim pelo app Redação 1000 (" + contextoAluno() + ") e quero a correção comentada da minha redação." +
+        (tema ? " Tema: " + tema + "." : "");
+    }
+    input.addEventListener("change", function () {
+      var arqs = Array.prototype.slice.call(input.files || [], 0, 3);
+      input.value = "";
+      if (!arqs.length) return;
+      Promise.all(arqs.map(comprimir)).then(function (bs) {
+        fotosSel = bs;
+        thumbs.innerHTML = bs.map(function (b, i) { return '<img alt="Página ' + (i + 1) + '" src="' + URL.createObjectURL(b) + '">'; }).join("");
+        btn.disabled = false;
+      }).catch(function () { toast("Não consegui abrir a foto. Tente outra."); });
+    });
+    function registrar() {
+      state.envios.push({ data: today, tema: document.getElementById("env-tema").value.trim().slice(0, 160), paginas: fotosSel.length });
+      save();
+      track("redacao_enviada", { paginas: fotosSel.length });
+    }
+    btn.addEventListener("click", function () {
+      var arqs = typeof File === "function" ? fotosSel.map(function (b, i) { return new File([b], "redacao-pagina-" + (i + 1) + ".jpg", { type: "image/jpeg" }); }) : [];
+      if (arqs.length && navigator.canShare && navigator.canShare({ files: arqs }) && navigator.share) {
+        navigator.share({ files: arqs, text: texto() }).then(function () { registrar(); renderEnviar(); toast("Enviado! Escolha o contato do professor."); })
+          .catch(function (e) { if (!e || e.name !== "AbortError") enviarSemArquivo(); });
+        return;
+      }
+      enviarSemArquivo();
+    });
+    /* Sem compartilhar arquivo: baixa as fotos e abre o WhatsApp com a mensagem; o aluno anexa. */
+    function enviarSemArquivo() {
+      fotosSel.forEach(function (b, i) {
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(b); a.download = "redacao-pagina-" + (i + 1) + ".jpg";
+        document.body.appendChild(a); a.click(); a.remove();
+      });
+      registrar();
+      window.open("https://wa.me/" + WHATS_PROF + "?text=" + encodeURIComponent(texto() + " Vou anexar a foto aqui."), "_blank", "noopener");
+      document.getElementById("env-info").textContent = "Fotos salvas no aparelho. No WhatsApp, toque no clipe 📎 e anexe a foto.";
+    }
   }
 
   function renderOficina(id) {
@@ -1243,6 +1307,7 @@
     else if (h === "#/trilha") { tab = "trilha"; renderTrilha(); }
     else if (h === "#/treino") { tab = "treino"; renderTreino(); }
     else if ((m = h.match(/^#\/treino\/(\d+)$/))) { tab = "treino"; renderOficina(+m[1]); }
+    else if (h === "#/enviar") { tab = "treino"; renderEnviar(); }
     else if (h === "#/simulado") { tab = "treino"; renderSimulado(); }
     else if (h === "#/kit") { tab = "kit"; renderKit(); }
     else if (h === "#/progresso") { tab = "progresso"; renderProgresso(); }
@@ -1323,6 +1388,7 @@
         return '<a class="btn ghost" data-motivo="' + m[0] + '" target="_blank" rel="noopener" href="https://wa.me/5521972032275?text=' +
           encodeURIComponent(mensagemProfessor(m[0])) + '">' + m[1] + "</a>";
       }).join("") +
+      '<a class="btn" href="#/enviar" id="prof-foto">📷 Enviar foto da redação</a>' +
       '<button class="btn small ghost" id="prof-fechar">Fechar</button>';
     document.body.appendChild(sh);
     track("professor_abriu");

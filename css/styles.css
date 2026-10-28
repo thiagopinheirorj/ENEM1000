@@ -500,3 +500,7 @@ textarea.folha { width: 100%; line-height: 1.9; background-image: repeating-line
 .prof-sheet h2 { margin: 0; }
 @media print { .fab-prof, .prof-sheet { display: none; } }
 #app { padding-bottom: 88px; } /* espaço para o botão do professor */
+
+/* Enviar redação por foto */
+.env-thumbs { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.env-thumbs img { width: 88px; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }

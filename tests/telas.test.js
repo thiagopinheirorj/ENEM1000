@@ -196,7 +196,7 @@ describe("P · Progresso", () => {
     await page.waitForSelector(".toast");
     assert.equal(await page.textContent(".toast"), "Trilha reiniciada");
     const s = await getState(page);
-    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08", simulados: [], sim: {}, lembrete: {} });
+    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08", simulados: [], sim: {}, lembrete: {}, envios: [] });
     assert.equal(await page.textContent("#streak-count"), "0");
     const stats = await page.$$eval(".stat .v", (v) => v.map((x) => x.textContent));
     assert.deepEqual(stats, ["0", "0", "0/30", "—"]);

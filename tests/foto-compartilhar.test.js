@@ -226,3 +226,42 @@ describe("S · Compartilhar", () => {
     assert.ok(txt.endsWith("\n\n" + APP_URL));
   });
 });
+
+describe("E · Enviar redação por foto", () => {
+  it("E01 · com compartilhamento de arquivo, envia as fotos e a mensagem com tema e progresso", async () => {
+    const { page } = await env.open({ hash: "#/enviar", init: comShare });
+    assert.equal(await page.isDisabled("#env-enviar"), true);
+    await page.fill("#env-tema", "Tema Z");
+    await page.setInputFiles("#env-foto", [pngGrande, pngPequeno]);
+    await page.waitForSelector("#env-thumbs img:nth-child(2)");
+    await page.click("#env-enviar");
+    await page.waitForFunction(() => window.__shared.length === 1);
+    const sh = await page.evaluate(() => window.__shared[0]);
+    assert.deepEqual(sh.files, ["redacao-pagina-1.jpg|image/jpeg", "redacao-pagina-2.jpg|image/jpeg"]);
+    assert.match(sh.text, /professor Thiago.*dia 1 da trilha.*Tema: Tema Z\./);
+    await page.waitForSelector("text=Redações enviadas");
+    const s = await getState(page);
+    assert.deepEqual(s.envios, [{ data: "2026-10-15", tema: "Tema Z", paginas: 2 }]);
+  });
+
+  it("E02 · sem compartilhamento, baixa a foto e abre o WhatsApp do professor", async () => {
+    const { page } = await env.open({ hash: "#/enviar", init: semShare });
+    await page.evaluate(() => { window.__abriu = []; window.open = (u) => { window.__abriu.push(u); }; });
+    await page.setInputFiles("#env-foto", pngPequeno);
+    await page.waitForSelector("#env-thumbs img");
+    const [dl] = await Promise.all([page.waitForEvent("download"), page.click("#env-enviar")]);
+    assert.equal(dl.suggestedFilename(), "redacao-pagina-1.jpg");
+    const url = await page.evaluate(() => window.__abriu[0]);
+    assert.match(decodeURIComponent(url), /^https:\/\/wa\.me\/5521972032275\?text=.*Vou anexar a foto aqui\./);
+    assert.match(await page.textContent("#env-info"), /anexe a foto/);
+  });
+
+  it("E03 · Treino, simulado e o botão do professor levam à tela de envio", async () => {
+    const { page } = await env.open({ hash: "#/treino" });
+    assert.equal(await page.locator('#app a[href="#/enviar"]').count(), 1);
+    await page.click("#fab-prof");
+    await page.click("#prof-foto");
+    await page.waitForSelector("#env-foto", { state: "attached" });
+    assert.equal(await page.locator("#prof-sheet").count(), 0);
+  });
+});
