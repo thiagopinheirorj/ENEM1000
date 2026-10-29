@@ -196,7 +196,7 @@ describe("P · Progresso", () => {
     await page.waitForSelector(".toast");
     assert.equal(await page.textContent(".toast"), "Trilha reiniciada");
     const s = await getState(page);
-    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08", simulados: [], sim: {}, lembrete: {}, envios: [] });
+    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08", simulados: [], sim: {}, lembrete: {}, envios: [], correcoes: 0 });
     assert.equal(await page.textContent("#streak-count"), "0");
     const stats = await page.$$eval(".stat .v", (v) => v.map((x) => x.textContent));
     assert.deepEqual(stats, ["0", "0", "0/30", "—"]);
@@ -359,5 +359,51 @@ describe("F · Fale com o professor", () => {
     await page.click("#fab-prof");
     await page.evaluate(() => { location.hash = "#/trilha"; });
     await page.waitForFunction(() => !document.getElementById("prof-sheet"));
+  });
+});
+
+describe("C · Correção rápida", () => {
+  const BOA_INTRO = "Segundo o sociólogo Zygmunt Bauman, as relações na modernidade tornaram-se líquidas. Nesse sentido, " +
+    "é preciso reconhecer que a desinformação em saúde persiste no Brasil, seja pela falta de educação midiática, seja pela omissão das plataformas digitais.";
+  const FRACA = "Eu acho que a desinformação é ruim pra todo mundo e tem que acabar logo.";
+  const BOA_PROPOSTA = "Portanto, cabe ao Ministério da Educação criar oficinas de educação midiática nas escolas, por meio de parcerias com universidades, " +
+    "que formem professores, a fim de que os jovens identifiquem notícias falsas.";
+
+  it("C01 · introdução completa atende todos os pontos", async () => {
+    const { page } = await env.open({ hash: "#/correcao" });
+    await page.fill("#cr-txt", BOA_INTRO);
+    await page.click("#cr-ok");
+    assert.match(await page.textContent("#cr-res h2"), /^6 de 6 pontos atendidos$/);
+    assert.equal((await getState(page)).correcoes, 1);
+  });
+
+  it("C02 · texto informal e curto aponta o que falta", async () => {
+    const { page } = await env.open({ hash: "#/correcao" });
+    await page.fill("#cr-txt", FRACA);
+    await page.click("#cr-ok");
+    const t = await page.textContent("#cr-res");
+    assert.match(t, /C1 ✗ Evite 1ª pessoa/);
+    assert.match(t, /C2 ✗ Está curta/);
+    assert.match(t, /C2 ✗ Abra com um repertório/);
+    assert.match(t, /C3 ✗ Anuncie os dois argumentos/);
+  });
+
+  it("C03 · proposta checa os 5 elementos e direitos humanos", async () => {
+    const { page } = await env.open({ hash: "#/correcao" });
+    await page.click('[data-tipo="proposta"]');
+    await page.fill("#cr-txt", BOA_PROPOSTA);
+    await page.click("#cr-ok");
+    assert.match(await page.textContent("#cr-res h2"), /^8 de 8 pontos atendidos$/);
+    await page.fill("#cr-txt", "O governo deve aplicar a pena de morte para resolver o problema da violência no país inteiro.");
+    await page.click("#cr-ok");
+    const t = await page.textContent("#cr-res");
+    assert.match(t, /C5 ✗ Atenção: propostas que ferem os direitos humanos/);
+    assert.match(t, /C5 ✗ Falta meio/);
+    assert.match(t, /C5 ✗ Falta finalidade/);
+  });
+
+  it("C04 · Treino tem o card da correção rápida", async () => {
+    const { page } = await env.open({ hash: "#/treino" });
+    assert.equal(await page.locator('#app a[href="#/correcao"]').count(), 1);
   });
 });

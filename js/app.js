@@ -54,7 +54,7 @@
 
   /* ---------- Armazenamento local ---------- */
   function emptyState() {
-    return { inicio: today, done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO, simulados: [], sim: {}, lembrete: {}, envios: [] };
+    return { inicio: today, done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO, simulados: [], sim: {}, lembrete: {}, envios: [], correcoes: 0 };
   }
   function load() {
     try {
@@ -909,6 +909,8 @@
           esc(o.titulo) + '</strong><span class="muted" style="display:block">' + esc(o.resumo) + "</span>" +
           '<span class="chip ' + (f >= o.questoes.length ? "ok" : "outline") + '">' + f + "/" + o.questoes.length + " questões</span></span></a>";
       }).join("") +
+      '<a class="card oficina" href="#/correcao"><span class="oficina-ico" aria-hidden="true">⚡</span><span><strong>Correção rápida</strong>' +
+        '<span class="muted" style="display:block">Cole sua introdução ou proposta e veja na hora o que falta pelas competências.</span></span></a>' +
       '<a class="card oficina" href="#/enviar"><span class="oficina-ico" aria-hidden="true">📷</span><span><strong>Enviar redação por foto</strong>' +
         '<span class="muted" style="display:block">Fotografe sua redação escrita à mão e mande para a correção do professor Thiago.</span></span></a>' +
       '<a class="card oficina" href="#/simulado"><span class="oficina-ico" aria-hidden="true">⏱️</span><span><strong>Simulado</strong>' +
@@ -1046,6 +1048,44 @@
       window.open("https://wa.me/" + WHATS_PROF + "?text=" + encodeURIComponent(texto() + " Vou anexar a foto aqui."), "_blank", "noopener");
       document.getElementById("env-info").textContent = "Fotos salvas no aparelho. No WhatsApp, toque no clipe 📎 e anexe a foto.";
     }
+  }
+
+  /* ---------- Tela: correção rápida (introdução ou proposta) ---------- */
+  function renderCorrecao() {
+    app.innerHTML =
+      '<a class="back" href="#/treino">‹ Treino</a><p class="eyebrow">Retorno na hora</p><h1>Correção rápida</h1>' +
+      '<section class="card"><p>Cole sua <strong>introdução</strong> ou sua <strong>proposta de intervenção</strong> e veja o que já está bom e o que falta, pelas competências do ENEM.</p>' +
+        '<div class="row" role="radiogroup" aria-label="O que você vai corrigir" style="margin-top:10px;flex-wrap:wrap">' +
+          '<button class="chip on" data-tipo="introducao" role="radio" aria-checked="true">Introdução</button>' +
+          '<button class="chip" data-tipo="proposta" role="radio" aria-checked="false">Proposta de intervenção</button></div>' +
+        '<textarea id="cr-txt" rows="7" style="margin-top:10px" aria-label="Seu texto" placeholder="Cole ou escreva aqui. O texto não sai do seu aparelho."></textarea>' +
+        '<button class="btn" id="cr-ok" style="margin-top:8px">Corrigir</button></section>' +
+      '<div id="cr-res"></div>' + AVISO;
+    var tipo = "introducao";
+    app.querySelectorAll("[data-tipo]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        tipo = b.getAttribute("data-tipo");
+        app.querySelectorAll("[data-tipo]").forEach(function (x) { var on = x === b; x.classList.toggle("on", on); x.setAttribute("aria-checked", on ? "true" : "false"); });
+      });
+    });
+    document.getElementById("cr-ok").addEventListener("click", function () {
+      var txt = document.getElementById("cr-txt").value;
+      var res = document.getElementById("cr-res");
+      if (txt.trim().length < 20) { toast("Escreva pelo menos uma frase completa"); return; }
+      var r = window.CORRECAO.analisar(tipo, txt);
+      state.correcoes = (state.correcoes || 0) + 1; save();
+      track("correcao_rapida", { tipo: tipo, ok: r.ok, total: r.total });
+      res.innerHTML = '<section class="card"><h2>' + r.ok + " de " + r.total + " pontos atendidos</h2>" +
+        r.itens.map(function (i) {
+          return '<div class="feedback ' + (i.ok ? "ok" : "bad") + '" style="margin-top:6px"><strong>' + i.c + (i.ok ? " ✓ " : " ✗ ") + "</strong>" + esc(i.msg) + "</div>";
+        }).join("") +
+        '<p class="empty" id="cr-ia" style="margin-top:8px">Correção automática por regras: é um guia, não uma nota oficial.</p>' +
+        '<a class="btn ghost" href="#/enviar" style="margin-top:8px">📷 Quer a correção completa? Envie para o professor</a></section>';
+      window.CORRECAO.pedirIA(tipo, "", txt).then(function (c) {
+        var box = document.getElementById("cr-ia");
+        if (c && box) box.textContent = "Comentário da IA: " + c;
+      });
+    });
   }
 
   function renderOficina(id) {
@@ -1307,6 +1347,7 @@
     else if (h === "#/trilha") { tab = "trilha"; renderTrilha(); }
     else if (h === "#/treino") { tab = "treino"; renderTreino(); }
     else if ((m = h.match(/^#\/treino\/(\d+)$/))) { tab = "treino"; renderOficina(+m[1]); }
+    else if (h === "#/correcao") { tab = "treino"; renderCorrecao(); }
     else if (h === "#/enviar") { tab = "treino"; renderEnviar(); }
     else if (h === "#/simulado") { tab = "treino"; renderSimulado(); }
     else if (h === "#/kit") { tab = "kit"; renderKit(); }
