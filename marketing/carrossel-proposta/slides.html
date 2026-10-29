@@ -1,0 +1,116 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+body{background:#111;font-family:"Plus Jakarta Sans",system-ui,sans-serif}
+.s{width:1080px;height:1350px;position:relative;overflow:hidden;color:#fff;padding:90px 84px;display:flex;flex-direction:column;
+ background:radial-gradient(circle at 15% 12%,#7c5cff 0,transparent 38%),radial-gradient(circle at 88% 30%,#00c2ff 0,transparent 36%),
+ radial-gradient(circle at 30% 92%,#ff5fa2 0,transparent 40%),radial-gradient(circle at 85% 88%,#2dd4bf 0,transparent 32%),#0b1026}
+.blob{position:absolute;border-radius:50%;filter:blur(2px);opacity:.85}
+.glass{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.26),rgba(255,255,255,.08));border:1.5px solid rgba(255,255,255,.45);
+ border-radius:44px;backdrop-filter:blur(28px) saturate(170%);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -1px 0 rgba(255,255,255,.15),0 30px 60px rgba(0,0,0,.25);padding:44px 48px}
+.glass:before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.35),transparent 40%);pointer-events:none}
+.pill{display:inline-block;align-self:flex-start;padding:12px 26px;border-radius:999px;background:rgba(255,255,255,.22);border:1.5px solid rgba(255,255,255,.5);font-weight:700;font-size:26px;letter-spacing:.06em;text-transform:uppercase;backdrop-filter:blur(20px)}
+h1{font-size:84px;line-height:1.02;font-weight:800;letter-spacing:-.02em}
+h2{font-size:60px;line-height:1.08;font-weight:800;letter-spacing:-.01em}
+p,li{font-size:34px;line-height:1.38}
+.sm{font-size:28px;opacity:.9}
+.foot{position:absolute;left:84px;right:84px;bottom:56px;display:flex;justify-content:space-between;font-size:26px;font-weight:600;opacity:.9}
+.gap{height:34px}
+.tag{display:inline-block;padding:4px 16px;border-radius:14px;font-weight:700;font-size:28px;margin-right:6px}
+.a{background:#7c5cff}.b{background:#ff5fa2}.c{background:#00a3d9}.d{background:#14b8a6}.e{background:#f59e0b}
+.row{display:grid;grid-template-columns:110px 1fr;gap:22px;align-items:center;margin:16px 0}
+.num{width:96px;height:96px;border-radius:30px;display:grid;place-items:center;font-size:44px;font-weight:800;background:rgba(255,255,255,.25);border:1.5px solid rgba(255,255,255,.55)}
+.lacuna{display:inline-block;min-width:220px;border-bottom:4px dashed rgba(255,255,255,.85);margin:0 6px}
+.bad{border-color:rgba(255,120,140,.9)}.good{border-color:rgba(110,255,200,.9)}
+em{font-style:normal;font-weight:800}
+</style></head><body>
+
+<section class="s" id="s1">
+ <span class="pill">Redação ENEM · Treino</span><div class="gap"></div>
+ <div class="glass" style="margin-top:40px"><h1>Proposta de intervenção nota 1000</h1><div class="gap"></div>
+ <p>5 exercícios práticos para montar a sua, passo a passo.</p></div>
+ <div class="glass" style="margin-top:40px;padding:34px 44px"><p class="sm">TEMA DO TREINO</p><p style="font-weight:700;font-size:40px;margin-top:8px">Desafios para a inclusão de pessoas neurodivergentes na sociedade brasileira</p></div>
+ <div class="foot"><span>@thiagopinheirorj</span><span>arraste ›</span></div>
+</section>
+
+<section class="s" id="s2">
+ <span class="pill">Antes de tudo</span><div class="gap"></div>
+ <h2>A Competência 5 cobra 5 elementos</h2><div class="gap"></div>
+ <div class="glass">
+  <div class="row"><div class="num">1</div><p><span class="tag a">AGENTE</span> quem vai agir?</p></div>
+  <div class="row"><div class="num">2</div><p><span class="tag b">AÇÃO</span> o que deve ser feito?</p></div>
+  <div class="row"><div class="num">3</div><p><span class="tag c">MEIO</span> como? “por meio de…”</p></div>
+  <div class="row"><div class="num">4</div><p><span class="tag d">FINALIDADE</span> para quê? “a fim de…”</p></div>
+  <div class="row"><div class="num">5</div><p><span class="tag e">DETALHE</span> explica um dos itens</p></div>
+ </div>
+ <p class="sm" style="margin-top:30px">Cada elemento vale 40 pontos. Os 5 juntos, 200.</p>
+ <div class="foot"><span>@thiagopinheirorj</span><span>2/9</span></div>
+</section>
+
+<section class="s" id="s3">
+ <span class="pill">Exercício 1 · Identifique</span><div class="gap"></div>
+ <h2>Marque os 5 elementos nesta proposta</h2><div class="gap"></div>
+ <div class="glass"><p>“Portanto, cabe ao Ministério da Educação ampliar a formação de professores em educação inclusiva, por meio de cursos gratuitos e obrigatórios na rede pública, os quais ensinem estratégias para estudantes autistas e com TDAH, a fim de que esses alunos aprendam com dignidade.”</p></div>
+ <p class="sm" style="margin-top:30px">Dica: procure as palavras-chave “cabe a”, “por meio de”, “os quais” e “a fim de”. Gabarito no slide 8.</p>
+ <div class="foot"><span>@thiagopinheirorj</span><span>3/9</span></div>
+</section>
+
+<section class="s" id="s4">
+ <span class="pill">Exercício 2 · Complete</span><div class="gap"></div>
+ <h2>Preencha as lacunas</h2><div class="gap"></div>
+ <div class="glass"><p>“Além disso, cabe <span class="lacuna"></span> <em>(agente)</em> promover campanhas contra o capacitismo, por meio de <span class="lacuna"></span> <em>(meio)</em>, com o objetivo de <span class="lacuna"></span> <em>(finalidade)</em>.”</p></div>
+ <p class="sm" style="margin-top:30px">Pense: quem tem alcance nacional para mudar a forma como a sociedade enxerga a neurodivergência?</p>
+ <div class="foot"><span>@thiagopinheirorj</span><span>4/9</span></div>
+</section>
+
+<section class="s" id="s5">
+ <span class="pill">Exercício 3 · Reescreva</span><div class="gap"></div>
+ <h2>Transforme a proposta fraca em completa</h2><div class="gap"></div>
+ <div class="glass bad"><p class="sm">❌ FRACA</p><p style="margin-top:10px">“O governo deve fazer algo para incluir os neurodivergentes.”</p></div>
+ <div class="glass" style="margin-top:28px"><p class="sm">O QUE FALTA?</p><p style="margin-top:10px">Agente vago (“o governo”), ação vaga (“fazer algo”), sem meio, sem finalidade, sem detalhe.</p></div>
+ <p class="sm" style="margin-top:30px">Reescreva antes de ver a versão forte no slide 8.</p>
+ <div class="foot"><span>@thiagopinheirorj</span><span>5/9</span></div>
+</section>
+
+<section class="s" id="s6">
+ <span class="pill">Exercício 4 · Ligue</span><div class="gap"></div>
+ <h2>Qual agente resolve cada causa?</h2><div class="gap"></div>
+ <div class="glass">
+  <p><em>Causa A.</em> Professores sem preparo para alunos autistas.</p>
+  <p style="margin-top:14px"><em>Causa B.</em> Preconceito e piadas sobre TDAH.</p>
+  <p style="margin-top:14px"><em>Causa C.</em> Empresas que não contratam neurodivergentes.</p>
+ </div>
+ <div class="glass" style="margin-top:28px">
+  <p>1. Mídia e influenciadores &nbsp;·&nbsp; 2. Ministério do Trabalho &nbsp;·&nbsp; 3. Ministério da Educação</p>
+ </div>
+ <p class="sm" style="margin-top:30px">A proposta precisa responder às causas que você discutiu nos parágrafos de desenvolvimento.</p>
+ <div class="foot"><span>@thiagopinheirorj</span><span>6/9</span></div>
+</section>
+
+<section class="s" id="s7">
+ <span class="pill">Exercício 5 · Escreva a sua</span><div class="gap"></div>
+ <h2>Use o molde e crie uma proposta inteira</h2><div class="gap"></div>
+ <div class="glass"><p>Dessa forma, cabe ao <span class="tag a">AGENTE</span> <span class="tag b">AÇÃO</span>, por meio de <span class="tag c">MEIO</span>, que <span class="tag e">DETALHE</span>, a fim de <span class="tag d">FINALIDADE</span>.</p></div>
+ <div class="glass" style="margin-top:28px"><p class="sm">REPERTÓRIO PARA FORTALECER</p><p style="margin-top:10px">Lei 12.764/2012 (direitos da pessoa com autismo) e Lei Brasileira de Inclusão, 13.146/2015.</p></div>
+ <div class="foot"><span>@thiagopinheirorj</span><span>7/9</span></div>
+</section>
+
+<section class="s" id="s8">
+ <span class="pill">Gabarito</span><div class="gap"></div>
+ <div class="glass" style="padding:36px 44px"><p class="sm">EXERCÍCIO 1</p><p style="font-size:30px;margin-top:8px"><span class="tag a">Ministério da Educação</span> <span class="tag b">ampliar a formação</span> <span class="tag c">cursos gratuitos</span> <span class="tag e">os quais ensinem…</span> <span class="tag d">a fim de que aprendam</span></p></div>
+ <div class="glass" style="margin-top:22px;padding:36px 44px"><p class="sm">EXERCÍCIO 2 (sugestão)</p><p style="font-size:30px;margin-top:8px">a mídia · campanhas com pessoas neurodivergentes contando suas histórias · desconstruir estereótipos</p></div>
+ <div class="glass good" style="margin-top:22px;padding:36px 44px"><p class="sm">EXERCÍCIO 3 ✅</p><p style="font-size:30px;margin-top:8px">“Cabe ao Ministério do Trabalho criar incentivos fiscais para empresas que contratem neurodivergentes, por meio de um selo de inclusão, que exija adaptações no ambiente, a fim de garantir renda e autonomia.”</p></div>
+ <div class="glass" style="margin-top:22px;padding:30px 44px"><p class="sm">EXERCÍCIO 4</p><p style="font-size:30px;margin-top:8px">A → 3 · B → 1 · C → 2</p></div>
+ <div class="foot"><span>@thiagopinheirorj</span><span>8/9</span></div>
+</section>
+
+<section class="s" id="s9">
+ <span class="pill">Sua vez</span><div class="gap"></div>
+ <div class="glass" style="margin-top:40px"><h2>Escreveu a sua proposta?</h2><div class="gap"></div>
+ <p>Manda nos comentários ou no meu WhatsApp que eu corrijo. ✍️</p></div>
+ <div class="glass" style="margin-top:34px"><p class="sm">TREINE 5 MINUTOS POR DIA</p><p style="font-weight:800;font-size:44px;margin-top:8px">App Redação 1000</p><p class="sm" style="margin-top:8px">Correção rápida da proposta, simulado de 60 min e repertório diário. Link na bio.</p></div>
+ <p class="sm" style="margin-top:34px">Salve este post para revisar antes da prova 📌</p>
+ <div class="foot"><span>@thiagopinheirorj</span><span>9/9</span></div>
+</section>
+</body></html>
