@@ -407,3 +407,30 @@ describe("C · Correção rápida", () => {
     assert.equal(await page.locator('#app a[href="#/correcao"]').count(), 1);
   });
 });
+
+describe("R · Semana e conquistas", () => {
+  it("R01 · pontos da semana somam devocionais, simulados e envios; compara com a anterior", async () => {
+    // hoje 15/10/2026 é quinta; semana começa na segunda 12/10
+    const st = { inicio: "2026-10-05", done: { 1: "2026-10-05", 2: "2026-10-12", 3: "2026-10-13", 4: "2026-10-15" },
+      dias: ["2026-10-05", "2026-10-12", "2026-10-13", "2026-10-15"],
+      simulados: [{ tema: "T", texto: "x", data: "2026-10-14", seg: 3000 }], envios: [{ data: "2026-10-15", tema: "T", paginas: 1 }] };
+    const { page } = await env.open({ hash: "#/progresso", state: st });
+    assert.equal(await page.textContent("#pts-semana"), "80");
+    assert.match(await page.textContent("#ranking"), /▲ 70 a mais que a semana passada.*🏆 Sua melhor semana!/);
+    assert.equal(await page.locator("#ranking .bar").count(), 4);
+  });
+
+  it("R02 · conquistas desbloqueiam conforme o progresso", async () => {
+    const st = { inicio: "2026-10-15", done: { 1: "2026-10-15" }, dias: ["2026-10-15"], simulados: [{ tema: "T", texto: "x", data: "2026-10-15", seg: 10 }] };
+    const { page } = await env.open({ hash: "#/progresso", state: st });
+    assert.match(await page.textContent("#conquistas h2"), /2\/10/);
+    const on = await page.$$eval("#conquistas .badge.on strong", (b) => b.map((x) => x.textContent));
+    assert.deepEqual(on, ["Primeiro passo", "Prova de fogo"]);
+  });
+
+  it("R03 · desafiar um amigo compartilha os pontos", async () => {
+    const { page } = await env.open({ hash: "#/progresso", init: () => { window.__t = []; navigator.share = (d) => { window.__t.push(d.text); return Promise.resolve(); }; } });
+    await page.click("#pts-desafiar");
+    assert.match(await page.evaluate(() => window.__t[0]), /^🏁 Fiz 0 pontos esta semana no Redação 1000.*github\.io\/ENEM1000\//);
+  });
+});

@@ -109,6 +109,41 @@
     });
     return best;
   }
+  /* ---------- Pontos da semana e conquistas (calculados do que o aluno fez) ---------- */
+  var PONTOS = { dia: 10, simulado: 30, envio: 20 };
+  function inicioSemana(d) { var w = parseIso(d).getDay(); return addDays(d, -((w + 6) % 7)); } // segunda-feira
+  function pontosSemana(seg) {
+    var fim = addDays(seg, 6), p = 0;
+    function dentro(d) { return d >= seg && d <= fim; }
+    Object.keys(state.done).forEach(function (k) { if (dentro(state.done[k])) p += PONTOS.dia; });
+    state.simulados.forEach(function (x) { if (dentro(x.data)) p += PONTOS.simulado; });
+    state.envios.forEach(function (x) { if (dentro(x.data)) p += PONTOS.envio; });
+    return p;
+  }
+  function semanas(n) {
+    var seg = inicioSemana(today), out = [];
+    for (var i = 0; i < n; i++) out.push({ seg: addDays(seg, -7 * i), pts: pontosSemana(addDays(seg, -7 * i)) });
+    return out;
+  }
+  function conquistas() {
+    var feitos = Object.keys(state.done).length;
+    var acertos = Object.keys(state.quiz).filter(function (id) { var d = byId(+id); return d && d.quiz.correta === state.quiz[id]; }).length;
+    var oficinas = TREINO.filter(function (o) { return treinoFeitas(o.id) >= o.questoes.length; }).length;
+    var melhor = bestStreak();
+    return [
+      ["🌱", "Primeiro passo", "Concluir o 1º devocional", feitos >= 1],
+      ["🔥", "Ritmo de prova", "7 dias seguidos", melhor >= 7],
+      ["🏅", "Metade do caminho", "15 devocionais concluídos", feitos >= 15],
+      ["👑", "Trilha completa", "Os 30 devocionais", feitos >= 30],
+      ["🎯", "Olho clínico", "Acertar 10 quizzes", acertos >= 10],
+      ["✏️", "Oficineiro", "Fechar todas as oficinas do Treino", oficinas >= TREINO.length],
+      ["⏱️", "Prova de fogo", "Fazer 1 simulado completo", state.simulados.length >= 1],
+      ["📷", "Coragem", "Enviar 1 redação para correção", state.envios.length >= 1],
+      ["⚡", "Autocrítica", "Usar a correção rápida 5 vezes", (state.correcoes || 0) >= 5],
+      ["📚", "Banco de repertório", "Favoritar 5 repertórios", state.favoritos.length >= 5]
+    ];
+  }
+
   function updateStreakBadge() {
     document.getElementById("streak-count").textContent = streak();
   }
@@ -1212,6 +1247,27 @@
         }).join("") : '<p class="empty">Toque em ☆ Favoritar em um devocional para montar seu banco de repertórios.</p>') +
       "</section>" +
 
+      (function () {
+        var sem = semanas(4), atual = sem[0].pts, ant = sem[1].pts;
+        var recorde = Math.max.apply(null, sem.map(function (x) { return x.pts; }));
+        var cq = conquistas(), ganhas = cq.filter(function (c) { return c[3]; }).length;
+        return '<section class="card" id="ranking"><h2>Sua semana</h2>' +
+          '<p class="big-num"><strong id="pts-semana">' + atual + "</strong> pontos</p>" +
+          '<p class="empty">' + (atual > ant ? "▲ " + (atual - ant) + " a mais que a semana passada. Boa!" : atual === ant ? "Igual à semana passada." : "▼ " + (ant - atual) + " a menos que a semana passada. Bora recuperar!") +
+            (atual > 0 && atual === recorde ? " 🏆 Sua melhor semana!" : "") + "</p>" +
+          '<div class="bars">' + sem.slice().reverse().map(function (x, i) {
+            var h = recorde ? Math.round((x.pts / recorde) * 100) : 0;
+            return '<div class="bar"><span style="height:' + Math.max(4, h) + '%"></span><small>' + (i === 3 ? "esta" : parseIso(x.seg).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })) + "</small></div>";
+          }).join("") + "</div>" +
+          '<p class="empty" style="margin-top:8px">Devocional +' + PONTOS.dia + " · simulado +" + PONTOS.simulado + " · redação enviada +" + PONTOS.envio + "</p>" +
+          '<button class="btn small ghost" id="pts-desafiar">🏁 Desafiar um amigo</button>' +
+        "</section>" +
+        '<section class="card" id="conquistas"><h2>Conquistas <span class="chip outline">' + ganhas + "/" + cq.length + "</span></h2>" +
+          '<div class="badges">' + cq.map(function (c) {
+            return '<div class="badge' + (c[3] ? " on" : "") + '" title="' + esc(c[2]) + '"><span aria-hidden="true">' + (c[3] ? c[0] : "🔒") + "</span><strong>" + esc(c[1]) + "</strong><small>" + esc(c[2]) + "</small></div>";
+          }).join("") + "</div></section>";
+      })() +
+
       '<section class="card" id="lembrete"><h2>Lembrete diário</h2>' +
         '<p class="empty">Escolha um horário para lembrar do devocional de 5 minutos.</p>' +
         '<div class="row" style="margin-top:10px;flex-wrap:wrap">' +
@@ -1251,6 +1307,13 @@
         img.src = URL.createObjectURL(b);
         img.hidden = false;
       }).catch(function () {});
+    });
+
+    document.getElementById("pts-desafiar").addEventListener("click", function () {
+      var txt = "🏁 Fiz " + pontosSemana(inicioSemana(today)) + " pontos esta semana no Redação 1000, treinando redação para o ENEM. Duvido você me passar! " + APP_URL;
+      track("desafio_amigo");
+      if (navigator.share) navigator.share({ text: txt }).catch(function () {});
+      else window.open("https://wa.me/?text=" + encodeURIComponent(txt), "_blank", "noopener");
     });
 
     var lemHora = document.getElementById("lem-hora");

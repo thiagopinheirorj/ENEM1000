@@ -508,3 +508,16 @@ textarea.folha { width: 100%; line-height: 1.9; background-image: repeating-line
 /* Correção rápida */
 button.chip { border: 1px solid var(--line); cursor: pointer; font: inherit; font-size: .85rem; }
 button.chip.on { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* Semana e conquistas */
+.big-num { font-size: 1.1rem; margin: 4px 0; }
+.big-num strong { font-size: 2.4rem; }
+.bars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; height: 110px; align-items: end; margin-top: 10px; }
+.bar { height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; }
+.bar span { width: 100%; background: var(--primary); border-radius: 8px 8px 3px 3px; opacity: .85; }
+.bar small { font-size: .75rem; color: var(--muted); }
+.badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
+.badge { border: 1px solid var(--line); border-radius: 14px; padding: 10px; text-align: center; opacity: .55; display: grid; gap: 2px; }
+.badge.on { opacity: 1; border-color: var(--primary); }
+.badge span { font-size: 1.8rem; }
+.badge small { color: var(--muted); font-size: .75rem; }
