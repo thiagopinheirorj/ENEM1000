@@ -54,7 +54,7 @@
 
   /* ---------- Armazenamento local ---------- */
   function emptyState() {
-    return { inicio: today, done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO, simulados: [], sim: {}, lembrete: {}, envios: [], correcoes: 0 };
+    return { inicio: today, done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO, simulados: [], sim: {}, lembrete: {}, envios: [], correcoes: 0, turma: {} };
   }
   function load() {
     try {
@@ -1123,6 +1123,74 @@
     });
   }
 
+  /* ---------- Turmas: o professor gera um convite; o aluno entra e manda o progresso ---------- */
+  function codTurma(t) {
+    var j = JSON.stringify({ e: t.escola, t: t.nome });
+    return btoa(unescape(encodeURIComponent(j))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+  function lerTurma(cod) {
+    try {
+      var b = cod.replace(/-/g, "+").replace(/_/g, "/");
+      var o = JSON.parse(decodeURIComponent(escape(atob(b))));
+      if (o && typeof o.e === "string" && typeof o.t === "string" && o.e.trim() && o.t.trim()) return { escola: o.e.slice(0, 80), nome: o.t.slice(0, 60) };
+    } catch (e) {}
+    return null;
+  }
+  function linkTurma(t) { return APP_URL + "#/turma/" + codTurma(t); }
+  function relatorioTurma() {
+    var t = state.turma, sem = pontosSemana(inicioSemana(today));
+    var acertos = Object.keys(state.quiz).filter(function (id) { var d = byId(+id); return d && d.quiz.correta === state.quiz[id]; }).length;
+    return "📋 Redação 1000 · " + t.escola + " · " + t.nome + "\n" +
+      "Aluno(a): " + t.aluno + "\n" +
+      "Devocionais concluídos: " + Object.keys(state.done).length + "/30\n" +
+      "Sequência: " + streak() + " dia(s) · melhor: " + bestStreak() + "\n" +
+      "Quizzes certos: " + acertos + "/" + Object.keys(state.quiz).length + "\n" +
+      "Simulados: " + state.simulados.length + " · redações enviadas: " + state.envios.length + "\n" +
+      "Pontos nesta semana: " + sem + "\n" +
+      "Atualizado em " + parseIso(today).toLocaleDateString("pt-BR");
+  }
+  function renderProfessor() {
+    app.innerHTML =
+      '<a class="back" href="#/progresso">‹ Progresso</a><p class="eyebrow">Para escolas e cursinhos</p><h1>Criar uma turma</h1>' +
+      '<section class="card"><p>Gere um convite para seus alunos. Eles entram com o próprio nome e, quando você pedir, mandam o progresso pronto no WhatsApp.</p>' +
+        '<label for="pf-escola" style="display:block;margin-top:10px"><strong>Escola ou cursinho</strong></label><input type="text" id="pf-escola" maxlength="80" style="width:100%">' +
+        '<label for="pf-turma" style="display:block;margin-top:10px"><strong>Turma</strong></label><input type="text" id="pf-turma" maxlength="60" placeholder="Ex.: 3º ano B" style="width:100%">' +
+        '<button class="btn" id="pf-gerar" style="margin-top:12px">Gerar convite</button>' +
+        '<div id="pf-res"></div></section>' +
+      '<section class="card"><h2>Quer um painel da turma?</h2><p>Para acompanhar todos os alunos num só lugar, com correções do professor Thiago, fale com a gente.</p>' +
+        '<a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/' + WHATS_PROF + "?text=" + encodeURIComponent("Oi, Thiago! Sou de uma escola/cursinho e quero o Redação 1000 com painel da turma.") + '">🏫 Quero para minha escola</a></section>' + AVISO;
+    document.getElementById("pf-gerar").addEventListener("click", function () {
+      var t = { escola: document.getElementById("pf-escola").value.trim(), nome: document.getElementById("pf-turma").value.trim() };
+      if (!t.escola || !t.nome) { toast("Preencha a escola e a turma"); return; }
+      var link = linkTurma(t);
+      var convite = "📚 Turma " + t.nome + " (" + t.escola + ") no Redação 1000: 5 minutos por dia de repertório para a redação do ENEM. Entre por aqui: " + link;
+      track("turma_criada");
+      document.getElementById("pf-res").innerHTML = '<div class="example" id="pf-link" style="margin-top:12px;word-break:break-all">' + esc(link) + "</div>" +
+        '<div class="row" style="margin-top:8px;flex-wrap:wrap"><a class="btn small" id="pf-whats" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(convite) + '">Enviar no WhatsApp</a>' +
+        '<button class="btn small ghost" id="pf-copiar">Copiar convite</button></div><textarea id="pf-texto" hidden readonly aria-label="Convite"></textarea>';
+      document.getElementById("pf-copiar").addEventListener("click", function () { copiar(convite, "pf-texto", "Convite copiado ✓"); });
+    });
+  }
+  function renderEntrarTurma(cod) {
+    var t = lerTurma(cod);
+    if (!t) { app.innerHTML = '<h1>Convite inválido</h1><p class="empty">Peça um novo link ao seu professor.</p><a class="btn" href="#/hoje">Ir para o app</a>'; return; }
+    app.innerHTML =
+      '<p class="eyebrow">Convite de turma</p><h1>' + esc(t.nome) + '</h1><p class="empty">' + esc(t.escola) + "</p>" +
+      '<section class="card"><label for="tm-nome"><strong>Seu nome</strong></label>' +
+        '<input type="text" id="tm-nome" maxlength="60" autocomplete="name" style="width:100%;margin-top:6px" value="' + esc(state.turma.aluno || "") + '">' +
+        '<p class="empty" style="margin-top:6px">Seu nome fica só no seu aparelho e vai no relatório que você mandar ao professor.</p>' +
+        '<button class="btn" id="tm-entrar" style="margin-top:10px">Entrar na turma</button></section>';
+    document.getElementById("tm-entrar").addEventListener("click", function () {
+      var nome = document.getElementById("tm-nome").value.trim();
+      if (!nome) { toast("Escreva seu nome"); return; }
+      state.turma = { escola: t.escola, nome: t.nome, aluno: nome.slice(0, 60) };
+      save();
+      track("turma_entrou");
+      toast("Você entrou na turma " + t.nome);
+      location.hash = "#/progresso";
+    });
+  }
+
   function renderOficina(id) {
     var o = TREINO.filter(function (x) { return x.id === id; })[0];
     if (!o) { renderTreino(); return; }
@@ -1268,6 +1336,15 @@
           }).join("") + "</div></section>";
       })() +
 
+      '<section class="card" id="turma"><h2>Minha turma</h2>' +
+        (state.turma.nome
+          ? '<p><strong>' + esc(state.turma.nome) + "</strong> · " + esc(state.turma.escola) + '<br><span class="muted">Aluno(a): ' + esc(state.turma.aluno) + "</span></p>" +
+            '<div class="row" style="margin-top:10px;flex-wrap:wrap"><button class="btn small" id="tm-relatorio">📋 Mandar meu progresso ao professor</button>' +
+            '<button class="btn small ghost" id="tm-sair">Sair da turma</button></div><textarea id="tm-texto" hidden readonly aria-label="Relatório"></textarea>'
+          : '<p class="empty">Seu professor pode criar uma turma e te mandar um link de convite.</p>') +
+        '<p style="margin-top:10px"><a href="#/professor">É professor? Crie uma turma ›</a></p>' +
+      "</section>" +
+
       '<section class="card" id="lembrete"><h2>Lembrete diário</h2>' +
         '<p class="empty">Escolha um horário para lembrar do devocional de 5 minutos.</p>' +
         '<div class="row" style="margin-top:10px;flex-wrap:wrap">' +
@@ -1315,6 +1392,18 @@
       if (navigator.share) navigator.share({ text: txt }).catch(function () {});
       else window.open("https://wa.me/?text=" + encodeURIComponent(txt), "_blank", "noopener");
     });
+
+    if (state.turma.nome) {
+      document.getElementById("tm-relatorio").addEventListener("click", function () {
+        var txt = relatorioTurma();
+        track("turma_relatorio");
+        if (navigator.share) navigator.share({ text: txt }).catch(function (e) { if (!e || e.name !== "AbortError") copiar(txt, "tm-texto", "Relatório copiado ✓"); });
+        else copiar(txt, "tm-texto", "Relatório copiado ✓ Cole no WhatsApp do professor.");
+      });
+      document.getElementById("tm-sair").addEventListener("click", function () {
+        state.turma = {}; save(); renderProgresso(); toast("Você saiu da turma");
+      });
+    }
 
     var lemHora = document.getElementById("lem-hora");
     lemHora.addEventListener("change", function () {
@@ -1410,6 +1499,8 @@
     else if (h === "#/trilha") { tab = "trilha"; renderTrilha(); }
     else if (h === "#/treino") { tab = "treino"; renderTreino(); }
     else if ((m = h.match(/^#\/treino\/(\d+)$/))) { tab = "treino"; renderOficina(+m[1]); }
+    else if (h === "#/professor") { tab = "progresso"; renderProfessor(); }
+    else if ((m = h.match(/^#\/turma\/([A-Za-z0-9_-]{4,400})$/))) { tab = "progresso"; renderEntrarTurma(m[1]); }
     else if (h === "#/correcao") { tab = "treino"; renderCorrecao(); }
     else if (h === "#/enviar") { tab = "treino"; renderEnviar(); }
     else if (h === "#/simulado") { tab = "treino"; renderSimulado(); }

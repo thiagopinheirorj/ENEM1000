@@ -196,7 +196,7 @@ describe("P · Progresso", () => {
     await page.waitForSelector(".toast");
     assert.equal(await page.textContent(".toast"), "Trilha reiniciada");
     const s = await getState(page);
-    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08", simulados: [], sim: {}, lembrete: {}, envios: [], correcoes: 0 });
+    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08", simulados: [], sim: {}, lembrete: {}, envios: [], correcoes: 0, turma: {} });
     assert.equal(await page.textContent("#streak-count"), "0");
     const stats = await page.$$eval(".stat .v", (v) => v.map((x) => x.textContent));
     assert.deepEqual(stats, ["0", "0", "0/30", "—"]);
@@ -432,5 +432,34 @@ describe("R · Semana e conquistas", () => {
     const { page } = await env.open({ hash: "#/progresso", init: () => { window.__t = []; navigator.share = (d) => { window.__t.push(d.text); return Promise.resolve(); }; } });
     await page.click("#pts-desafiar");
     assert.match(await page.evaluate(() => window.__t[0]), /^🏁 Fiz 0 pontos esta semana no Redação 1000.*github\.io\/ENEM1000\//);
+  });
+});
+
+describe("TU · Turmas", () => {
+  it("TU01 · professor gera convite; aluno entra com o nome e manda o progresso", async () => {
+    const { page } = await env.open({ hash: "#/professor", init: () => { window.__t = []; navigator.share = (d) => { window.__t.push(d.text); return Promise.resolve(); }; } });
+    await page.fill("#pf-escola", "Colégio Ação");
+    await page.fill("#pf-turma", "3º ano B");
+    await page.click("#pf-gerar");
+    const link = await page.textContent("#pf-link");
+    assert.match(link, /^https:\/\/thiagopinheirorj\.github\.io\/ENEM1000\/#\/turma\/[A-Za-z0-9_-]+$/);
+    assert.match(decodeURIComponent(await page.getAttribute("#pf-whats", "href")), /Turma 3º ano B \(Colégio Ação\)/);
+    await page.evaluate((h) => { location.hash = h; }, link.slice(link.indexOf("#")));
+    await page.waitForSelector("#tm-nome");
+    assert.match(await page.textContent("#app h1"), /3º ano B/);
+    await page.fill("#tm-nome", "Ana");
+    await page.click("#tm-entrar");
+    await page.waitForSelector("#tm-relatorio");
+    assert.deepEqual((await getState(page)).turma, { escola: "Colégio Ação", nome: "3º ano B", aluno: "Ana" });
+    await page.click("#tm-relatorio");
+    const rel = await page.evaluate(() => window.__t[0]);
+    assert.match(rel, /Colégio Ação · 3º ano B\nAluno\(a\): Ana\nDevocionais concluídos: 0\/30/);
+    await page.click("#tm-sair");
+    assert.deepEqual((await getState(page)).turma, {});
+  });
+
+  it("TU02 · convite inválido mostra aviso", async () => {
+    const { page } = await env.open({ hash: "#/turma/abcdef" });
+    assert.match(await page.textContent("#app"), /Convite inválido/);
   });
 });
