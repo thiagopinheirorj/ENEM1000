@@ -521,3 +521,9 @@ button.chip.on { background: var(--primary); color: #fff; border-color: var(--pr
 .badge.on { opacity: 1; border-color: var(--primary); }
 .badge span { font-size: 1.8rem; }
 .badge small { color: var(--muted); font-size: .75rem; }
+
+/* Planos */
+.plano.destaque { border: 2px solid var(--primary); }
+.plano-preco { font-size: 1.6rem; font-weight: 700; margin: 2px 0 8px; }
+.plano-itens { padding-left: 1.2em; margin: 0 0 12px; }
+.plano-itens li { margin: 4px 0; }

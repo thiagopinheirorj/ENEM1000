@@ -1191,6 +1191,32 @@
     });
   }
 
+  /* ---------- Plano premium (desenho; sem cobrança no app) ---------- */
+  var PLANOS = [
+    { id: "gratis", nome: "Grátis", preco: "R$ 0", destaque: false, itens: ["Devocional diário e trilha de 30 dias", "Podcast e Kit da redação", "Oficinas do Treino e correção rápida", "Simulado com tema surpresa", "Pontos, conquistas e turmas"] },
+    { id: "premium", nome: "Premium", preco: "Em breve", destaque: true, itens: ["Tudo do grátis", "4 correções comentadas por mês com o professor Thiago", "Temas exclusivos de simulado toda semana", "Correção por IA com comentário escrito", "Aulão ao vivo mensal e grupo fechado", "Trilha extra para vestibulares"] },
+    { id: "escola", nome: "Escola", preco: "Sob consulta", destaque: false, itens: ["Tudo do premium para a turma", "Painel do professor com o progresso de cada aluno", "Simulados aplicados em sala", "Relatório mensal para a coordenação"] }
+  ];
+  function renderPremium() {
+    app.innerHTML =
+      '<a class="back" href="#/progresso">‹ Progresso</a><p class="eyebrow">Planos</p><h1>Redação 1000 Premium</h1>' +
+      '<p class="empty">O app continua grátis. O Premium é para quem quer acompanhamento de perto até a nota 1000.</p>' +
+      PLANOS.map(function (p) {
+        var msg = p.id === "escola" ? "Oi, Thiago! Quero o plano Escola do Redação 1000." : "Oi, Thiago! Quero ser avisado quando o Redação 1000 Premium abrir.";
+        return '<section class="card plano' + (p.destaque ? " destaque" : "") + '" data-plano="' + p.id + '">' +
+          (p.destaque ? '<span class="chip ok">Mais completo</span>' : "") +
+          "<h2>" + esc(p.nome) + '</h2><p class="plano-preco">' + esc(p.preco) + "</p>" +
+          '<ul class="plano-itens">' + p.itens.map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul>" +
+          (p.id === "gratis" ? '<p class="empty">Seu plano atual</p>' :
+            '<a class="btn' + (p.destaque ? "" : " ghost") + '" data-quero="' + p.id + '" target="_blank" rel="noopener" href="https://wa.me/' + WHATS_PROF + "?text=" + encodeURIComponent(msg) + '">' +
+            (p.id === "escola" ? "🏫 Falar sobre o plano Escola" : "🔔 Quero ser avisado") + "</a>") +
+          "</section>";
+      }).join("") + AVISO;
+    app.querySelectorAll("[data-quero]").forEach(function (a) {
+      a.addEventListener("click", function () { track("premium_interesse", { plano: a.getAttribute("data-quero") }); });
+    });
+  }
+
   function renderOficina(id) {
     var o = TREINO.filter(function (x) { return x.id === id; })[0];
     if (!o) { renderTreino(); return; }
@@ -1335,6 +1361,9 @@
             return '<div class="badge' + (c[3] ? " on" : "") + '" title="' + esc(c[2]) + '"><span aria-hidden="true">' + (c[3] ? c[0] : "🔒") + "</span><strong>" + esc(c[1]) + "</strong><small>" + esc(c[2]) + "</small></div>";
           }).join("") + "</div></section>";
       })() +
+
+      '<a class="card oficina" id="cta-premium" href="#/premium"><span class="oficina-ico" aria-hidden="true">⭐</span><span><strong>Redação 1000 Premium</strong>' +
+        '<span class="muted" style="display:block">Correções mensais com o professor, temas exclusivos e aulão ao vivo. Veja os planos.</span></span></a>' +
 
       '<section class="card" id="turma"><h2>Minha turma</h2>' +
         (state.turma.nome
@@ -1499,6 +1528,7 @@
     else if (h === "#/trilha") { tab = "trilha"; renderTrilha(); }
     else if (h === "#/treino") { tab = "treino"; renderTreino(); }
     else if ((m = h.match(/^#\/treino\/(\d+)$/))) { tab = "treino"; renderOficina(+m[1]); }
+    else if (h === "#/premium") { tab = "progresso"; renderPremium(); }
     else if (h === "#/professor") { tab = "progresso"; renderProfessor(); }
     else if ((m = h.match(/^#\/turma\/([A-Za-z0-9_-]{4,400})$/))) { tab = "progresso"; renderEntrarTurma(m[1]); }
     else if (h === "#/correcao") { tab = "treino"; renderCorrecao(); }

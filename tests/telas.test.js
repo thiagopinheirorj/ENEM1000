@@ -463,3 +463,18 @@ describe("TU · Turmas", () => {
     assert.match(await page.textContent("#app"), /Convite inválido/);
   });
 });
+
+describe("PR · Plano premium", () => {
+  it("PR01 · Progresso leva aos planos; premium e escola abrem o WhatsApp sem cobrança no app", async () => {
+    const { page } = await env.open({ hash: "#/progresso" });
+    await page.click("#cta-premium");
+    await page.waitForSelector('[data-plano="premium"]');
+    assert.equal(await page.locator(".plano").count(), 3);
+    assert.match(await page.textContent('[data-plano="premium"]'), /Em breve.*4 correções comentadas por mês/);
+    const href = decodeURIComponent(await page.getAttribute('[data-quero="premium"]', "href"));
+    assert.match(href, /^https:\/\/wa\.me\/5521972032275\?text=.*Premium abrir/);
+    assert.match(decodeURIComponent(await page.getAttribute('[data-quero="escola"]', "href")), /plano Escola/);
+    assert.equal(await page.locator("form, input[type=password]").count(), 0);
+    assert.equal(await page.getAttribute('.tabbar a[data-tab="progresso"]', "aria-current"), "page");
+  });
+});
