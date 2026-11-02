@@ -1349,9 +1349,9 @@
           '<p class="big-num"><strong id="pts-semana">' + atual + "</strong> pontos</p>" +
           '<p class="empty">' + (atual > ant ? "▲ " + (atual - ant) + " a mais que a semana passada. Boa!" : atual === ant ? "Igual à semana passada." : "▼ " + (ant - atual) + " a menos que a semana passada. Bora recuperar!") +
             (atual > 0 && atual === recorde ? " 🏆 Sua melhor semana!" : "") + "</p>" +
-          '<div class="bars">' + sem.slice().reverse().map(function (x, i) {
+          '<div class="wk-bars">' + sem.slice().reverse().map(function (x, i) {
             var h = recorde ? Math.round((x.pts / recorde) * 100) : 0;
-            return '<div class="bar"><span style="height:' + Math.max(4, h) + '%"></span><small>' + (i === 3 ? "esta" : parseIso(x.seg).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })) + "</small></div>";
+            return '<div class="wk-bar"><span style="height:' + Math.max(4, h) + '%"></span><small>' + (i === 3 ? "esta" : parseIso(x.seg).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })) + "</small></div>";
           }).join("") + "</div>" +
           '<p class="empty" style="margin-top:8px">Devocional +' + PONTOS.dia + " · simulado +" + PONTOS.simulado + " · redação enviada +" + PONTOS.envio + "</p>" +
           '<button class="btn small ghost" id="pts-desafiar">🏁 Desafiar um amigo</button>' +

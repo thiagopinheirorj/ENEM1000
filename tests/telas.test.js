@@ -417,7 +417,7 @@ describe("R · Semana e conquistas", () => {
     const { page } = await env.open({ hash: "#/progresso", state: st });
     assert.equal(await page.textContent("#pts-semana"), "80");
     assert.match(await page.textContent("#ranking"), /▲ 70 a mais que a semana passada.*🏆 Sua melhor semana!/);
-    assert.equal(await page.locator("#ranking .bar").count(), 4);
+    assert.equal(await page.locator("#ranking .wk-bar").count(), 4);
   });
 
   it("R02 · conquistas desbloqueiam conforme o progresso", async () => {
