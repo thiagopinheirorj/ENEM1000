@@ -5,6 +5,8 @@
 **App publicado:** https://thiagopinheirorj.github.io/ENEM1000/ ·
 [Política de privacidade](https://thiagopinheirorj.github.io/ENEM1000/privacidade.html)
 
+**Também publicado aqui:** [Vôlei dos Professores](https://thiagopinheirorj.github.io/ENEM1000/volei/) · ranking de jogadores e times equilibrados (`volei/index.html`, arquivo único).
+
 Um app de **5 minutos por dia** para ampliar o repertório da redação do ENEM.
 Cada dia traz um "devocional" com:
 
