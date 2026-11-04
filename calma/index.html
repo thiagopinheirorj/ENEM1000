@@ -6,7 +6,12 @@
 <title>Calma · Estoicismo contra a ansiedade</title>
 <meta name="description" content="Prática diária de estoicismo e TCC para diminuir o apego ansioso.">
 <meta name="theme-color" content="#1c1f26">
-<link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Calma">
 <style>
 :root{
   --bg:#f4f1ea; --card:#fffdf8; --fg:#1d2330; --dim:#5b6475; --line:#e2ddd0;
@@ -180,6 +185,11 @@ nav button[aria-selected=true]{color:var(--accent)}
   <div class="card">
     <h2>Como usar</h2>
     <p>Manhã: preencha o que depende e o que não depende de você. Durante o dia: use o SOS e o registro de pensamento quando a ansiedade surgir. Noite: faça a revisão e conclua o dia.</p>
+  </div>
+  <div class="card">
+    <h2>Instalar no celular</h2>
+    <p class="note">Android (Chrome): menu ⋮ → "Instalar app". iPhone (Safari): Compartilhar → "Adicionar à Tela de Início". Depois funciona offline.</p>
+    <button id="btn-instalar" hidden>Instalar o Calma</button>
   </div>
   <div class="card">
     <h2>Seus dados</h2>
@@ -380,6 +390,21 @@ $("v-ctl").addEventListener("click",e=>{
   save(); ctl();
 });
 ctl();
+
+/* ---------- PWA: offline e instalação ---------- */
+if("serviceWorker" in navigator && location.protocol !== "file:"){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+let pedidoInstalar = null;
+window.addEventListener("beforeinstallprompt",e=>{
+  e.preventDefault(); pedidoInstalar=e; $("btn-instalar").hidden=false;
+});
+$("btn-instalar").addEventListener("click",async()=>{
+  if(!pedidoInstalar) return;
+  pedidoInstalar.prompt(); await pedidoInstalar.userChoice;
+  pedidoInstalar=null; $("btn-instalar").hidden=true;
+});
+window.addEventListener("appinstalled",()=>{ $("btn-instalar").hidden=true; });
 
 /* ---------- Dados ---------- */
 $("btn-export").addEventListener("click",()=>{
