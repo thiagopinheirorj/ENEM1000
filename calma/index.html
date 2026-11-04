@@ -69,6 +69,13 @@ nav button[aria-selected=true]{color:var(--accent)}
 .entry{border-top:1px solid var(--line);padding:10px 0;font-size:.92rem}
 .entry b{display:block;color:var(--dim);font-weight:600;font-size:.8rem}
 .note{font-size:.85rem;color:var(--dim)}
+dialog{border:0;border-radius:18px;padding:16px;width:min(94vw,440px);max-height:94vh;overflow:auto;
+  background:var(--card);color:var(--fg)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+#cv{width:100%;height:auto;max-height:58vh;object-fit:contain;border-radius:12px;display:block;margin:0 auto 12px;background:var(--bg)}
+.opts{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.opt{padding:6px 12px;min-height:36px;font-size:.85rem;background:transparent;color:var(--fg);border:1px solid var(--line)}
+.opt[aria-pressed=true]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 @media (prefers-reduced-motion:reduce){.breath{transition:none}}
 </style>
 </head>
@@ -84,6 +91,7 @@ nav button[aria-selected=true]{color:var(--accent)}
     <p class="quote" id="q-texto" style="margin-top:10px"></p>
     <p class="who" id="q-autor"></p>
     <p id="q-pratica"></p>
+    <button id="btn-compartilhar">Compartilhar este pensamento</button>
   </div>
 
   <div class="card">
@@ -204,6 +212,21 @@ nav button[aria-selected=true]{color:var(--accent)}
     <p class="note">Este app é uma ferramenta de autoajuda e não substitui acompanhamento psicológico. Se a ansiedade estiver intensa ou atrapalhando sua vida, procure um profissional. Em crise, ligue 188 (CVV, 24h, gratuito, no Brasil).</p>
   </div>
 </section>
+
+<dialog id="dlg" aria-label="Compartilhar pensamento">
+  <canvas id="cv" width="1080" height="1350"></canvas>
+  <div class="opts" role="group" aria-label="Formato" id="op-fmt">
+    <button class="opt" data-f="feed" aria-pressed="true">Feed 4:5</button>
+    <button class="opt" data-f="story" aria-pressed="false">Story 9:16</button>
+  </div>
+  <div class="opts" role="group" aria-label="Estilo" id="op-tema"></div>
+  <div class="row">
+    <button id="btn-share">Compartilhar</button>
+    <button class="ghost" id="btn-baixar">Baixar imagem</button>
+    <button class="ghost" id="btn-fechar">Fechar</button>
+  </div>
+  <p class="note" id="msg-share" style="margin-top:8px"></p>
+</dialog>
 
 <nav role="tablist" aria-label="Seções">
   <button role="tab" aria-selected="true" data-v="hoje"><span class="ic">☀</span>Hoje</button>
@@ -390,6 +413,115 @@ $("v-ctl").addEventListener("click",e=>{
   save(); ctl();
 });
 ctl();
+
+
+/* ---------- Compartilhar (imagem para Instagram) ---------- */
+const TEMAS = [
+  {n:"Noite",  a:"#141b2b", b:"#3d5a80", fg:"#f6f3ec", dim:"rgba(246,243,236,.72)", acc:"#e9c46a"},
+  {n:"Areia",  a:"#f7f1e6", b:"#e5d2b6", fg:"#2a2a33", dim:"rgba(42,42,51,.66)",   acc:"#9c5a3c"},
+  {n:"Musgo",  a:"#16302a", b:"#4f7a66", fg:"#f2f5ee", dim:"rgba(242,245,238,.72)", acc:"#d9e4a8"},
+  {n:"Poente", a:"#2a1a3d", b:"#d5645a", fg:"#fff6ec", dim:"rgba(255,246,236,.78)", acc:"#ffd59a"}
+];
+const FMT = {feed:[1080,1350], story:[1080,1920]};
+let fmtAtual = "feed", temaAtual = 0;
+const SERIF = 'Georgia,"Times New Roman",serif';
+const SANS = 'system-ui,-apple-system,"Segoe UI",sans-serif';
+
+function quebra(ctx, texto, larg){
+  const linhas=[]; let atual="";
+  for(const w of texto.split(/\s+/)){
+    const t = atual ? atual+" "+w : w;
+    if(ctx.measureText(t).width > larg && atual){ linhas.push(atual); atual=w; } else atual=t;
+  }
+  if(atual) linhas.push(atual);
+  return linhas;
+}
+function desenha(){
+  const cv=$("cv"), [W,H]=FMT[fmtAtual], T=TEMAS[temaAtual];
+  cv.width=W; cv.height=H;
+  const ctx=cv.getContext("2d");
+  const g=ctx.createLinearGradient(0,0,W*.6,H);
+  g.addColorStop(0,T.a); g.addColorStop(1,T.b);
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  // luz suave decorativa
+  const r=ctx.createRadialGradient(W*.85,H*.12,0,W*.85,H*.12,W*.7);
+  r.addColorStop(0,"rgba(255,255,255,.16)"); r.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle=r; ctx.fillRect(0,0,W,H);
+
+  // margens seguras (o Story tem áreas cobertas pela interface)
+  const mx=110, topo = fmtAtual==="story" ? 280 : 150, base = fmtAtual==="story" ? 300 : 150;
+  const larg=W-mx*2;
+  ctx.textBaseline="alphabetic"; ctx.textAlign="left";
+
+  // selo do dia
+  ctx.fillStyle=T.dim; ctx.font=`600 34px ${SANS}`;
+  ctx.fillText(`DIA ${idx+1} DE 30`, mx, topo);
+  ctx.fillStyle=T.acc; ctx.fillRect(mx, topo+26, 90, 5);
+
+  // citação: maior fonte que cabe; o bloco (aspas + frase + autor) fica centralizado
+  const aspasH=130, gap=40, autorH=90;
+  const zIni=topo+70, zFim=H-base-60, zAlt=zFim-zIni;
+  let tam=88, linhas, lh;
+  for(; tam>=40; tam-=2){
+    ctx.font=`italic 500 ${tam}px ${SERIF}`;
+    linhas=quebra(ctx, prat[0], larg); lh=tam*1.28;
+    if(aspasH+gap+linhas.length*lh+autorH<=zAlt) break;
+  }
+  const blocoH=aspasH+gap+linhas.length*lh+autorH;
+  const y0=zIni+Math.max(0,(zAlt-blocoH)/2);
+
+  ctx.fillStyle=T.acc; ctx.font=`700 260px ${SERIF}`;
+  ctx.fillText("\u201C", mx-10, y0+aspasH+70);
+
+  ctx.font=`italic 500 ${tam}px ${SERIF}`; ctx.fillStyle=T.fg;
+  let y=y0+aspasH+gap+tam;
+  for(const l of linhas){ ctx.fillText(l, mx, y); y+=lh; }
+
+  ctx.fillStyle=T.dim; ctx.font=`500 38px ${SANS}`;
+  ctx.fillText("\u2014 "+prat[1], mx, y+22);
+
+  // rodapé
+  ctx.fillStyle=T.fg; ctx.font=`700 44px ${SERIF}`;
+  ctx.fillText("Calma", mx, H-base+40);
+  ctx.fillStyle=T.dim; ctx.font=`500 30px ${SANS}`;
+  ctx.fillText("estoicismo contra a ansiedade", mx, H-base+84);
+}
+function blobPng(){ return new Promise(res=>$("cv").toBlob(res,"image/png")); }
+function marca(grupo, attr, val){
+  document.querySelectorAll(grupo+" button").forEach(b=>b.setAttribute("aria-pressed", b.dataset[attr]==val));
+}
+$("op-tema").innerHTML = TEMAS.map((t,i)=>`<button class="opt" data-t="${i}" aria-pressed="${i===0}">${t.n}</button>`).join("");
+$("op-tema").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-t]"); if(!b) return;
+  temaAtual=+b.dataset.t; marca("#op-tema","t",temaAtual); desenha();
+});
+$("op-fmt").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-f]"); if(!b) return;
+  fmtAtual=b.dataset.f; marca("#op-fmt","f",fmtAtual); desenha();
+});
+$("btn-compartilhar").addEventListener("click",()=>{
+  $("msg-share").textContent=""; desenha();
+  const d=$("dlg"); if(d.showModal) d.showModal(); else d.setAttribute("open","");
+});
+$("btn-fechar").addEventListener("click",()=>$("dlg").close());
+$("dlg").addEventListener("click",e=>{ if(e.target===$("dlg")) $("dlg").close(); });
+async function baixar(){
+  const blob=await blobPng();
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download=`calma-dia-${idx+1}-${fmtAtual}.png`; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  $("msg-share").textContent="Imagem baixada. Abra o Instagram e publique pela galeria.";
+}
+$("btn-baixar").addEventListener("click",baixar);
+$("btn-share").addEventListener("click",async()=>{
+  try{
+    const blob=await blobPng();
+    const file=new File([blob],`calma-dia-${idx+1}.png`,{type:"image/png"});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], text:`“${prat[0]}” ${prat[1]}`});
+    } else { await baixar(); }
+  }catch(e){ if(e && e.name!=="AbortError") await baixar(); }
+});
 
 /* ---------- PWA: offline e instalação ---------- */
 if("serviceWorker" in navigator && location.protocol !== "file:"){
