@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calma · Estoicismo contra a ansiedade</title>
+<meta name="description" content="Prática diária de estoicismo e TCC para diminuir o apego ansioso.">
+<meta name="theme-color" content="#1c1f26">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Calma">
+<style>
+:root{
+  --bg:#f4f1ea; --card:#fffdf8; --fg:#1d2330; --dim:#5b6475; --line:#e2ddd0;
+  --accent:#3d5a80; --on-accent:#fff; --good:#2e7d5b; --warn:#b4691f;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#15181e; --card:#1e222b; --fg:#ecebe6; --dim:#9aa3b2; --line:#2e3340;
+        --accent:#8fb0d9; --on-accent:#10131a; --good:#6cc49a; --warn:#e0a35c;}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;
+  padding:16px 16px calc(84px + env(safe-area-inset-bottom));max-width:640px;margin-inline:auto}
+h1{font-size:1.4rem;margin:8px 0 2px}
+h2{font-size:1.1rem;margin:0 0 8px}
+p{margin:0 0 10px}
+.sub{color:var(--dim);margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.quote{font-size:1.1rem;font-style:italic}
+.who{color:var(--dim);font-size:.9rem}
+label{display:block;font-weight:600;margin:12px 0 4px}
+textarea,input[type=text]{width:100%;font:inherit;color:inherit;background:var(--bg);
+  border:1px solid var(--line);border-radius:10px;padding:10px}
+textarea{min-height:76px;resize:vertical}
+button{font:inherit;font-weight:600;cursor:pointer;border:0;border-radius:12px;padding:12px 16px;
+  background:var(--accent);color:var(--on-accent);min-height:44px}
+button.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+button.small{padding:6px 10px;min-height:36px;font-size:.9rem}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;background:var(--bg);
+  border:1px solid var(--line);font-size:.8rem;color:var(--dim)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);
+  border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;color:var(--dim);border-radius:0;font-size:.8rem;padding:10px 2px;
+  display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button .ic{font-size:1.3rem;line-height:1}
+nav button[aria-selected=true]{color:var(--accent)}
+.view{display:none}.view.on{display:block}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.col{border:1px dashed var(--line);border-radius:12px;padding:8px;min-height:90px}
+.col h3{font-size:.9rem;margin:0 0 6px;color:var(--dim)}
+.chip{display:flex;justify-content:space-between;gap:6px;align-items:center;padding:6px 8px;margin:4px 0;
+  background:var(--bg);border:1px solid var(--line);border-radius:10px;font-size:.92rem}
+.chip button{padding:2px 8px;min-height:28px;font-size:.8rem}
+.timer{font-size:2.6rem;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;margin:6px 0}
+.breath{width:120px;height:120px;border-radius:50%;margin:14px auto;background:var(--accent);opacity:.25;
+  transition:transform 4s ease-in-out,opacity 4s ease-in-out}
+.breath.in{transform:scale(1.35);opacity:.6}
+.center{text-align:center}
+.days{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-top:10px}
+.day{aspect-ratio:1;border-radius:6px;background:var(--bg);border:1px solid var(--line);font-size:.65rem;
+  display:flex;align-items:center;justify-content:center;color:var(--dim)}
+.day.done{background:var(--good);border-color:var(--good);color:#fff}
+.day.today{outline:2px solid var(--accent)}
+.entry{border-top:1px solid var(--line);padding:10px 0;font-size:.92rem}
+.entry b{display:block;color:var(--dim);font-weight:600;font-size:.8rem}
+.note{font-size:.85rem;color:var(--dim)}
+@media (prefers-reduced-motion:reduce){.breath{transition:none}}
+</style>
+</head>
+<body>
+
+<h1>Calma</h1>
+<p class="sub">Estoicismo e TCC para diminuir o apego ansioso. Dez minutos por dia.</p>
+
+<!-- HOJE -->
+<section class="view on" id="v-hoje">
+  <div class="card">
+    <span class="pill" id="dia-n"></span>
+    <p class="quote" id="q-texto" style="margin-top:10px"></p>
+    <p class="who" id="q-autor"></p>
+    <p id="q-pratica"></p>
+  </div>
+
+  <div class="card">
+    <h2>Manhã: o que depende de mim hoje?</h2>
+    <label for="m-dep">Depende de mim</label>
+    <textarea id="m-dep" placeholder="Ex.: como eu respondo, o que eu faço, minha rotina"></textarea>
+    <label for="m-nao">Não depende de mim (aceitar)</label>
+    <textarea id="m-nao" placeholder="Ex.: o que o outro sente, quando responde, o que pensa de mim"></textarea>
+  </div>
+
+  <div class="card">
+    <h2>Noite: revisão sem culpa</h2>
+    <label for="n-medo">Em que momento agi por medo hoje?</label>
+    <textarea id="n-medo"></textarea>
+    <label for="n-valor">Em que momento agi pelos meus valores?</label>
+    <textarea id="n-valor"></textarea>
+    <div class="row" style="margin-top:12px">
+      <button id="btn-concluir">Concluir o dia de hoje</button>
+      <span class="note" id="msg-hoje"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Sua jornada de 30 dias</h2>
+    <p class="note" id="streak"></p>
+    <div class="days" id="grade"></div>
+  </div>
+</section>
+
+<!-- SOS -->
+<section class="view" id="v-sos">
+  <div class="card">
+    <h2>Bateu a ansiedade? Espere 20 minutos antes de agir.</h2>
+    <p class="note">Mandar mensagem, checar o celular, pedir reasseguramento: nada disso precisa ser decidido agora. Deixe a onda passar.</p>
+    <div class="timer" id="timer">20:00</div>
+    <div class="breath" id="breath" aria-hidden="true"></div>
+    <p class="center" id="breath-txt">Inspire 4s · expire 4s</p>
+    <div class="row" style="justify-content:center">
+      <button id="btn-timer">Começar</button>
+      <button class="ghost" id="btn-reset">Zerar</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Enquanto espera</h2>
+    <ol>
+      <li>Nomeie o que sente: "estou sentindo ansiedade / medo de abandono".</li>
+      <li>Perceba onde está no corpo. Fique 90 segundos observando, sem obedecer.</li>
+      <li>Pergunte: isso depende de mim? Se não, aceite. Se sim, qual é a menor ação útil?</li>
+      <li>Faça algo com as mãos ou o corpo: caminhar, água fria, alongar.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- PENSAMENTO -->
+<section class="view" id="v-pens">
+  <div class="card">
+    <h2>Registro de pensamento</h2>
+    <p class="note">Não são os fatos que perturbam, e sim os juízos sobre eles (Epicteto).</p>
+    <label for="p-fato">1. Fato (o que uma câmera registraria)</label>
+    <textarea id="p-fato" placeholder="Ex.: ele(a) ainda não respondeu desde as 14h"></textarea>
+    <label for="p-int">2. Interpretação / pensamento automático</label>
+    <textarea id="p-int" placeholder="Ex.: perdeu o interesse, vou ser deixado(a)"></textarea>
+    <label for="p-emo">3. Emoção e intensidade (0 a 10)</label>
+    <input type="text" id="p-emo" placeholder="Ex.: medo, 8">
+    <label for="p-ev">4. Evidências a favor e contra</label>
+    <textarea id="p-ev"></textarea>
+    <label for="p-alt">5. Pensamento mais equilibrado (e o pior caso: eu sobreviveria? o que faria?)</label>
+    <textarea id="p-alt"></textarea>
+    <div class="row" style="margin-top:12px"><button id="btn-pens">Salvar registro</button></div>
+  </div>
+  <div class="card">
+    <h2>Registros anteriores</h2>
+    <div id="lista-pens"><p class="note">Nenhum registro ainda.</p></div>
+  </div>
+</section>
+
+<!-- CONTROLE -->
+<section class="view" id="v-ctl">
+  <div class="card">
+    <h2>Dicotomia do controle</h2>
+    <p class="note">Escreva uma preocupação e classifique: depende de mim ou não?</p>
+    <div class="row">
+      <input type="text" id="c-novo" placeholder="Ex.: ele(a) vai gostar de mim?" style="flex:1;min-width:0" aria-label="Nova preocupação">
+      <button id="btn-c-add">Adicionar</button>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="col"><h3>Depende de mim</h3><div id="c-sim"></div></div>
+    <div class="col"><h3>Não depende (aceitar)</h3><div id="c-nao"></div></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="col" style="border:0;padding:0"><h3>Ainda sem classificar</h3><div id="c-pend"></div></div>
+    <p class="note">Para o que depende de você, defina a menor ação possível. Para o resto, o trabalho é aceitar.</p>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="view" id="v-sobre">
+  <div class="card">
+    <h2>Como usar</h2>
+    <p>Manhã: preencha o que depende e o que não depende de você. Durante o dia: use o SOS e o registro de pensamento quando a ansiedade surgir. Noite: faça a revisão e conclua o dia.</p>
+  </div>
+  <div class="card">
+    <h2>Instalar no celular</h2>
+    <p class="note">Android (Chrome): menu ⋮ → "Instalar app". iPhone (Safari): Compartilhar → "Adicionar à Tela de Início". Depois funciona offline.</p>
+    <button id="btn-instalar" hidden>Instalar o Calma</button>
+  </div>
+  <div class="card">
+    <h2>Seus dados</h2>
+    <p class="note">Tudo fica apenas neste aparelho (localStorage). Nada é enviado a servidores. Limpar os dados do navegador apaga tudo.</p>
+    <div class="row">
+      <button class="ghost" id="btn-export">Exportar (.json)</button>
+      <button class="ghost" id="btn-apagar">Apagar tudo</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Aviso</h2>
+    <p class="note">Este app é uma ferramenta de autoajuda e não substitui acompanhamento psicológico. Se a ansiedade estiver intensa ou atrapalhando sua vida, procure um profissional. Em crise, ligue 188 (CVV, 24h, gratuito, no Brasil).</p>
+  </div>
+</section>
+
+<nav role="tablist" aria-label="Seções">
+  <button role="tab" aria-selected="true" data-v="hoje"><span class="ic">☀</span>Hoje</button>
+  <button role="tab" aria-selected="false" data-v="sos"><span class="ic">⏱</span>SOS</button>
+  <button role="tab" aria-selected="false" data-v="pens"><span class="ic">✎</span>Pensar</button>
+  <button role="tab" aria-selected="false" data-v="ctl"><span class="ic">⚖</span>Controle</button>
+  <button role="tab" aria-selected="false" data-v="sobre"><span class="ic">ⓘ</span>Sobre</button>
+</nav>
+
+<script>
+"use strict";
+/* ---------- Conteúdo: 30 práticas curtas ---------- */
+const PRATICAS = [
+ ["Algumas coisas dependem de nós, outras não.","Epicteto, Manual 1","Hoje, antes de agir por ansiedade, pergunte: isso depende de mim?"],
+ ["Não são as coisas que perturbam as pessoas, mas os juízos sobre elas.","Epicteto, Manual 5","Quando surgir uma angústia, escreva separadamente o fato e a sua interpretação."],
+ ["Você tem poder sobre sua mente, não sobre os eventos externos. Perceba isso e encontrará força.","Marco Aurélio, atribuída","Escolha uma situação de hoje e decida só a sua resposta, não o resultado."],
+ ["Se algo te aflige por fatores externos, a dor não vem disso, mas do seu julgamento. E você pode revogá-lo agora.","Marco Aurélio, Meditações 8.47","Revogue um juízo catastrófico: 'e se eu estiver interpretando mal?'"],
+ ["Sofremos mais na imaginação do que na realidade.","Sêneca, Cartas 13","Anote o pior cenário que sua mente criou e o que realmente aconteceu das últimas vezes."],
+ ["Ensaie a perda: imagine o que teme e pergunte se poderia suportar.","Sêneca, premeditatio malorum","Faça a pergunta: se acontecesse, eu sobreviveria? O que eu faria?"],
+ ["Aquilo que amas, lembra-te de que é mortal e não é teu.","Epicteto, Manual 3","Ame hoje sem exigir garantia. Gratidão pelo que existe agora."],
+ ["Ninguém é livre se não for senhor de si.","Sêneca","Antes de mandar mensagem por impulso, espere 20 minutos (aba SOS)."],
+ ["O obstáculo ao ato faz avançar o ato. O que está no caminho se torna o caminho.","Marco Aurélio, Meditações 5.20","Use o desconforto de hoje como treino de tolerância à incerteza."],
+ ["Se queres ser livre, não desejes nem evites o que depende dos outros.","Epicteto, Manual 14","Liste o que você tenta controlar nos outros. Escolha uma para soltar."],
+ ["A felicidade de sua vida depende da qualidade dos seus pensamentos.","Marco Aurélio, atribuída","Troque um pensamento automático por uma versão equilibrada."],
+ ["Começa a viver agora, e conta cada dia como uma vida inteira.","Sêneca, Cartas 101","Faça uma coisa hoje que dependa só de você e tenha valor para você."],
+ ["Não percas tempo discutindo como deve ser um homem bom. Sê um.","Marco Aurélio, Meditações 10.16","Escolha um valor (honestidade, calma, coragem) e aja nele hoje."],
+ ["Devemos aceitar a realidade como ela é, não como queremos que seja.","Amor fati, Epicteto e Nietzsche","Aceite um fato incômodo de hoje sem lutar mentalmente contra ele."],
+ ["A medida do homem é o que ele faz com o poder que tem, não com o que não tem.","Resumo estoico","Qual é o menor passo útil dentro do seu controle hoje?"],
+ ["Observe o pensamento sem obedecê-lo.","Defusão cognitiva, ACT","Diga em voz baixa: 'estou tendo o pensamento de que...' antes de reagir."],
+ ["A ansiedade passa quando não é alimentada por fuga e reasseguramento.","TCC, exposição","Resista a uma checagem hoje (celular, status, perfil) e observe a onda subir e descer."],
+ ["Cada emoção tem pico e queda, geralmente em poucos minutos.","Mindfulness","Sinta a ansiedade no corpo por 90 segundos, sem fazer nada."],
+ ["Amizades, hobbies e sono sustentam o equilíbrio emocional.","Autocuidado","Invista em algo seu: um encontro, exercício ou hobby, sem ligação com a outra pessoa."],
+ ["Trate a si mesmo como trataria um bom amigo.","Autocompaixão","Escreva para si mesmo o que diria a um amigo com o mesmo medo."],
+ ["Nenhuma pessoa é a única fonte do seu valor.","Estoicismo e teoria do apego","Liste cinco fontes de sentido na sua vida além do relacionamento."],
+ ["Prefira pedir com clareza a testar com silêncio ou ciúme.","Comunicação assertiva","Formule uma necessidade em uma frase direta, sem acusação."],
+ ["Tolerar a incerteza é um músculo.","TCC, ansiedade","Deixe uma pergunta sem resposta por algumas horas. Observe que você aguenta."],
+ ["Tudo o que existe é como uma folha: tem seu tempo.","Marco Aurélio, Meditações 10.34","Reflita: o que mudou nos relacionamentos que você achava que seriam eternos?"],
+ ["Vê o que é teu e o que é alheio, e age só sobre o teu.","Epicteto","Faça hoje a lista de manhã com honestidade. O que é alheio, solte."],
+ ["Seja grato por quem está presente, sem exigir que fique igual.","Gratidão estoica","Agradeça de verdade a alguém por algo concreto."],
+ ["Segurança vem de dentro: das suas escolhas e do seu caráter.","Epicteto","Cumpra uma pequena promessa a si mesmo hoje."],
+ ["Distinguir impulso de decisão é o início da liberdade.","Viktor Frankl, adaptado","Entre o gatilho e a resposta há um espaço. Respire antes de responder."],
+ ["O melhor tipo de vingança é não ser como quem te feriu.","Marco Aurélio, Meditações 6.6","Responda com calma ao que te incomodou, sem punir nem implorar."],
+ ["Você chegou longe. Revise o que mudou em 30 dias.","Revisão final","Releia seus registros. O que você faz diferente? O que ainda quer treinar?"]
+];
+
+/* ---------- Armazenamento ---------- */
+const KEY = "calma.v1";
+const DEF = {inicio:null, dias:{}, pens:[], ctl:[]};
+function load(){
+  try{ const r = localStorage.getItem(KEY); return r ? Object.assign({}, DEF, JSON.parse(r)) : structuredClone(DEF); }
+  catch(e){ return structuredClone(DEF); }
+}
+let S = load();
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2,"0");
+function hoje(){ const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+function diasEntre(a,b){ return Math.round((new Date(b+"T00:00:00")-new Date(a+"T00:00:00"))/864e5); }
+function esc(s){ return s.replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+if(!S.inicio){ S.inicio = hoje(); save(); }
+
+/* ---------- Navegação ---------- */
+document.querySelectorAll("nav button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected", x===b));
+    document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on", v.id==="v-"+b.dataset.v));
+    window.scrollTo(0,0);
+  });
+});
+
+/* ---------- Hoje ---------- */
+const h = hoje();
+const idx = Math.min(Math.max(diasEntre(S.inicio,h),0),29);
+const prat = PRATICAS[idx];
+$("dia-n").textContent = `Dia ${idx+1} de 30`;
+$("q-texto").textContent = "“"+prat[0]+"”";
+$("q-autor").textContent = prat[1];
+$("q-pratica").innerHTML = "<b>Prática de hoje:</b> "+esc(prat[2]);
+
+const campos = {"m-dep":"dep","m-nao":"nao","n-medo":"medo","n-valor":"valor"};
+S.dias[h] = S.dias[h] || {};
+for(const [id,k] of Object.entries(campos)){
+  $(id).value = S.dias[h][k] || "";
+  $(id).addEventListener("input",()=>{ S.dias[h][k]=$(id).value; save(); });
+}
+function streak(){
+  let n=0, d=new Date();
+  if(!(S.dias[hoje()]||{}).feito) d.setDate(d.getDate()-1);
+  for(;;){
+    const k=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    if((S.dias[k]||{}).feito){ n++; d.setDate(d.getDate()-1); } else break;
+  }
+  return n;
+}
+function grade(){
+  const g=$("grade"); g.innerHTML="";
+  const ini=new Date(S.inicio+"T00:00:00");
+  for(let i=0;i<30;i++){
+    const d=new Date(ini); d.setDate(ini.getDate()+i);
+    const k=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    const el=document.createElement("div");
+    el.className="day"+((S.dias[k]||{}).feito?" done":"")+(k===h?" today":"");
+    el.textContent=i+1; g.appendChild(el);
+  }
+  const total=Object.values(S.dias).filter(x=>x.feito).length;
+  $("streak").textContent=`Sequência atual: ${streak()} dia(s) · Total concluídos: ${total}. Dia sem fazer não é fracasso: retome amanhã.`;
+}
+$("btn-concluir").addEventListener("click",()=>{
+  S.dias[h].feito = true; save(); grade();
+  $("msg-hoje").textContent = "Dia concluído. Bom trabalho.";
+});
+if(S.dias[h].feito) $("msg-hoje").textContent = "Dia concluído.";
+grade();
+
+/* ---------- SOS: timer + respiração ---------- */
+let total = 20*60, resto = total, tick = null, bt = null;
+function fmt(s){ return `${pad(Math.floor(s/60))}:${pad(s%60)}`; }
+function paint(){ $("timer").textContent = fmt(resto); }
+function stopAll(){ clearInterval(tick); clearInterval(bt); tick=bt=null; $("breath").classList.remove("in"); }
+$("btn-timer").addEventListener("click",()=>{
+  if(tick){ stopAll(); $("btn-timer").textContent="Continuar"; return; }
+  $("btn-timer").textContent="Pausar";
+  let dentro=false;
+  const respira=()=>{ dentro=!dentro; $("breath").classList.toggle("in",dentro); $("breath-txt").textContent = dentro?"Inspire…":"Expire…"; };
+  respira(); bt=setInterval(respira,4000);
+  tick=setInterval(()=>{
+    resto--; paint();
+    if(resto<=0){
+      stopAll(); resto=total; paint(); $("btn-timer").textContent="Começar";
+      $("breath-txt").textContent="Passaram 20 minutos. Agora decida com calma.";
+      if(navigator.vibrate) navigator.vibrate(200);
+    }
+  },1000);
+});
+$("btn-reset").addEventListener("click",()=>{ stopAll(); resto=total; paint(); $("btn-timer").textContent="Começar"; $("breath-txt").textContent="Inspire 4s · expire 4s"; });
+
+/* ---------- Registro de pensamento ---------- */
+function listaPens(){
+  const box=$("lista-pens");
+  if(!S.pens.length){ box.innerHTML='<p class="note">Nenhum registro ainda.</p>'; return; }
+  box.innerHTML = S.pens.slice().reverse().map(p=>`
+    <div class="entry">
+      <span class="pill">${esc(p.data)}</span>
+      <b>Fato</b>${esc(p.fato)}
+      <b>Interpretação</b>${esc(p.int)}
+      <b>Emoção</b>${esc(p.emo)}
+      <b>Evidências</b>${esc(p.ev)}
+      <b>Pensamento equilibrado</b>${esc(p.alt)}
+    </div>`).join("");
+}
+$("btn-pens").addEventListener("click",()=>{
+  const p={data:h,fato:$("p-fato").value.trim(),int:$("p-int").value.trim(),emo:$("p-emo").value.trim(),
+           ev:$("p-ev").value.trim(),alt:$("p-alt").value.trim()};
+  if(!p.fato && !p.int) return;
+  S.pens.push(p); save();
+  ["p-fato","p-int","p-emo","p-ev","p-alt"].forEach(i=>$(i).value="");
+  listaPens();
+});
+listaPens();
+
+/* ---------- Dicotomia do controle ---------- */
+function chip(c,i,stat){
+  const btns = stat==="pend"
+    ? `<button class="small" data-i="${i}" data-s="sim">Depende</button><button class="small ghost" data-i="${i}" data-s="nao">Não</button>`
+    : `<button class="small ghost" data-i="${i}" data-s="pend" aria-label="Voltar">↺</button>`;
+  return `<div class="chip"><span>${esc(c.t)}</span><span class="row">${btns}<button class="small ghost" data-i="${i}" data-s="del" aria-label="Remover">✕</button></span></div>`;
+}
+function ctl(){
+  for(const s of ["sim","nao","pend"]){
+    $("c-"+s).innerHTML = S.ctl.map((c,i)=>c.s===s?chip(c,i,s):"").join("") || '<span class="note">—</span>';
+  }
+}
+function addCtl(){
+  const t=$("c-novo").value.trim(); if(!t) return;
+  S.ctl.push({t,s:"pend"}); $("c-novo").value=""; save(); ctl();
+}
+$("btn-c-add").addEventListener("click",addCtl);
+$("c-novo").addEventListener("keydown",e=>{ if(e.key==="Enter") addCtl(); });
+$("v-ctl").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-i]"); if(!b) return;
+  const i=+b.dataset.i, s=b.dataset.s;
+  if(s==="del") S.ctl.splice(i,1); else S.ctl[i].s=s;
+  save(); ctl();
+});
+ctl();
+
+/* ---------- PWA: offline e instalação ---------- */
+if("serviceWorker" in navigator && location.protocol !== "file:"){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+let pedidoInstalar = null;
+window.addEventListener("beforeinstallprompt",e=>{
+  e.preventDefault(); pedidoInstalar=e; $("btn-instalar").hidden=false;
+});
+$("btn-instalar").addEventListener("click",async()=>{
+  if(!pedidoInstalar) return;
+  pedidoInstalar.prompt(); await pedidoInstalar.userChoice;
+  pedidoInstalar=null; $("btn-instalar").hidden=true;
+});
+window.addEventListener("appinstalled",()=>{ $("btn-instalar").hidden=true; });
+
+/* ---------- Dados ---------- */
+$("btn-export").addEventListener("click",()=>{
+  const blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="calma-dados.json"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+});
+$("btn-apagar").addEventListener("click",()=>{
+  if(confirm("Apagar todos os registros deste aparelho? Isso não pode ser desfeito.")){
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  }
+});
+</script>
+</body>
+</html>
