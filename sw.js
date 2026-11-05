@@ -1,9 +1,10 @@
 /* Service worker: guarda os arquivos do app para uso offline. */
-var CACHE = "enem1000-v20";
+var CACHE = "enem1000-v21";
 var ASSETS = [
   "./",
   "index.html",
   "css/styles.css",
+  "fonts/plus-jakarta-sans-latin.woff2",
   "js/analytics.js",
   "js/content.js",
   "js/conversa.js",

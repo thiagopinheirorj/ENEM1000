@@ -166,14 +166,14 @@ describe("V · Visual e acessibilidade", () => {
   it("V04 · tema escuro aplicado pela preferência do sistema e respeitando data-theme", async () => {
     const cor = (page, sel) => page.$eval(sel, (e) => getComputedStyle(e).backgroundColor);
     const claro = await env.open({ colorScheme: "light" });
-    assert.equal(await cor(claro.page, "body"), "rgb(247, 243, 236)");
+    assert.equal(await cor(claro.page, "body"), "rgb(244, 243, 251)");
     const escuro = await env.open({ colorScheme: "dark" });
-    assert.equal(await cor(escuro.page, "body"), "rgb(18, 22, 31)");
-    assert.equal(await escuro.page.$eval("body", (e) => getComputedStyle(e).color), "rgb(233, 230, 223)");
+    assert.equal(await cor(escuro.page, "body"), "rgb(12, 14, 26)");
+    assert.equal(await escuro.page.$eval("body", (e) => getComputedStyle(e).color), "rgb(236, 238, 248)");
     await escuro.page.evaluate(() => document.documentElement.setAttribute("data-theme", "light"));
-    assert.equal(await cor(escuro.page, "body"), "rgb(247, 243, 236)");
+    assert.equal(await cor(escuro.page, "body"), "rgb(244, 243, 251)");
     await claro.page.evaluate(() => document.documentElement.setAttribute("data-theme", "dark"));
-    assert.equal(await cor(claro.page, "body"), "rgb(18, 22, 31)");
+    assert.equal(await cor(claro.page, "body"), "rgb(12, 14, 26)");
     // elementos com [hidden] continuam escondidos mesmo com display definido no CSS
     assert.ok(await escuro.page.isHidden("#foto-del"));
   });
