@@ -231,3 +231,29 @@ describe("O · Offline (service worker)", () => {
     assert.deepEqual(errors.filter((e) => e.startsWith("pageerror")), []);
   });
 });
+
+describe("TM · Botão de tema", () => {
+  let env2;
+  before(async () => { env2 = await require("./helpers").setup(); });
+  after(async () => { await env2.teardown(); });
+  it("TM01 · alterna automático → claro → escuro → automático e lembra a escolha", async () => {
+    const { page } = await env2.open({ hash: "#/hoje", colorScheme: "dark" });
+    const bg = () => page.$eval("body", (e) => getComputedStyle(e).backgroundColor);
+    const attr = () => page.evaluate(() => document.documentElement.getAttribute("data-theme"));
+    assert.equal(await page.textContent("#tema-btn"), "🌓");
+    assert.equal(await attr(), null);
+    await page.click("#tema-btn");
+    assert.equal(await attr(), "light");
+    assert.equal(await bg(), "rgb(233, 235, 255)");
+    assert.match(await page.getAttribute("#tema-btn", "aria-label"), /^Tema claro/);
+    await page.click("#tema-btn");
+    assert.equal(await attr(), "dark");
+    assert.equal(await bg(), "rgb(11, 16, 38)");
+    await page.reload();
+    await page.waitForSelector("#tema-btn");
+    assert.equal(await attr(), "dark");
+    assert.equal(await page.textContent("#tema-btn"), "🌙");
+    await page.click("#tema-btn");
+    assert.equal(await attr(), null);
+  });
+});

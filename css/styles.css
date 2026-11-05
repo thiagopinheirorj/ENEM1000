@@ -701,3 +701,4 @@ textarea, input[type="text"], input[type="time"], input[type="date"], select { b
   -webkit-backdrop-filter: blur(26px) saturate(180%);
   backdrop-filter: blur(26px) saturate(180%);
 }
+.tema-btn { font: inherit; cursor: pointer; color: var(--ink); line-height: 1; }
