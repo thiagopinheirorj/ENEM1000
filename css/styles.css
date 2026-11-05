@@ -757,3 +757,11 @@ textarea, input[type="text"], input[type="time"], input[type="date"], select { b
 .brand-mark { background: linear-gradient(135deg, #f59e0b, #f97316); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .countdown { background: linear-gradient(180deg, var(--glass-hi), transparent 50%), linear-gradient(135deg, rgba(251, 191, 36, .28), rgba(249, 115, 22, .16)), var(--surface); }
 .badge.on { border-color: var(--accent); }
+
+/* Texto completo da leitura */
+.aprofundar { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+.aprofundar summary { cursor: pointer; font-weight: 700; color: var(--primary); list-style: none; padding: 10px 14px; border-radius: 14px; border: 1px solid var(--line); background: linear-gradient(180deg, var(--glass-hi), transparent), var(--surface); }
+.aprofundar summary::-webkit-details-marker { display: none; }
+.aprofundar[open] summary { margin-bottom: 6px; }
+.aprofundar h3 { font-size: 17px; margin-top: 14px; color: var(--primary); }
+.aprofundar p { margin: 6px 0 0; }

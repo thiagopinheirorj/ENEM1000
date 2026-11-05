@@ -153,3 +153,27 @@ describe("D · Devocional do dia", () => {
     assert.ok(await page.isDisabled("#concluir"));
   });
 });
+
+describe("AP · Texto completo da leitura", () => {
+  const { setup } = require("./helpers");
+  let env3;
+  before(async () => { env3 = await setup(); });
+  after(async () => { await env3.teardown(); });
+  it("AP01 · todos os 30 dias têm texto completo com 5 seções", () => {
+    const vm = require("vm"), fs = require("fs"), ctx = { window: {} };
+    vm.runInNewContext(fs.readFileSync(require("path").join(__dirname, "..", "js", "aprofundar.js"), "utf8"), ctx);
+    for (let i = 1; i <= 30; i++) {
+      const a = ctx.window.APROFUNDAR[i];
+      assert.ok(Array.isArray(a) && a.length === 5, "dia " + i);
+      a.forEach((s) => assert.ok(s.t && s.p.length > 80, "dia " + i + ": " + s.t));
+    }
+  });
+  it("AP02 · fica no fim da Leitura, fechado, e abre ao tocar", async () => {
+    const { page } = await env3.open({ hash: "#/dia/1" });
+    assert.equal(await page.locator(".card:has(h2:text('Leitura')) #aprofundar").count(), 1);
+    assert.equal(await page.isVisible("#aprofundar h3"), false);
+    await page.click("#aprofundar summary");
+    assert.equal(await page.isVisible("#aprofundar h3"), true);
+    assert.match(await page.textContent("#aprofundar"), /Quem foi Bauman.*Como usar na redação/s);
+  });
+});

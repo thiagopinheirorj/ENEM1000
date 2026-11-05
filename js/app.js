@@ -7,6 +7,7 @@
   var KIT = window.KIT;
   var TREINO = window.TREINO;
   var CONN_EX = window.CONECTIVOS_EX;
+  var APROF = window.APROFUNDAR || {};
   var SIM_TEMAS = window.SIMULADO_TEMAS || [];
   var RED = window.REDACOES1000;
   var N = DEV.length;
@@ -539,6 +540,8 @@
         '<div class="step"><span class="step-n">1</span><h2>Leitura</h2></div>' +
         leitura +
         '<div class="tags">' + tags + "</div>" +
+        (APROF[id] ? '<details class="aprofundar" id="aprofundar"><summary>📖 Ler o texto completo sobre o tema <span class="muted">(~3 min)</span></summary>' +
+          APROF[id].map(function (s) { return "<h3>" + esc(s.t) + "</h3><p>" + esc(s.p) + "</p>"; }).join("") + "</details>" : "") +
       "</article>" +
 
       '<article class="card">' +
