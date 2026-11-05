@@ -765,3 +765,5 @@ textarea, input[type="text"], input[type="time"], input[type="date"], select { b
 .aprofundar[open] summary { margin-bottom: 6px; }
 .aprofundar h3 { font-size: 17px; margin-top: 14px; color: var(--primary); }
 .aprofundar p { margin: 6px 0 0; }
+.aprofundar .fontes { padding-left: 1.1em; margin: 6px 0 0; font-size: 14px; }
+.aprofundar .fontes li { margin: 4px 0; }

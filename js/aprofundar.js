@@ -1,217 +1,423 @@
 /*
  * Texto completo de cada devocional: abre no fim da seção "Leitura".
- * Cada item tem seções curtas: contexto, a ideia em detalhe, conexão com o Brasil,
- * como usar na redação e um cuidado para não errar.
+ * Cada dia tem seções curtas e a lista de fontes consultadas (leis no Planalto/Câmara,
+ * Inep, universidades, revistas científicas e imprensa). Só entra o que está nas fontes;
+ * as frases-modelo de "Como usar na redação" são exemplos de escrita, não dados.
  */
 window.APROFUNDAR = {
-  1: [
-    { t: "Quem foi Bauman", p: "Zygmunt Bauman (1925–2017) foi um sociólogo polonês que viveu boa parte da vida na Inglaterra e se tornou um dos pensadores mais lidos sobre a vida contemporânea. A partir de Modernidade Líquida, de 2000, escreveu uma série de livros que aplicam a mesma metáfora ao amor, ao medo, ao trabalho e à vida em comunidade." },
-    { t: "A ideia em detalhe", p: "Bauman contrapõe uma modernidade \"sólida\", com empregos para a vida toda, instituições estáveis e projetos de longo prazo, a uma modernidade \"líquida\", em que tudo é provisório. Nela, o indivíduo é livre para escolher, mas também fica sozinho para lidar com a insegurança. Em Amor Líquido, ele observa que as conexões virtuais são fáceis de fazer e de desfazer, e por isso raramente geram compromisso." },
-    { t: "No Brasil de hoje", p: "A ideia ajuda a explicar fenômenos como a busca por curtidas, a ansiedade diante da comparação constante nas redes, a rotatividade em empregos informais e a solidão de quem tem muitos contatos, mas poucos vínculos de confiança." },
-    { t: "Como usar na redação", p: "Use Bauman na introdução, para contextualizar, ou no desenvolvimento, como causa de um problema. Explique a metáfora em uma frase e ligue-a ao tema: \"a liquidez das relações, descrita por Bauman, favorece vínculos superficiais nas redes, o que agrava o isolamento dos jovens\"." },
-    { t: "Cuidado", p: "Não use \"líquido\" como sinônimo de algo bom ou moderno. Para Bauman, a liquidez traz liberdade, mas também insegurança e fragilidade dos laços. E evite citar só o nome: a banca quer ver a ideia explicada." }
-  ],
-  2: [
-    { t: "Quem é Byung-Chul Han", p: "Byung-Chul Han nasceu na Coreia do Sul em 1959 e fez carreira como filósofo na Alemanha. Seus livros são curtos e muito lidos, e tratam de temas como cansaço, transparência, redes digitais e a pressa da vida atual." },
-    { t: "A ideia em detalhe", p: "Em Sociedade do Cansaço (2010), Han diz que o século XXI não é marcado por vírus ou bactérias, mas por doenças ligadas ao excesso: depressão, esgotamento (burnout) e transtornos de atenção. Na sociedade do desempenho, o lema é \"você pode\". O sujeito se torna empresário de si mesmo e explora a si próprio acreditando que está se realizando, o que torna o cansaço mais difícil de perceber e de combater." },
-    { t: "No Brasil de hoje", p: "O conceito dialoga com a cultura da produtividade, com a pressão por resultados nos estudos e no trabalho, com jornadas longas em trabalhos por aplicativo e com o aumento da preocupação pública com saúde mental entre jovens e trabalhadores." },
-    { t: "Como usar na redação", p: "Han funciona bem como causa: \"a lógica do desempenho, analisada por Byung-Chul Han, leva os jovens a se cobrarem sem limites, o que contribui para quadros de ansiedade\". Combine com uma proposta que envolva escola, empresas ou o Ministério da Saúde." },
-    { t: "Cuidado", p: "Han não diz que esforço é ruim. Ele critica a autoexploração sem pausa, em que a pessoa não reconhece o próprio limite. Também não atribua a ele dados ou estatísticas: o livro é uma reflexão filosófica." }
-  ],
-  3: [
-    { t: "Quem foi Goffman", p: "Erving Goffman (1922–1982) foi um sociólogo canadense que estudou as interações do dia a dia: como nos apresentamos aos outros, como lidamos com a vergonha e como as instituições moldam as pessoas. Estigma, de 1963, é um dos seus livros mais citados." },
-    { t: "A ideia em detalhe", p: "Para Goffman, estigma é um atributo que \"desqualifica\" a pessoa aos olhos dos outros e a reduz a uma marca. Quem carrega o estigma passa a ser visto só por ele, como se a deficiência, a doença ou a origem fosse a pessoa inteira. Muitas vezes, quem é estigmatizado tenta esconder a característica para evitar rejeição, o que gera sofrimento e isolamento." },
-    { t: "No Brasil de hoje", p: "O conceito explica por que muitas pessoas demoram a procurar tratamento para transtornos mentais, por que pessoas com HIV, com deficiência ou egressas do sistema prisional enfrentam barreiras no trabalho e por que o preconceito se mantém mesmo quando há leis de proteção." },
-    { t: "Como usar na redação", p: "Use Goffman para explicar a dimensão social do problema: \"segundo Goffman, o estigma reduz o indivíduo a um rótulo; assim, o preconceito contra pessoas com transtornos mentais as afasta dos serviços de saúde\". Uma boa proposta envolve campanhas de mídia e formação de profissionais." },
-    { t: "Cuidado", p: "Estigma não é o mesmo que doença ou deficiência: é o olhar social sobre elas. Deixe claro que o problema está no preconceito, e não na pessoa." }
-  ],
-  4: [
-    { t: "A lei e a médica", p: "A Lei nº 10.216/2001, conhecida como Lei da Reforma Psiquiátrica, mudou o modelo de cuidado em saúde mental no Brasil. Antes dela, a internação longa em hospícios era a regra. A psiquiatra alagoana Nise da Silveira (1905–1999) foi pioneira ao rejeitar tratamentos agressivos e usar a arte e o convívio com animais no cuidado de pacientes no Rio de Janeiro." },
-    { t: "A ideia em detalhe", p: "A lei garante os direitos das pessoas com transtornos mentais e determina que a internação só aconteça quando os recursos fora do hospital forem insuficientes. O foco passa a ser o cuidado em liberdade, perto da família e da comunidade, por meio de serviços como os Centros de Atenção Psicossocial (CAPS). Nise mostrou, décadas antes, que o tratamento humanizado produzia resultados que o isolamento não produzia." },
-    { t: "No Brasil de hoje", p: "O tema aparece em debates sobre a falta de serviços de saúde mental em muitas cidades, a demora no atendimento, o preconceito contra pacientes e a necessidade de ampliar a rede de atenção psicossocial." },
-    { t: "Como usar na redação", p: "A lei é um repertório legal forte para temas de saúde mental: \"embora a Lei nº 10.216/2001 assegure o cuidado em liberdade, a escassez de CAPS em muitos municípios limita esse direito\". Nise da Silveira serve como exemplo histórico de humanização." },
-    { t: "Cuidado", p: "Não diga que a lei proíbe toda internação: ela a admite como exceção, com regras. E não use termos como \"louco\" ou \"doente mental\" de forma pejorativa; prefira \"pessoas com transtornos mentais\"." }
-  ],
-  5: [
-    { t: "Dois autores, uma mesma pergunta", p: "Michel Foucault (1926–1984), filósofo francês, estudou como o poder atua sobre os corpos e os comportamentos. Shoshana Zuboff, professora emérita de Harvard, analisou como grandes empresas de tecnologia lucram com os dados dos usuários. Os dois ajudam a entender a vigilância em épocas diferentes." },
-    { t: "A ideia em detalhe", p: "Em Vigiar e Punir (1975), Foucault usa a imagem do panóptico, uma prisão em que um vigia pode observar todos sem ser visto. Como o preso nunca sabe quando está sendo observado, passa a se vigiar sozinho. Zuboff, em A Era do Capitalismo de Vigilância (2019), mostra que hoje a observação vem dos dados: cada clique, curtida e localização vira matéria-prima para prever e influenciar comportamentos, sobretudo para vender publicidade." },
-    { t: "No Brasil de hoje", p: "O tema se liga à Lei Geral de Proteção de Dados (Lei nº 13.709/2018), aos vazamentos de dados pessoais, ao uso de reconhecimento facial em espaços públicos e à publicidade direcionada a crianças e adolescentes." },
-    { t: "Como usar na redação", p: "Foucault serve bem na introdução; Zuboff, no desenvolvimento, como explicação atual: \"o capitalismo de vigilância, descrito por Zuboff, transforma dados pessoais em mercadoria, o que expõe usuários a manipulações\". A LGPD fortalece a proposta de intervenção." },
-    { t: "Cuidado", p: "O panóptico é uma metáfora: não diga que Foucault falou de internet. A ponte com os dias de hoje é sua, e deve ser explicada." }
-  ],
-  6: [
-    { t: "Quem é Eli Pariser", p: "Eli Pariser é um ativista e escritor norte-americano. Em 2011 publicou O Filtro Invisível, livro que popularizou a expressão \"bolha de filtros\" para descrever como os algoritmos personalizam o que cada pessoa vê na internet." },
-    { t: "A ideia em detalhe", p: "Plataformas e buscadores selecionam conteúdos de acordo com o que o usuário já clicou, curtiu ou procurou. Isso parece conveniente, mas cria uma bolha: a pessoa passa a ver sobretudo opiniões parecidas com as suas e quase nunca é exposta a pontos de vista diferentes. Como o filtro é invisível, ela tende a achar que aquilo é o retrato do mundo." },
-    { t: "No Brasil de hoje", p: "O conceito ajuda a explicar a polarização política, a circulação de notícias falsas em grupos fechados e a dificuldade de diálogo entre pessoas que pensam diferente." },
-    { t: "Como usar na redação", p: "Pariser é ótimo para temas de desinformação e democracia: \"as bolhas de filtros, descritas por Eli Pariser, reforçam crenças prévias e dificultam a checagem de informações\". Uma boa proposta envolve educação midiática nas escolas." },
-    { t: "Cuidado", p: "Não culpe só os algoritmos: o comportamento dos usuários também importa. Mostrar as duas faces deixa o argumento mais maduro." }
-  ],
-  7: [
-    { t: "Quem foi Guy Debord", p: "Guy Debord (1931–1994) foi um escritor e cineasta francês. Seu livro A Sociedade do Espetáculo (1967) é uma crítica à sociedade de consumo e à forma como as imagens passaram a dominar a vida social." },
-    { t: "A ideia em detalhe", p: "Para Debord, o espetáculo não é só um conjunto de imagens, mas uma relação entre pessoas mediada por imagens. A vida passa a ser vivida como representação: mais importante do que ser é parecer. O consumo de aparências substitui a experiência real, e a pessoa se torna espectadora da própria vida." },
-    { t: "No Brasil de hoje", p: "As redes sociais tornam a ideia muito atual: perfis editados, filtros, padrões de beleza difíceis de alcançar e a exposição da intimidade em busca de visibilidade. O conceito também ajuda a discutir a espetacularização da violência na mídia." },
-    { t: "Como usar na redação", p: "Debord funciona bem em temas sobre padrões de beleza, exposição nas redes e mídia: \"na sociedade do espetáculo, como definiu Guy Debord, a aparência vale mais que a experiência; por isso, jovens moldam a autoimagem a filtros e curtidas\"." },
-    { t: "Cuidado", p: "Debord escreveu antes da internet. Faça a ponte com as redes de forma explícita, sem dizer que ele falou delas." }
-  ],
-  8: [
-    { t: "Quem foi Paulo Freire", p: "Paulo Freire (1921–1997), educador pernambucano, é o Patrono da Educação Brasileira e um dos pensadores brasileiros mais lidos no mundo. Ficou conhecido por alfabetizar adultos partindo das palavras e da realidade dos próprios alunos." },
-    { t: "A ideia em detalhe", p: "Freire criticava a \"educação bancária\", em que o professor deposita conteúdos e o aluno apenas recebe. Defendia uma educação dialógica e crítica, que ajudasse as pessoas a ler o mundo e a transformá-lo. Em Pedagogia da Indignação (2000), aparece a ideia de que a educação sozinha não transforma a sociedade, mas sem ela a sociedade também não muda." },
-    { t: "No Brasil de hoje", p: "O artigo 205 da Constituição de 1988 diz que a educação é direito de todos e dever do Estado e da família, visando ao pleno desenvolvimento da pessoa, ao preparo para a cidadania e à qualificação para o trabalho. A distância entre essa promessa e a realidade de muitas escolas é um ótimo ponto de partida para argumentos." },
-    { t: "Como usar na redação", p: "Freire é coringa na proposta de intervenção, porque quase todo problema social tem uma solução ligada à educação: \"como defendia Paulo Freire, a educação crítica é caminho de transformação; assim, cabe ao MEC incluir o tema nas escolas\"." },
-    { t: "Cuidado", p: "Evite usar Freire apenas como enfeite em qualquer tema. Mostre qual mudança a educação produziria naquele problema específico." }
-  ],
-  9: [
-    { t: "Quem foi Bourdieu", p: "Pierre Bourdieu (1930–2002) foi um sociólogo francês que estudou como as desigualdades se reproduzem. Em A Reprodução (1970), escrito com Jean-Claude Passeron, analisou o papel da escola nesse processo." },
-    { t: "A ideia em detalhe", p: "Bourdieu criou o conceito de capital cultural: o conjunto de conhecimentos, gostos, hábitos de leitura e modos de falar que a criança herda da família. A escola costuma valorizar exatamente esse capital, como se fosse talento natural. Assim, quem já chega com ele tende a ir melhor, e a escola, em vez de corrigir a desigualdade, acaba legitimando-a." },
-    { t: "No Brasil de hoje", p: "O conceito ajuda a entender diferenças de desempenho entre escolas públicas e privadas, a desigualdade de acesso à universidade e os limites do discurso de que basta se esforçar para vencer." },
-    { t: "Como usar na redação", p: "Bourdieu fortalece argumentos sobre desigualdade educacional e meritocracia: \"segundo Bourdieu, o capital cultural herdado é tratado pela escola como mérito; logo, estudantes pobres partem em desvantagem\". Combine com políticas de acesso à cultura e reforço escolar." },
-    { t: "Cuidado", p: "Bourdieu não diz que esforço não importa. Ele mostra que o ponto de partida é desigual, e que isso costuma ficar escondido." }
-  ],
-  10: [
-    { t: "As leis", p: "A Lei nº 10.436/2002 reconheceu a Língua Brasileira de Sinais (Libras) como meio legal de comunicação e expressão. A Lei nº 13.146/2015, a Lei Brasileira de Inclusão (Estatuto da Pessoa com Deficiência), reuniu direitos de acessibilidade, educação, trabalho e participação social." },
-    { t: "A ideia em detalhe", p: "Libras é uma língua completa, com gramática própria, e não uma mímica ou uma tradução palavra por palavra do português. A Lei Brasileira de Inclusão adota a ideia de que a deficiência resulta da interação entre a pessoa e as barreiras do ambiente. Ou seja, a exclusão não é causada só pela condição da pessoa, mas pela falta de adaptação da sociedade." },
-    { t: "No Brasil de hoje", p: "Ainda faltam intérpretes em escolas, hospitais e serviços públicos, e poucos ouvintes aprendem Libras. O ENEM de 2017 teve como tema \"Desafios para a formação educacional de surdos no Brasil\"." },
-    { t: "Como usar na redação", p: "As leis são repertório legal sólido para mostrar a distância entre o direito e a prática: \"apesar de a Lei nº 10.436/2002 reconhecer a Libras, a escassez de intérpretes nas escolas compromete a aprendizagem de estudantes surdos\"." },
-    { t: "Cuidado", p: "Prefira \"pessoa com deficiência\" e \"pessoa surda\". Evite \"deficiente\" sozinho e nunca use \"surdo-mudo\": muitas pessoas surdas falam, e a expressão é considerada inadequada." }
-  ],
-  11: [
-    { t: "Dois repertórios que se completam", p: "O artigo 215 da Constituição de 1988 garante a todos o pleno exercício dos direitos culturais e o acesso às fontes da cultura nacional. Theodor Adorno e Max Horkheimer, filósofos alemães da Escola de Frankfurt, escreveram Dialética do Esclarecimento (1947), em que criticam a \"indústria cultural\"." },
-    { t: "A ideia em detalhe", p: "Para Adorno e Horkheimer, a cultura passou a ser produzida em série, como mercadoria, para entreter e vender. Isso tende a padronizar gostos e a reduzir o espaço para obras que façam pensar. Ao mesmo tempo, a Constituição trata a cultura como direito, e não só como produto. A tensão entre as duas ideias é rica para argumentar." },
-    { t: "No Brasil de hoje", p: "Muitas cidades não têm cinema, teatro ou biblioteca, e o acesso à cultura depende da renda e do lugar onde a pessoa mora. O ENEM de 2019 teve como tema \"Democratização do acesso ao cinema no Brasil\"." },
-    { t: "Como usar na redação", p: "Use a Constituição para mostrar o direito e Adorno e Horkheimer para discutir a qualidade do que é oferecido: \"embora o art. 215 garanta o acesso à cultura, a concentração de salas de cinema em grandes centros exclui as periferias\"." },
-    { t: "Cuidado", p: "Não trate cultura popular como inferior. A crítica da indústria cultural é sobre a padronização, e não sobre o gosto do povo." }
-  ],
-  12: [
-    { t: "Quem foi Dimenstein", p: "Gilberto Dimenstein (1956–2020) foi um jornalista brasileiro dedicado a temas de educação e direitos da criança. O Cidadão de Papel (1993) foi escrito para jovens e se tornou leitura comum em escolas." },
-    { t: "A ideia em detalhe", p: "O título resume a tese: muitos brasileiros são cidadãos só no papel. A lei garante direitos como saúde, educação, moradia e segurança, mas na prática eles não chegam a todos. A cidadania fica no texto da lei, enquanto parte da população vive sem acesso ao básico." },
-    { t: "No Brasil de hoje", p: "O conceito se aplica a temas como o sub-registro civil (pessoas sem certidão de nascimento), a falta de saneamento, a evasão escolar e a dificuldade de acessar serviços públicos." },
-    { t: "Como usar na redação", p: "Dimenstein é ótimo para mostrar a distância entre a lei e a realidade: \"como alertou Gilberto Dimenstein, muitos brasileiros são cidadãos de papel; sem certidão de nascimento, não conseguem sequer acessar direitos básicos\"." },
-    { t: "Cuidado", p: "Não basta dizer que a lei não é cumprida. Explique por que o direito não chega: falta de estrutura, de informação ou de fiscalização." }
-  ],
-  13: [
-    { t: "Quem foi José Murilo de Carvalho", p: "José Murilo de Carvalho (1939–2023) foi um historiador mineiro e membro da Academia Brasileira de Letras. Em Cidadania no Brasil: o longo caminho (2001), explicou como os direitos foram conquistados no país." },
-    { t: "A ideia em detalhe", p: "O autor compara o Brasil com o modelo descrito pelo sociólogo inglês T. H. Marshall, em que os direitos civis vieram primeiro, depois os políticos e por fim os sociais. No Brasil, a ordem foi diferente: direitos sociais chegaram cedo, muitas vezes concedidos por governos autoritários, antes que os direitos civis e políticos estivessem consolidados. Isso ajudou a formar uma cultura em que se espera tudo do Estado e se participa pouco." },
-    { t: "No Brasil de hoje", p: "A ideia ajuda a discutir a baixa participação política dos jovens, a desconfiança em relação às instituições e a pouca mobilização em conselhos e associações de bairro." },
-    { t: "Como usar na redação", p: "Use o autor para explicar a raiz histórica do problema: \"segundo José Murilo de Carvalho, a cidadania no Brasil foi construída de cima para baixo; por isso, muitos jovens não se veem como agentes da política\"." },
-    { t: "Cuidado", p: "O autor não diz que o povo é desinteressado por natureza. Ele mostra causas históricas, e é isso que dá força ao argumento." }
-  ],
-  14: [
-    { t: "Quem foi Sérgio Buarque", p: "Sérgio Buarque de Holanda (1902–1982) foi historiador e um dos intérpretes clássicos do Brasil. Raízes do Brasil (1936) busca explicar traços da formação social do país." },
-    { t: "A ideia em detalhe", p: "O livro apresenta o \"homem cordial\". Cordial vem de coração: não significa gentil, mas alguém que age guiado pela emoção e pelas relações pessoais. Nesse modelo, a fronteira entre o público e o privado fica borrada: o espaço público é tratado como extensão da família, e a lei vale menos que a amizade ou o parentesco." },
-    { t: "No Brasil de hoje", p: "O conceito ajuda a discutir o \"jeitinho\", o nepotismo, o favorecimento de conhecidos, a corrupção e a dificuldade de seguir regras impessoais no trânsito, no serviço público e no dia a dia." },
-    { t: "Como usar na redação", p: "Sérgio Buarque funciona bem como causa cultural: \"a cordialidade descrita por Sérgio Buarque de Holanda mistura o público e o privado; assim, práticas como o nepotismo ainda são naturalizadas\"." },
-    { t: "Cuidado", p: "\"Homem cordial\" não quer dizer homem educado ou simpático. Usar o termo nesse sentido é um erro comum e mostra que o conceito não foi entendido." }
-  ],
-  15: [
-    { t: "Quem foi Hannah Arendt", p: "Hannah Arendt (1906–1975) foi uma filósofa alemã de origem judaica que fugiu do nazismo e viveu nos Estados Unidos. Em 1961, acompanhou o julgamento do oficial nazista Adolf Eichmann e escreveu Eichmann em Jerusalém (1963)." },
-    { t: "A ideia em detalhe", p: "Arendt esperava encontrar um monstro, mas viu um burocrata comum, que dizia apenas cumprir ordens. Daí veio o conceito de \"banalidade do mal\": grandes crueldades podem ser cometidas por pessoas comuns que deixam de pensar sobre o que fazem e tratam o mal como rotina." },
-    { t: "No Brasil de hoje", p: "O conceito ajuda a explicar o discurso de ódio nas redes, o compartilhamento de conteúdos violentos sem reflexão, a naturalização do preconceito e a indiferença diante do sofrimento alheio." },
-    { t: "Como usar na redação", p: "Arendt é ótima para temas de violência e ética digital: \"a banalidade do mal, conceito de Hannah Arendt, ajuda a entender por que ataques virtuais se tornam rotina: muitos agressores não refletem sobre o dano que causam\"." },
-    { t: "Cuidado", p: "Banalidade do mal não significa que o mal seja pequeno ou desculpável. Significa que ele pode nascer da ausência de pensamento crítico, o que torna a responsabilidade ainda mais importante." }
-  ],
-  16: [
-    { t: "Quem foi Simone de Beauvoir", p: "Simone de Beauvoir (1908–1986) foi uma filósofa e escritora francesa. O Segundo Sexo (1949) é uma das obras mais importantes do pensamento feminista." },
-    { t: "A ideia em detalhe", p: "A frase mais famosa do livro é \"Não se nasce mulher, torna-se mulher\". Beauvoir afirma que os papéis atribuídos às mulheres não são naturais, mas construídos pela cultura, pela educação e pelas expectativas sociais. A mulher foi definida historicamente em relação ao homem, como \"o outro\", e isso justificou sua exclusão de muitos espaços." },
-    { t: "No Brasil de hoje", p: "A ideia ajuda a discutir a desigualdade salarial, a sobrecarga com tarefas domésticas, a sub-representação feminina na política e nas ciências e a violência de gênero. A frase de Beauvoir foi citada em uma questão do ENEM de 2015, ano em que a redação tratou da violência contra a mulher." },
-    { t: "Como usar na redação", p: "Use Beauvoir para mostrar que a desigualdade é social, e não natural: \"como afirmou Simone de Beauvoir, 'não se nasce mulher, torna-se mulher'; assim, a educação que associa meninas ao cuidado do lar limita suas escolhas profissionais\"." },
-    { t: "Cuidado", p: "Cite a frase exatamente como ela é e explique o sentido. Usar só a frase, sem ligação com o tema, vira repertório solto." }
-  ],
-  17: [
-    { t: "Quem é Silvia Federici", p: "Silvia Federici é uma filósofa e ativista ítalo-americana, conhecida por estudar o trabalho doméstico e de cuidado. O Ponto Zero da Revolução (2012) reúne textos escritos ao longo de décadas sobre o tema." },
-    { t: "A ideia em detalhe", p: "Federici argumenta que o trabalho doméstico e de cuidado, como limpar, cozinhar e cuidar de crianças, idosos e doentes, é a base que permite todos os outros trabalhos existirem. Mesmo assim, ele é tratado como obrigação natural das mulheres e não é remunerado nem reconhecido. Por isso, ela fala em trabalho invisível." },
-    { t: "No Brasil de hoje", p: "Pesquisas do IBGE mostram que as mulheres dedicam mais horas por semana que os homens a afazeres domésticos e ao cuidado de pessoas. O ENEM de 2023 teve como tema \"Desafios para o enfrentamento da invisibilidade do trabalho de cuidado realizado pela mulher no Brasil\"." },
-    { t: "Como usar na redação", p: "Federici é um repertório preciso para temas de gênero e trabalho: \"segundo Silvia Federici, o trabalho de cuidado sustenta a economia, mas permanece invisível; por isso, a dupla jornada feminina limita o acesso das mulheres ao mercado e aos estudos\"." },
-    { t: "Cuidado", p: "Não diga que cuidar é ruim. O problema apontado é a divisão desigual e a falta de reconhecimento desse trabalho." }
-  ],
-  18: [
-    { t: "A lei e a história", p: "A Lei nº 11.340/2006 leva o nome de Maria da Penha Maia Fernandes, farmacêutica cearense que ficou paraplégica após ser atacada pelo então marido. Ela lutou por anos por justiça, e o caso chegou à Comissão Interamericana de Direitos Humanos, que responsabilizou o Brasil por omissão." },
-    { t: "A ideia em detalhe", p: "A lei criou mecanismos para coibir a violência doméstica e familiar contra a mulher. Ela reconhece formas de violência além da física, como a psicológica, a sexual, a patrimonial e a moral. Também prevê medidas protetivas de urgência, como o afastamento do agressor, e juizados especializados." },
-    { t: "No Brasil de hoje", p: "A lei é considerada um avanço, mas ainda há desafios: falta de delegacias especializadas em muitas cidades, demora no atendimento, medo de denunciar e dependência financeira da vítima. Em 2015, a lei do feminicídio (Lei nº 13.104) reforçou o tema." },
-    { t: "Como usar na redação", p: "A Lei Maria da Penha é repertório legal indispensável em temas de violência de gênero: \"embora a Lei Maria da Penha preveja medidas protetivas, a escassez de delegacias da mulher no interior dificulta o acesso das vítimas à proteção\"." },
-    { t: "Cuidado", p: "Não diga que a lei não funciona. Mostre o avanço e aponte o que falta para que ela seja efetiva: estrutura, informação e rede de apoio." }
-  ],
-  19: [
-    { t: "Quem é Silvio Almeida", p: "Silvio Almeida é um jurista e filósofo brasileiro. Em Racismo Estrutural (2019), explica de forma acessível como o racismo funciona na sociedade, para além de atitudes individuais." },
-    { t: "A ideia em detalhe", p: "O autor distingue três concepções de racismo: a individualista, que vê o racismo como desvio de algumas pessoas; a institucional, em que instituições reproduzem desvantagens; e a estrutural. Nesta última, o racismo faz parte do modo normal como a sociedade se organiza, na economia, na política e no direito. Por isso, ele se reproduz mesmo sem intenção explícita de discriminar." },
-    { t: "No Brasil de hoje", p: "Dados do IBGE mostram diferenças entre pessoas brancas e negras em renda, escolaridade, acesso a cargos de liderança e exposição à violência. O conceito ajuda a explicar por que essas desigualdades persistem." },
-    { t: "Como usar na redação", p: "Use o conceito como causa profunda: \"segundo Silvio Almeida, o racismo é estrutural, pois está nas próprias instituições; isso explica por que jovens negros seguem sub-representados nas universidades e superexpostos à violência\"." },
-    { t: "Cuidado", p: "Estrutural não significa que ninguém é responsável. O conceito mostra que combater o racismo exige mudar instituições e práticas, e não só atitudes individuais." }
-  ],
-  20: [
-    { t: "As leis e a pensadora", p: "A Lei nº 10.639/2003 tornou obrigatório o ensino de história e cultura afro-brasileira nas escolas, e a Lei nº 11.645/2008 incluiu a história e a cultura indígena. Lélia Gonzalez (1935–1994) foi uma intelectual e ativista mineira, pioneira em estudos sobre racismo e gênero no Brasil." },
-    { t: "A ideia em detalhe", p: "As leis reconhecem que a formação do Brasil não pode ser contada só pela perspectiva europeia. Lélia Gonzalez criou o conceito de \"amefricanidade\" para valorizar a herança africana e indígena na cultura das Américas, presente na língua, na música, na religião e nos costumes. Ela chamou o português falado no Brasil de \"pretuguês\", destacando a influência das línguas africanas." },
-    { t: "No Brasil de hoje", p: "Muitas escolas ainda aplicam as leis de forma superficial, restrita a datas comemorativas como o 20 de novembro. O tema se liga ao combate à intolerância religiosa e à valorização da cultura negra e indígena." },
-    { t: "Como usar na redação", p: "As leis fortalecem a proposta de intervenção, e Lélia Gonzalez dá profundidade ao argumento: \"embora a Lei nº 10.639/2003 determine o ensino da cultura afro-brasileira, sua aplicação pontual impede que os estudantes reconheçam a herança africana que, como mostrou Lélia Gonzalez, forma a identidade nacional\"." },
-    { t: "Cuidado", p: "Não restrinja a herança africana à escravidão. Mostre também a contribuição cultural, científica e social desses povos." }
-  ],
-  21: [
-    { t: "Quem é Ailton Krenak", p: "Ailton Krenak é um líder indígena, ambientalista e escritor mineiro. Ficou conhecido nacionalmente em 1987, quando discursou na Assembleia Constituinte pintando o rosto de preto em protesto. Em 2023, tornou-se o primeiro indígena eleito para a Academia Brasileira de Letras." },
-    { t: "A ideia em detalhe", p: "Em Ideias para Adiar o Fim do Mundo (2019), Krenak critica a ideia de que a humanidade está separada da natureza, como se a Terra fosse apenas um recurso a ser explorado. Para ele, essa separação é a raiz da crise ambiental. Os povos indígenas, que se veem como parte da natureza, oferecem outras formas de viver que podem nos ajudar a \"adiar o fim do mundo\"." },
-    { t: "No Brasil de hoje", p: "O pensamento de Krenak dialoga com o desmatamento, a crise climática, os conflitos por terras indígenas e a valorização dos saberes tradicionais. O ENEM de 2022 teve como tema \"Desafios para a valorização de comunidades e povos tradicionais no Brasil\"." },
-    { t: "Como usar na redação", p: "Krenak é excelente para temas ambientais e de povos tradicionais: \"como alerta Ailton Krenak, a ideia de uma humanidade separada da natureza alimenta a exploração predatória; por isso, valorizar os saberes indígenas é estratégia de preservação\"." },
-    { t: "Cuidado", p: "Não trate os povos indígenas como algo do passado ou como um grupo único. São povos diversos, contemporâneos e com direitos garantidos pela Constituição." }
-  ],
-  22: [
-    { t: "O filósofo e a Constituição", p: "Hans Jonas (1903–1993) foi um filósofo alemão que estudou a ética diante do poder da tecnologia. O artigo 225 da Constituição de 1988 garante a todos o direito ao meio ambiente ecologicamente equilibrado." },
-    { t: "A ideia em detalhe", p: "Em O Princípio Responsabilidade (1979), Jonas argumenta que a tecnologia deu à humanidade o poder de destruir as condições de vida no planeta. Por isso, a ética precisa considerar as gerações futuras. Ele propôs um novo imperativo: agir de modo que os efeitos das nossas ações sejam compatíveis com a permanência de uma vida humana autêntica na Terra." },
-    { t: "No Brasil de hoje", p: "O art. 225 impõe ao poder público e à coletividade o dever de defender o meio ambiente para as presentes e futuras gerações. O tema se liga a queimadas, desmatamento, eventos climáticos extremos e consumo excessivo." },
-    { t: "Como usar na redação", p: "Combine os dois: Jonas para a ética, a Constituição para o dever legal. \"Hans Jonas defende uma ética voltada às gerações futuras, princípio presente no art. 225 da Constituição; contudo, o avanço do desmatamento mostra que esse dever ainda não é cumprido\"." },
-    { t: "Cuidado", p: "Não reduza a responsabilidade ambiental ao indivíduo que separa o lixo. Jonas fala sobretudo do poder coletivo, de governos, empresas e da tecnologia." }
-  ],
-  23: [
-    { t: "Quem foi Ulrich Beck", p: "Ulrich Beck (1944–2015) foi um sociólogo alemão. Publicou Sociedade de Risco em 1986, ano do acidente nuclear de Chernobyl, o que deu grande repercussão às suas ideias." },
-    { t: "A ideia em detalhe", p: "Beck afirma que a modernidade produziu riqueza, mas também riscos criados pela própria ação humana: poluição, acidentes industriais, mudanças climáticas e contaminações. Esses riscos muitas vezes são invisíveis, globais e difíceis de controlar. Ainda assim, não atingem todos igualmente: os mais pobres costumam estar mais expostos." },
-    { t: "No Brasil de hoje", p: "O conceito ajuda a entender o rompimento de barragens de mineração em Mariana (2015) e Brumadinho (2019), as enchentes e deslizamentos em áreas de risco e a crise sanitária da pandemia de covid-19." },
-    { t: "Como usar na redação", p: "Beck é ótimo para desastres e meio ambiente: \"na sociedade de risco descrita por Ulrich Beck, as ameaças são produzidas pelo próprio desenvolvimento; os rompimentos de barragens em Minas Gerais mostram como a falta de fiscalização transforma lucro em tragédia\"." },
-    { t: "Cuidado", p: "Não diga que os riscos são iguais para todos. Mostrar a desigualdade na exposição ao risco deixa o argumento mais forte." }
-  ],
-  24: [
-    { t: "Quem foi Josué de Castro", p: "Josué de Castro (1908–1973) foi um médico, geógrafo e escritor pernambucano. Presidiu o Conselho da FAO, órgão da ONU para alimentação, e foi indicado mais de uma vez ao Prêmio Nobel da Paz." },
-    { t: "A ideia em detalhe", p: "Em Geografia da Fome (1946), Josué de Castro rompeu com a ideia de que a fome é causada pela natureza, pela seca ou pela falta de alimentos. Para ele, a fome é um fenômeno social e político, produzido pela forma como a terra, a renda e a comida são distribuídas. Ele mapeou as diferentes regiões de fome no Brasil e mostrou que ela tem causas humanas." },
-    { t: "No Brasil de hoje", p: "O Brasil é um grande produtor de alimentos, mas a insegurança alimentar ainda atinge milhões de pessoas, ao mesmo tempo em que há desperdício. A alimentação está entre os direitos sociais do artigo 6º da Constituição." },
-    { t: "Como usar na redação", p: "Josué de Castro é o repertório mais preciso para temas de fome: \"como demonstrou Josué de Castro, a fome é uma questão política, e não natural; prova disso é que o Brasil produz alimentos em abundância, mas parte da população não tem acesso a eles\"." },
-    { t: "Cuidado", p: "Evite números que você não tem certeza. O argumento de Josué de Castro é forte por si só: a contradição entre produção e acesso." }
-  ],
-  25: [
-    { t: "Quem foi Carolina Maria de Jesus", p: "Carolina Maria de Jesus (1914–1977) foi uma escritora mineira que viveu na favela do Canindé, em São Paulo, onde catava papel para sustentar os filhos. Seus diários, publicados como Quarto de Despejo (1960), viraram um sucesso de vendas e foram traduzidos para vários idiomas." },
-    { t: "A ideia em detalhe", p: "No livro, Carolina descreve a fome, a falta de moradia digna e o preconceito vividos na favela. Ela chama a favela de \"quarto de despejo\" da cidade: o lugar para onde é jogado aquilo que a sociedade não quer ver. A obra dá voz a quem raramente era ouvido e mostra a pobreza a partir de dentro, com dignidade e lucidez." },
-    { t: "No Brasil de hoje", p: "O livro dialoga com temas como déficit habitacional, insegurança alimentar, invisibilidade social, racismo e a importância de ouvir as vozes das periferias. Carolina é cada vez mais estudada em escolas e universidades." },
-    { t: "Como usar na redação", p: "Carolina é um repertório potente e brasileiro: \"em Quarto de Despejo, Carolina Maria de Jesus revela a favela como o lugar daquilo que a cidade quer esconder; décadas depois, a falta de moradia digna mostra que essa invisibilidade persiste\"." },
-    { t: "Cuidado", p: "Valorize Carolina como escritora, e não apenas como personagem da pobreza. Ela foi uma autora que escolheu a escrita como forma de resistência." }
-  ],
-  26: [
-    { t: "Quem foi Milton Santos", p: "Milton Santos (1926–2001) foi um geógrafo baiano e um dos intelectuais brasileiros mais reconhecidos no exterior. Em 1994 recebeu o Prêmio Vautrin Lud, considerado o mais importante da geografia." },
-    { t: "A ideia em detalhe", p: "Em Por uma Outra Globalização (2000), Milton Santos descreve três globalizações. A primeira é a globalização como fábula, o discurso de que o mundo virou uma aldeia global com oportunidades para todos. A segunda é a globalização como perversidade, a realidade de desemprego, pobreza e exclusão para muitos. A terceira é a globalização como possibilidade: a chance de usar a técnica a serviço das pessoas." },
-    { t: "No Brasil de hoje", p: "O conceito ajuda a discutir a exclusão digital, a precarização do trabalho por aplicativo, a concentração de riqueza e a promessa de que a tecnologia, sozinha, resolveria as desigualdades." },
-    { t: "Como usar na redação", p: "Milton Santos é coringa para temas de tecnologia e desigualdade: \"Milton Santos alerta que a globalização, vendida como fábula de oportunidades, também é perversa; o trabalho por aplicativo, sem direitos trabalhistas, é exemplo dessa contradição\"." },
-    { t: "Cuidado", p: "Milton Santos não é contra a tecnologia. Feche o argumento com a terceira globalização, a da possibilidade, que combina com uma proposta de intervenção." }
-  ],
-  27: [
-    { t: "Quem é Amartya Sen", p: "Amartya Sen é um economista e filósofo indiano, vencedor do Prêmio Nobel de Economia em 1998. Seus estudos sobre pobreza, fome e bem-estar influenciaram a criação do Índice de Desenvolvimento Humano (IDH)." },
-    { t: "A ideia em detalhe", p: "Em Desenvolvimento como Liberdade (1999), Sen argumenta que desenvolvimento não é só crescimento econômico. Desenvolver-se é ampliar as liberdades reais das pessoas, ou seja, aquilo que elas conseguem de fato ser e fazer: ter saúde, educação, participar da política e escolher a própria vida. Pobreza, para ele, é privação dessas capacidades, e não apenas falta de renda." },
-    { t: "No Brasil de hoje", p: "O conceito ajuda a mostrar por que o crescimento do PIB nem sempre melhora a vida da população, e por que políticas de saúde, educação e saneamento são essenciais para o desenvolvimento." },
-    { t: "Como usar na redação", p: "Sen dá força a argumentos sobre políticas públicas: \"para Amartya Sen, desenvolvimento é expansão das liberdades; assim, sem acesso à educação e à saúde, o crescimento econômico não se traduz em qualidade de vida\"." },
-    { t: "Cuidado", p: "Não diga que Sen é contra o crescimento econômico. Ele o considera importante, mas insuficiente se não ampliar as liberdades das pessoas." }
-  ],
-  28: [
-    { t: "O filósofo e a lei", p: "John Rawls (1921–2002) foi um filósofo norte-americano. Uma Teoria da Justiça (1971) é uma das obras mais influentes da filosofia política. A Lei nº 12.711/2012, a Lei de Cotas, reserva vagas nas universidades e institutos federais para estudantes de escolas públicas, com recortes de renda, raça e deficiência." },
-    { t: "A ideia em detalhe", p: "Rawls propõe um experimento: imagine que você vai escolher as regras da sociedade sem saber que lugar ocuparia nela, se seria rico ou pobre, de que cor ou com que saúde. Por trás desse \"véu da ignorância\", as pessoas escolheriam regras justas. Uma delas é o princípio da diferença: desigualdades só são aceitáveis se beneficiarem os menos favorecidos." },
-    { t: "No Brasil de hoje", p: "A Lei de Cotas é um exemplo de política de equidade: tratar de forma diferente quem parte de condições desiguais, para que todos tenham oportunidades reais. Em 2023, a lei foi revisada e atualizada." },
-    { t: "Como usar na redação", p: "Rawls justifica ações afirmativas: \"sob o véu da ignorância de John Rawls, ninguém escolheria uma sociedade em que o acesso à universidade dependesse da origem; por isso, políticas como a Lei de Cotas promovem justiça\"." },
-    { t: "Cuidado", p: "Igualdade e equidade não são a mesma coisa. Explicar a diferença mostra domínio do conceito e evita argumentos frágeis." }
-  ],
-  29: [
-    { t: "A lei", p: "O Estatuto da Pessoa Idosa, Lei nº 10.741/2003, garante direitos às pessoas com 60 anos ou mais, como prioridade no atendimento, acesso à saúde, transporte gratuito e proteção contra a violência e o abandono. Em 2022, uma lei mudou o nome de \"Estatuto do Idoso\" para \"Estatuto da Pessoa Idosa\"." },
-    { t: "A ideia em detalhe", p: "O Estatuto parte da ideia de que envelhecer com dignidade é um direito, e de que família, sociedade e Estado têm o dever de garantir isso. Ele também combate o etarismo, o preconceito contra pessoas por causa da idade, que aparece no mercado de trabalho, na publicidade e no dia a dia." },
-    { t: "No Brasil de hoje", p: "A população brasileira está envelhecendo, o que torna o tema cada vez mais urgente. Questões como a exclusão digital de idosos, os golpes financeiros, a solidão e a falta de cuidadores aparecem com frequência no debate público." },
-    { t: "Como usar na redação", p: "O Estatuto é repertório legal direto para temas sobre envelhecimento: \"embora o Estatuto da Pessoa Idosa assegure a dignidade no envelhecimento, a exclusão digital deixa muitos idosos vulneráveis a golpes e sem acesso a serviços públicos\"." },
-    { t: "Cuidado", p: "Evite tratar idosos apenas como frágeis ou dependentes. Mostre também o direito à autonomia e à participação social." }
-  ],
-  30: [
-    { t: "Quem foi Durkheim", p: "Émile Durkheim (1858–1917) foi um sociólogo francês considerado um dos fundadores da sociologia. Em Da Divisão do Trabalho Social (1893) e em O Suicídio (1897), estudou o que mantém uma sociedade unida." },
-    { t: "A ideia em detalhe", p: "Durkheim criou o conceito de anomia: uma situação em que as normas sociais perdem a força, ficam confusas ou deixam de orientar as pessoas. Em momentos de mudança rápida ou de crise, os indivíduos podem se sentir sem referências e sem pertencimento. Em O Suicídio, ele mostrou que até um ato aparentemente individual tem causas sociais, ligadas ao grau de integração e de regulação da sociedade." },
-    { t: "No Brasil de hoje", p: "O conceito ajuda a discutir a violência nas escolas, o enfraquecimento de laços comunitários, o desrespeito às leis e o sofrimento psíquico de jovens que não se sentem parte de nada." },
-    { t: "Como usar na redação", p: "Durkheim dá base sociológica a temas de violência e saúde mental: \"segundo Durkheim, a anomia surge quando as normas deixam de orientar a vida coletiva; nas escolas, a falta de vínculos e de mediação de conflitos favorece episódios de violência\"." },
-    { t: "Cuidado", p: "Ao tratar de suicídio, use linguagem cuidadosa e foque em prevenção e acolhimento. Se precisar de apoio, o CVV atende gratuitamente pelo telefone 188." }
-  ]
+  1: {
+    secoes: [
+      { t: "Quem foi Bauman", p: "Zygmunt Bauman nasceu na Polônia em 1925 e morreu em Leeds, na Inglaterra, em janeiro de 2017, aos 91 anos. Foi chefe do departamento de sociologia da Universidade de Leeds e ficou conhecido no mundo todo pelo conceito de \"modernidade líquida\", que usou para analisar as relações afetivas, econômicas e políticas." },
+      { t: "A ideia em detalhe", p: "Na modernidade líquida, tudo vira objeto de consumo, inclusive as pessoas, e nada é feito para durar. Em Amor Líquido (2003; edição brasileira de 2004), Bauman observa que se sai das relações virtuais com muito mais facilidade do que das reais e diz que hoje formamos mais \"conexões\" do que vínculos: a vantagem da conexão é poder ser desfeita sem grande custo." },
+      { t: "Como usar na redação", p: "Use Bauman para explicar a causa de um problema ligado a redes sociais, consumo ou solidão. Explique a metáfora e ligue ao tema: \"Segundo Bauman, os laços na modernidade líquida são frágeis e fáceis de desfazer; nas redes, essa lógica favorece contatos numerosos, mas superficiais\"." },
+      { t: "Cuidado", p: "\"Líquido\" não é elogio. Para Bauman, a liquidez traz liberdade de escolha, mas também insegurança e fragilidade dos laços. E não cite só o nome: explique a ideia." }
+    ],
+    fontes: [
+      { n: "Carta Capital: morte de Bauman (2017)", u: "https://www.cartacapital.com.br/?p=8133" },
+      { n: "Universidade de Leeds: homenagem a Bauman", u: "https://baumaninstitute.leeds.ac.uk/news/a-tribute-to-professor-zygmunt-bauman-1925-2017/" },
+      { n: "SciELO: artigo sobre Amor Líquido", u: "https://scielo.br/pdf/psoc/v17n2/27044.pdf" }
+    ]
+  },
+  2: {
+    secoes: [
+      { t: "Quem é Byung-Chul Han", p: "Byung-Chul Han nasceu em Seul, na Coreia do Sul, em 1959, e mudou-se jovem para a Alemanha, onde se tornou professor de filosofia em Berlim. Sociedade do Cansaço foi publicado em 2010 (edição brasileira da Vozes, 2015). Em 2025, recebeu o Prêmio Princesa das Astúrias de Comunicação e Humanidades." },
+      { t: "A ideia em detalhe", p: "Para Han, se o século XX foi marcado por doenças virais e bacterianas, o início do século XXI é marcado por doenças \"neuronais\", como depressão, TDAH e síndrome de burnout. Elas não vêm de um inimigo de fora, mas do excesso de positividade da sociedade do desempenho, em que o lema é \"você pode\" e o próprio indivíduo se cobra e se explora." },
+      { t: "Como usar na redação", p: "Han funciona como causa em temas de saúde mental, trabalho e juventude: \"Para Byung-Chul Han, a sociedade do desempenho leva o sujeito a se cobrar sem limites, o que ajuda a explicar o esgotamento entre estudantes e trabalhadores\"." },
+      { t: "Cuidado", p: "Han não diz que o esforço é ruim. Ele critica a autoexploração sem pausa. E o livro é uma reflexão filosófica: não atribua a ele estatísticas." }
+    ],
+    fontes: [
+      { n: "Le Monde Diplomatique Brasil: resenha de Sociedade do Cansaço", u: "https://diplomatique.org.br/review/a-sociedade-do-cansaco/" },
+      { n: "Folha de Pernambuco: Han vence Prêmio Princesa das Astúrias", u: "https://www.folhape.com.br/cultura/byung-chul-han/409643/" },
+      { n: "Revista Fides Reformata (Mackenzie): resenha", u: "https://cpaj.mackenzie.br/fileadmin/ARQUIVOS/Public/50-outros/cpaj/Fides_Reformata/29-2/7_Fides_v29_n2-2024_-_Resenha_Sociedade_do_Cansaco_-_Allen_Porto.pdf" },
+      { n: "Monografia PUC-SP sobre Sociedade do Cansaço", u: "https://tede2.pucsp.br/bitstream/handle/39825/1/Mariana%20Ramos%20Marques%20-%20Monografia.pdf" }
+    ]
+  },
+  3: {
+    secoes: [
+      { t: "Quem foi Goffman", p: "Erving Goffman (1922–1982) foi um sociólogo canadense que estudou as interações do dia a dia. Seu livro Estigma: notas sobre a manipulação da identidade deteriorada foi publicado em 1963 (edição brasileira da Zahar, 2004)." },
+      { t: "A ideia em detalhe", p: "Toda sociedade define o que considera \"normal\" nas pessoas: Goffman chama isso de identidade social virtual. O estigma aparece quando há uma discrepância entre essa expectativa e a identidade real de alguém, e o atributo passa a ser visto como defeito ou desvantagem. O estigma é relacional: é construído e manejado nas interações, e não está na pessoa em si." },
+      { t: "Como usar na redação", p: "Goffman ajuda a explicar o preconceito em temas de saúde mental, deficiência e inclusão: \"Segundo Goffman, o estigma reduz o indivíduo a um atributo considerado negativo; assim, o preconceito pode afastar pessoas com transtornos mentais da busca por ajuda\"." },
+      { t: "Cuidado", p: "Estigma não é a doença ou a deficiência: é o olhar social sobre elas. Deixe claro que o problema está no preconceito." }
+    ],
+    fontes: [
+      { n: "Enciclopédia de Antropologia (USP): Estigma", u: "https://ea.fflch.usp.br/sites/ea.fflch.usp.br/files/inline-files/Estigma%20-%20Erving%20Goffman_0.pdf" },
+      { n: "Infopédia: estigma (sociologia)", u: "https://www.infopedia.pt/artigos/$estigma-(sociologia)" },
+      { n: "Revista Simbiótica (UFES): identidade deteriorada em Goffman", u: "https://periodicos.ufes.br/simbiotica/en/article/view/47299" }
+    ]
+  },
+  4: {
+    secoes: [
+      { t: "A lei e a médica", p: "A Lei nº 10.216/2001, conhecida como Lei da Reforma Psiquiátrica, trata da proteção e dos direitos das pessoas com transtornos mentais. A psiquiatra alagoana Nise da Silveira (1905–1999) trabalhou no antigo Centro Psiquiátrico Pedro II, no Engenho de Dentro, no Rio de Janeiro, e recusou tratamentos como eletrochoque, lobotomia e coma insulínico." },
+      { t: "A ideia em detalhe", p: "O artigo 4º da lei diz que a internação, em qualquer modalidade, só será indicada quando os recursos fora do hospital se mostrarem insuficientes, e que o tratamento deve buscar a reinserção social do paciente. Nise criou ateliês de pintura e modelagem na Seção de Terapêutica Ocupacional, que deram origem ao Museu de Imagens do Inconsciente (1952). Também foi pioneira no Brasil ao usar cães e gatos como \"coterapeutas\" de pacientes." },
+      { t: "Como usar na redação", p: "A lei é repertório legal para temas de saúde mental, e Nise é exemplo histórico de cuidado humanizado: \"A Lei nº 10.216/2001 define a internação como último recurso; para que esse direito se cumpra, é preciso uma rede de cuidado em liberdade, como defendia, décadas antes, Nise da Silveira\"." },
+      { t: "Cuidado", p: "A lei não proíbe toda internação: ela a admite quando os outros recursos não bastam, com regras. Prefira \"pessoas com transtornos mentais\" a termos pejorativos." }
+    ],
+    fontes: [
+      { n: "Planalto: Lei nº 10.216/2001", u: "https://planalto.gov.br/ccivil_03/leis/leis_2001/l10216.htm" },
+      { n: "Fiocruz (ARCA): origens do Museu de Imagens do Inconsciente", u: "https://www.arca.fiocruz.br/handle/icict/6086" },
+      { n: "Folha Vitória: mostra sobre Nise e os animais coterapeutas", u: "https://www.folhavitoria.com.br/cultura/nise-da-silveira-ganha-mostra-sobre-sua-vida/" },
+      { n: "Revista Junguiana (PePSIC): Nise e os animais", u: "https://pepsic.bvsalud.org/pdf/jung/v41n3/2595-1297-jung-41-3-0067.pdf" }
+    ]
+  },
+  5: {
+    secoes: [
+      { t: "Dois autores, uma mesma pergunta", p: "Michel Foucault (1926–1984), filósofo francês, publicou Vigiar e Punir em 1975. Shoshana Zuboff, professora emérita de Harvard, publicou A Era do Capitalismo de Vigilância em 2019. Os dois ajudam a entender a vigilância em épocas diferentes." },
+      { t: "A ideia em detalhe", p: "Foucault usa a imagem do panóptico, uma prisão em que o vigia pode ver todos sem ser visto: quem não sabe quando está sendo observado passa a se vigiar sozinho. Zuboff descreve um sistema que trata a experiência cotidiana como matéria-prima: os dados de comportamento dos usuários são extraídos para prever e influenciar o que as pessoas vão fazer, e essas previsões são vendidas, sobretudo para publicidade." },
+      { t: "No Brasil", p: "A Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018) regula o tratamento de dados pessoais no país, inclusive nos meios digitais." },
+      { t: "Como usar na redação", p: "\"O capitalismo de vigilância, descrito por Shoshana Zuboff, transforma o comportamento dos usuários em mercadoria; por isso, é preciso fortalecer a aplicação da LGPD\". Foucault funciona bem na introdução." },
+      { t: "Cuidado", p: "O panóptico é uma metáfora de 1975: Foucault não falou de internet. A ponte com os dias de hoje é sua e deve ser explicada." }
+    ],
+    fontes: [
+      { n: "Planalto: Lei nº 13.709/2018 (LGPD)", u: "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" },
+      { n: "Mural Internacional (UERJ): capitalismo de vigilância", u: "https://www.e-publicacoes.uerj.br/muralinternacional/article/download/55150/37234/202904" },
+      { n: "Poder360: Zuboff ao Financial Times", u: "https://www.poder360.com.br/futuro-indicativo/roubo-de-dados-e-a-mae-de-todos-os-problemas-diz-pesquisadora/" }
+    ]
+  },
+  6: {
+    secoes: [
+      { t: "Quem é Eli Pariser", p: "Eli Pariser é um ativista e escritor norte-americano. Em 2011 publicou o livro The Filter Bubble (O Filtro Invisível) e fez a palestra TED \"Beware online filter bubbles\" (Cuidado com as bolhas de filtros on-line)." },
+      { t: "A ideia em detalhe", p: "A bolha de filtros é um universo de informação único e pessoal, montado pelos algoritmos de acordo com quem você é e o que você faz on-line. Para Pariser, essa personalização tende a não expor as pessoas a informações que desafiem ou ampliem sua visão de mundo, o que é ruim para a sociedade e para a democracia." },
+      { t: "Como usar na redação", p: "\"As bolhas de filtros, descritas por Eli Pariser, reduzem o contato com opiniões diferentes; por isso, a educação midiática nas escolas é essencial para formar leitores críticos\"." },
+      { t: "Cuidado", p: "Não culpe só os algoritmos: o comportamento dos usuários também conta. Reconhecer as duas faces deixa o argumento mais maduro." }
+    ],
+    fontes: [
+      { n: "NPR: Eli Pariser e as bolhas de filtros", u: "https://www.npr.org/2016/12/16/505586856/how-can-we-look-past-or-see-beyond-our-digital-filters" },
+      { n: "UNESCO/UNAOC MIL: Beware online filter bubbles", u: "https://milunesco.unaoc.org/mil-resources/beware-online-filter-bubbles" }
+    ]
+  },
+  7: {
+    secoes: [
+      { t: "Quem foi Guy Debord", p: "Guy Debord (1931–1994) foi um escritor e cineasta francês. A Sociedade do Espetáculo, de 1967, é organizada em nove capítulos e 221 teses (edição brasileira da Contraponto, 1997)." },
+      { t: "A ideia em detalhe", p: "Uma das teses mais conhecidas diz que \"o espetáculo não é um conjunto de imagens, mas uma relação social entre pessoas, mediada por imagens\". Para Debord, as imagens passam a ocupar o lugar da experiência vivida, e as pessoas se tornam espectadoras da própria realidade." },
+      { t: "Como usar na redação", p: "Debord serve para temas de redes sociais, padrões de beleza e mídia: \"Para Guy Debord, as relações sociais passam a ser mediadas por imagens; nas redes, essa lógica faz a aparência valer mais que a experiência\"." },
+      { t: "Cuidado", p: "Debord escreveu antes da internet. Faça a ponte com as redes de forma explícita, sem dizer que ele falou delas." }
+    ],
+    fontes: [
+      { n: "Le Monde Diplomatique Brasil: Debord", u: "https://diplomatique.org.br/?p=2170" },
+      { n: "Revista Temática (UFPB): sociedade do espetáculo", u: "https://periodicos.ufpb.br/index.php/tematica/article/download/46791/28082/121283" },
+      { n: "Revista Eco-Pós (UFRJ)", u: "https://revistaecopos.eco.ufrj.br/eco_pos/article/download/1212/1149/2083" }
+    ]
+  },
+  8: {
+    secoes: [
+      { t: "Quem foi Paulo Freire", p: "Paulo Freire (1921–1997) foi um educador pernambucano. A Lei nº 12.612/2012, aprovada por unanimidade no Congresso, declarou-o Patrono da Educação Brasileira." },
+      { t: "A ideia em detalhe", p: "Em Pedagogia do Oprimido, Freire critica a \"educação bancária\", em que o professor deposita conteúdos e o aluno só recebe, e propõe uma educação problematizadora e dialógica. Em Pedagogia da Indignação (2000), na \"Terceira carta pedagógica\", aparece a frase: \"Se a educação sozinha não transforma a sociedade, sem ela tampouco a sociedade muda\"." },
+      { t: "Na lei", p: "O artigo 205 da Constituição de 1988 diz que a educação é direito de todos e dever do Estado e da família, visando ao pleno desenvolvimento da pessoa, ao preparo para a cidadania e à qualificação para o trabalho." },
+      { t: "Como usar na redação", p: "Freire é coringa na proposta de intervenção: \"Como afirmou Paulo Freire, sem a educação a sociedade não muda; por isso, cabe ao MEC levar o debate sobre o tema para as escolas\"." },
+      { t: "Cuidado", p: "Não use Freire como enfeite. Mostre qual mudança a educação produziria naquele problema específico." }
+    ],
+    fontes: [
+      { n: "Agência Senado: Freire declarado Patrono da Educação (2012)", u: "https://www12.senado.leg.br/noticias/materias/2012/04/16/paulo-freire-e-declarado-patrono-da-educacao-brasileira" },
+      { n: "Câmara: Lei nº 12.612/2012", u: "https://www2.camara.leg.br/legin/fed/lei/2012/lei-12612-13-abril-2012-612708-publicacaooriginal-135760-pl.html" },
+      { n: "Acervo do Instituto Paulo Freire: a frase da Terceira carta", u: "https://acervo.paulofreire.org/handle/7891/90172" },
+      { n: "Revista de Comunicação Dialógica (UERJ): educação bancária", u: "https://www.e-publicacoes.uerj.br/rcd/article/view/59891" },
+      { n: "Planalto: Constituição Federal", u: "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm" }
+    ]
+  },
+  9: {
+    secoes: [
+      { t: "Quem foi Bourdieu", p: "Pierre Bourdieu (1930–2002) foi um sociólogo francês. A Reprodução, escrito com Jean-Claude Passeron, foi publicado na França em 1970 e no Brasil em 1975." },
+      { t: "A ideia em detalhe", p: "Capital cultural é o conjunto de saberes e hábitos transmitidos pela família. Seu valor na escola depende da distância entre a cultura da família e a cultura que a escola valoriza. Por isso, a escola pode converter herança familiar em sucesso escolar e, ao tratar isso como mérito, dissimular e legitimar as desigualdades." },
+      { t: "Como usar na redação", p: "\"Segundo Bourdieu, a escola valoriza o capital cultural herdado como se fosse mérito; assim, estudantes de famílias com menos acesso à cultura partem em desvantagem\"." },
+      { t: "Cuidado", p: "Bourdieu não diz que o esforço não importa. Ele mostra que o ponto de partida é desigual e que isso costuma ficar escondido." }
+    ],
+    fontes: [
+      { n: "Educação & Pesquisa: 50 anos de A Reprodução (Valle, 2022)", u: "https://dialnet.unirioja.es/descarga/articulo/8569804.pdf" },
+      { n: "Redalyc: capital cultural (Medeiros et al.)", u: "https://www.redalyc.org/journal/298/29870349021/29870349021.pdf" },
+      { n: "Boletim IFTM: Bourdieu e a escola", u: "https://periodicos.iftm.edu.br/index.php/boletimiftm/article/view/353/201" }
+    ]
+  },
+  10: {
+    secoes: [
+      { t: "As leis", p: "A Lei nº 10.436/2002 reconheceu a Língua Brasileira de Sinais (Libras) como meio legal de comunicação e expressão. A Lei nº 13.146/2015, a Lei Brasileira de Inclusão, reúne direitos das pessoas com deficiência." },
+      { t: "A ideia em detalhe", p: "Libras não é mímica nem tradução palavra por palavra do português: é uma língua com gramática e estrutura próprias. O artigo 2º da Lei Brasileira de Inclusão define pessoa com deficiência como aquela que tem impedimento de longo prazo que, em interação com uma ou mais barreiras, pode obstruir sua participação plena na sociedade. Ou seja: a exclusão também nasce das barreiras do ambiente e das atitudes." },
+      { t: "No ENEM", p: "O tema da redação do ENEM 2017 foi \"Desafios para a formação educacional de surdos no Brasil\"." },
+      { t: "Como usar na redação", p: "\"Embora a Lei nº 10.436/2002 reconheça a Libras, a inclusão de estudantes surdos depende de remover barreiras, como a falta de comunicação acessível na escola\"." },
+      { t: "Cuidado", p: "Não use \"surdo-mudo\": a maioria das pessoas surdas tem o aparelho fonador preservado, e a comunidade surda não aceita o termo. Prefira \"pessoa surda\" e \"pessoa com deficiência\"." }
+    ],
+    fontes: [
+      { n: "Planalto: Lei nº 10.436/2002 (Libras)", u: "https://www.planalto.gov.br/ccivil_03/leis/2002/l10436.htm" },
+      { n: "Senado: Lei nº 13.146/2015", u: "https://legis.senado.leg.br/norma/584958/publicacao/15637494" },
+      { n: "Bnews: tema do ENEM 2017", u: "https://www.bnews.com.br/noticias/educacao/190566-desafios-para-formacao-educacional-de-surdos-e-o-tema-da-redacao-do-enem-2017.html" },
+      { n: "USP: aspectos linguísticos da Libras", u: "https://linux.ime.usp.br/~cosmo/ensino/libras/Goes%20Libras-%20aspectos%20linguisticos%20e%20historicos.pdf" },
+      { n: "Catraca Livre: fatos sobre a comunidade surda", u: "https://catracalivre.com.br/cidadania/5-fatos-que-voce-deveria-saber-sobre-a-comunidade-surda/" }
+    ]
+  },
+  11: {
+    secoes: [
+      { t: "Dois repertórios que se completam", p: "O artigo 215 da Constituição de 1988 diz que o Estado garantirá a todos o pleno exercício dos direitos culturais e o acesso às fontes da cultura nacional. Theodor Adorno e Max Horkheimer, da Escola de Frankfurt, usaram o termo \"indústria cultural\" no livro Dialética do Esclarecimento, publicado em Amsterdã em 1947." },
+      { t: "A ideia em detalhe", p: "Adorno e Horkheimer trocaram a expressão \"cultura de massa\" por \"indústria cultural\" para deixar claro que essa cultura não nasce espontaneamente do povo: ela é produzida como mercadoria, padronizada por critérios comerciais, o que tende a uniformizar o gosto do público." },
+      { t: "No ENEM", p: "O tema da redação do ENEM 2019 foi \"Democratização do acesso ao cinema no Brasil\"." },
+      { t: "Como usar na redação", p: "\"O artigo 215 da Constituição garante o acesso à cultura; contudo, quando a oferta segue apenas a lógica da indústria cultural, descrita por Adorno e Horkheimer, o acesso fica limitado a quem pode pagar\"." },
+      { t: "Cuidado", p: "A crítica à indústria cultural é sobre a padronização e a mercantilização, e não sobre o gosto popular." }
+    ],
+    fontes: [
+      { n: "Planalto: Constituição Federal", u: "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm" },
+      { n: "USP: texto A indústria cultural", u: "https://edisciplinas.usp.br/pluginfile.php/7638355/mod_resource/content/1/ADORNO_HORKHEIMER_A%20industria%20cultural.pdf" },
+      { n: "Revista Kínesis (Unesp): indústria cultural", u: "https://revistas.marilia.unesp.br/index.php/kinesis/article/view/4357/3174" },
+      { n: "Poder360: tema do ENEM 2019", u: "https://www.poder360.com.br/brasil/redacao-do-enem-2019-tem-o-tema-democratizacao-do-acesso-ao-cinema-no-brasil/" }
+    ]
+  },
+  12: {
+    secoes: [
+      { t: "Quem foi Dimenstein", p: "Gilberto Dimenstein (1956–2020) foi um jornalista paulistano, colunista da Folha de S.Paulo, comentarista da rádio CBN e fundador do site Catraca Livre. O Cidadão de Papel: a infância, a adolescência e os direitos humanos no Brasil (Ática) ganhou o Prêmio Jabuti de não ficção em 1993." },
+      { t: "A ideia em detalhe", p: "A tese do livro está no título: a cidadania brasileira é frágil, e muitos direitos existem só no papel. A lei garante, mas a prática social muda pouco para quem mais precisa, sobretudo crianças e adolescentes." },
+      { t: "Como usar na redação", p: "\"Como mostrou Gilberto Dimenstein, muitos brasileiros são cidadãos de papel: têm direitos na lei, mas não na prática\". Depois, explique por que o direito não chega naquele tema: falta de estrutura, de informação ou de fiscalização." },
+      { t: "Cuidado", p: "Não basta dizer que a lei não é cumprida. Mostre o mecanismo que impede o direito de chegar às pessoas." }
+    ],
+    fontes: [
+      { n: "CNN Brasil: morte de Dimenstein (2020)", u: "https://www.cnnbrasil.com.br/nacional/jornalista-gilberto-dimenstein-morre-aos-63-anos/" },
+      { n: "Câmara Municipal de SP: justificativa citando o Jabuti de 1993", u: "https://www.saopaulo.sp.leg.br/iah/fulltext/justificativa/JPL0407-2020.pdf" },
+      { n: "Revista LAMP (UERN): análise do livro", u: "https://homologacaoperiodicos.apps.uern.br/index.php/LAMP/article/download/5871/4151/18256" }
+    ]
+  },
+  13: {
+    secoes: [
+      { t: "Quem foi José Murilo de Carvalho", p: "José Murilo de Carvalho foi um historiador mineiro, membro da Academia Brasileira de Letras desde 2004 (cadeira 5). Morreu no Rio de Janeiro em agosto de 2023. Publicou Cidadania no Brasil: o longo caminho em 2001." },
+      { t: "A ideia em detalhe", p: "O sociólogo inglês T. H. Marshall descreveu, para a Inglaterra, uma sequência de conquistas: primeiro os direitos civis, depois os políticos e, por fim, os sociais. José Murilo mostra que no Brasil a ordem foi invertida: os direitos sociais vieram antes, na era Vargas, e os civis foram os últimos a se consolidar. Para ele, a cidadania brasileira foi construída \"de cima para baixo\", com forte presença do Estado." },
+      { t: "Como usar na redação", p: "\"Segundo José Murilo de Carvalho, a cidadania no Brasil foi construída de cima para baixo; isso ajuda a explicar por que muitos cidadãos esperam do Estado, mas participam pouco da vida política\"." },
+      { t: "Cuidado", p: "O autor não diz que o povo é desinteressado por natureza: ele aponta causas históricas. É isso que dá força ao argumento." }
+    ],
+    fontes: [
+      { n: "Agência Brasil: morte de José Murilo de Carvalho", u: "https://agenciabrasil.ebc.com.br/geral/noticia/2023-08/morre-no-rio-aos-83-anos-o-academico-jose-murilo-de-carvalho" },
+      { n: "Revista Pesquisa FAPESP: legado do historiador", u: "https://revistapesquisa.fapesp.br/jose-murilo-de-carvalho-renovou-o-estudo-das-elites-e-da-cidadania-no-brasil/" },
+      { n: "Biblioteca Digital do TSE: cidadania e a sequência de Marshall", u: "https://bibliotecadigital.tse.jus.br/bitstreams/30ab6d73-ab8d-4e95-9654-e3996f306273/download" },
+      { n: "Revista Contemporânea (UERJ)", u: "https://www.e-publicacoes.uerj.br/contemporanea/article/download/17554/12928/57767" }
+    ]
+  },
+  14: {
+    secoes: [
+      { t: "Quem foi Sérgio Buarque", p: "Sérgio Buarque de Holanda (1902–1982) foi historiador e um dos intérpretes clássicos do Brasil. Raízes do Brasil foi publicado em 1936. A expressão \"homem cordial\" veio do escritor Ribeiro Couto, mas foi Sérgio Buarque quem a popularizou." },
+      { t: "A ideia em detalhe", p: "\"Cordial\" vem do latim cordis, coração. O autor pediu que a palavra fosse entendida nesse sentido: o homem cordial age guiado pela emoção e pelas relações pessoais, e não necessariamente com gentileza. Nesse modelo, a influência da família e das relações privadas se sobrepõe ao que é público e impessoal. Era uma crítica, e não um elogio." },
+      { t: "Como usar na redação", p: "\"A cordialidade descrita por Sérgio Buarque de Holanda mistura o público e o privado; essa herança ajuda a explicar por que práticas como favorecer conhecidos ainda são toleradas\"." },
+      { t: "Cuidado", p: "\"Homem cordial\" não quer dizer homem educado ou simpático. Esse é o erro mais comum com esse repertório, e o próprio sentido comum da palavra gerou mal-entendidos." }
+    ],
+    fontes: [
+      { n: "Revista Pesquisa FAPESP: as raízes centenárias de Raízes do Brasil", u: "https://revistapesquisa.fapesp.br/as-centenarias-raizes-do-brasil/" },
+      { n: "Revista O Eixo e a Roda (UFMG)", u: "https://periodicos.ufmg.br/index.php/o_eixo_ea_roda/article/download/28064/21874/84264" },
+      { n: "Redalyc: o homem cordial", u: "https://www.redalyc.org/pdf/3476/347632172011.pdf" }
+    ]
+  },
+  15: {
+    secoes: [
+      { t: "Quem foi Hannah Arendt", p: "Hannah Arendt (1906–1975) foi uma filósofa alemã de origem judaica. A revista The New Yorker a enviou para cobrir o julgamento do oficial nazista Adolf Eichmann, iniciado em Jerusalém em abril de 1961. Os artigos deram origem ao livro Eichmann em Jerusalém (1963)." },
+      { t: "A ideia em detalhe", p: "Arendt se surpreendeu menos com algo excepcional em Eichmann do que com a sua normalidade. Daí veio a expressão \"banalidade do mal\": para ela, o mal não precisa ter raízes profundas nem uma motivação diabólica; ele se torna banal quando pessoas comuns deixam de pensar sobre o que fazem, num verdadeiro \"vazio de pensamento\"." },
+      { t: "Como usar na redação", p: "\"A banalidade do mal, conceito de Hannah Arendt, ajuda a entender ataques virtuais: muitos agressores não refletem sobre o dano que causam ao compartilhar ódio\"." },
+      { t: "Cuidado", p: "Banalidade do mal não quer dizer que o mal é pequeno ou desculpável. Quer dizer que ele pode nascer da falta de pensamento crítico, o que torna a responsabilidade ainda maior." }
+    ],
+    fontes: [
+      { n: "Revista Brasileira de Sociologia do Direito: Arendt e Eichmann", u: "https://revista.abrasd.com.br/index.php/rbsd/article/download/107/107/564" },
+      { n: "Unijuí: banalidade do mal", u: "https://publicacoeseventos.unijui.edu.br/index.php/direitoshumanosedemocracia/article/view/10651/9354" },
+      { n: "Revista Alamedas (Unioeste): vazio de pensamento", u: "https://e-revista.unioeste.br/index.php/alamedas/article/download/30846/22237/124050" }
+    ]
+  },
+  16: {
+    secoes: [
+      { t: "Quem foi Simone de Beauvoir", p: "Simone de Beauvoir (1908–1986) foi uma filósofa e escritora francesa. O Segundo Sexo foi publicado na França em 1949 e chegou ao Brasil em 1960." },
+      { t: "A ideia em detalhe", p: "A frase mais famosa do livro é \"Ninguém nasce mulher: torna-se mulher\". Beauvoir mostra que a mulher foi historicamente definida em relação ao homem, como \"o Outro\", e que essa posição de \"segundo sexo\" não é um destino biológico, mas uma construção social e histórica." },
+      { t: "No ENEM", p: "Em 2015, uma questão de Ciências Humanas do ENEM usou essa frase de Beauvoir. No mesmo ano, o tema da redação foi \"A persistência da violência contra a mulher na sociedade brasileira\"." },
+      { t: "Como usar na redação", p: "\"Como afirmou Simone de Beauvoir, 'ninguém nasce mulher: torna-se mulher'; assim, os papéis impostos às mulheres são construídos socialmente e podem ser transformados pela educação\"." },
+      { t: "Cuidado", p: "Cite a frase exatamente e explique o sentido. Usada sozinha, sem ligação com o tema, ela vira repertório solto." }
+    ],
+    fontes: [
+      { n: "Estado de Minas: a questão do ENEM 2015 com Beauvoir", u: "https://www.em.com.br/app/noticia/nacional/2015/10/30/interna_nacional,703208/camara-de-campinas-quer-anular-questao-do-enem-que-cita-simone-de-beauvoir.shtml" },
+      { n: "IHU Unisinos: a polêmica de 2015", u: "https://www.ihu.unisinos.br/548565" },
+      { n: "Revista Sapere Aude (PUC Minas): O Segundo Sexo", u: "https://periodicos.pucminas.br/SapereAude/article/download/7559/6665/28264" }
+    ]
+  },
+  17: {
+    secoes: [
+      { t: "Quem é Silvia Federici", p: "Silvia Federici é uma filósofa e ativista ítalo-americana. O Ponto Zero da Revolução: trabalho doméstico, reprodução e luta feminista reúne textos escritos entre 1974 e 2012 (edição brasileira da Elefante, tradução do Coletivo Sycorax)." },
+      { t: "A ideia em detalhe", p: "Para Federici, o trabalho doméstico e de cuidado é o \"ponto zero\": a base que sustenta todos os outros trabalhos. Ela argumenta que o capitalismo depende desse trabalho não remunerado para continuar existindo, embora ele seja tratado como obrigação natural das mulheres e não seja reconhecido." },
+      { t: "No Brasil", p: "Segundo a PNAD Contínua 2022 do IBGE, as mulheres de 14 anos ou mais dedicaram em média 21,3 horas por semana a afazeres domésticos e cuidado de pessoas, contra 11,7 horas dos homens. O tema da redação do ENEM 2023 foi \"Desafios para o enfrentamento da invisibilidade do trabalho de cuidado realizado pela mulher no Brasil\"." },
+      { t: "Como usar na redação", p: "\"Segundo Silvia Federici, o trabalho de cuidado sustenta a economia, mas é invisível; os dados do IBGE confirmam essa sobrecarga: as mulheres dedicam quase o dobro de horas que os homens a essas tarefas\"." },
+      { t: "Cuidado", p: "Não diga que cuidar é ruim. O problema apontado é a divisão desigual e a falta de reconhecimento desse trabalho." }
+    ],
+    fontes: [
+      { n: "Carta Capital: entrevista com Federici", u: "https://www.cartacapital.com.br/?p=93908" },
+      { n: "Fundação Rosa Luxemburgo: O Ponto Zero da Revolução (PDF)", u: "https://rosalux.org.br/wp-content/uploads/2020/11/Opontozerodarevolucao_WEB.pdf" },
+      { n: "SBT News: dados do IBGE sobre afazeres domésticos (2022)", u: "https://sbtnews.sbt.com.br/noticia/brasil/256279-mulheres-dedicam-quase-10-horas-semanais-a-mais-do-que-homens-em-tarefas-domesticas" },
+      { n: "O Povo: tema do ENEM 2023", u: "https://www.opovo.com.br/noticias/brasil/2023/11/05/redacao-do-enem-aborda-mulheres-e-invisibilidade-do-trabalho-de-cuidar.html" }
+    ]
+  },
+  18: {
+    secoes: [
+      { t: "A lei e a história", p: "A Lei nº 11.340/2006 leva o nome de Maria da Penha Maia Fernandes. Em 2001, a Comissão Interamericana de Direitos Humanos, no Relatório nº 54/01, concluiu que o Brasil foi omisso e negligente diante da violência doméstica que ela sofreu. A denúncia foi levada por ela com as organizações CEJIL e CLADEM, e o caso está ligado à criação da lei em 2006." },
+      { t: "A ideia em detalhe", p: "O artigo 7º da lei reconhece cinco formas de violência doméstica e familiar contra a mulher, \"entre outras\": física, psicológica, sexual, patrimonial e moral. A lei também prevê medidas protetivas de urgência. Em 2015, a Lei nº 13.104 tornou o feminicídio uma qualificadora do homicídio." },
+      { t: "Como usar na redação", p: "\"A Lei Maria da Penha reconhece formas de violência que vão além da física; para que ela seja efetiva, é preciso que as vítimas conheçam seus direitos e encontrem uma rede de apoio\"." },
+      { t: "Cuidado", p: "Não diga que a lei não funciona. Reconheça o avanço e aponte o que falta para que ela seja efetiva." }
+    ],
+    fontes: [
+      { n: "Planalto: Lei nº 11.340/2006", u: "https://www.planalto.gov.br/ccivil_03/_ato2004-2006/2006/lei/l11340.htm" },
+      { n: "CNJ: a Lei Maria da Penha", u: "https://www.cnj.jus.br/ha-12-anos-o-brasil-criou-a-lei-maria-da-penha-falta-investir-na-prevencao/" },
+      { n: "TJCE: formas de violência", u: "https://www.tjce.jus.br/mulher/formas-de-violencia/" },
+      { n: "Planalto: Lei nº 13.104/2015 (feminicídio)", u: "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13104.htm" }
+    ]
+  },
+  19: {
+    secoes: [
+      { t: "Quem é Silvio Almeida", p: "Silvio Almeida é um jurista e filósofo brasileiro. Em O que é racismo estrutural? (2018; depois publicado como Racismo Estrutural), ele explica três formas de entender o racismo." },
+      { t: "A ideia em detalhe", p: "Na concepção individualista, o racismo seria uma \"patologia\" de algumas pessoas. Na institucional, ele aparece no funcionamento de instituições que dão privilégios a certos grupos conforme a raça. Na estrutural, que é a tese do autor, o racismo faz parte da própria organização da sociedade, nas relações políticas, econômicas e jurídicas, e as instituições o reproduzem." },
+      { t: "No Brasil", p: "Segundo o estudo Desigualdades Sociais por Cor ou Raça do IBGE, com dados de 2021, o rendimento médio dos trabalhadores brancos foi 75,7% maior que o dos pretos. Pretos e pardos eram 53,8% dos trabalhadores, mas ocupavam 29,5% dos cargos gerenciais." },
+      { t: "Como usar na redação", p: "\"Segundo Silvio Almeida, o racismo é estrutural; isso ajuda a explicar por que, como mostra o IBGE, pretos e pardos são maioria entre os trabalhadores, mas minoria nos cargos de gerência\"." },
+      { t: "Cuidado", p: "Estrutural não quer dizer que ninguém é responsável. Quer dizer que combater o racismo exige mudar instituições e práticas, e não só atitudes individuais." }
+    ],
+    fontes: [
+      { n: "Revista Humanidades e Inovação (Unitins): resenha", u: "https://revista.unitins.br/index.php/humanidadeseinovacao/article/view/951/903" },
+      { n: "Jus.com.br: resenha de Racismo Estrutural", u: "https://jus.com.br/artigos/85565/resenha-baseada-no-livro-racismo-estrutural-de-silvio-de-almeida" },
+      { n: "IBGE: Desigualdades Sociais por Cor ou Raça (informativo)", u: "https://biblioteca.ibge.gov.br/visualizacao/livros/liv101972_informativo.pdf" },
+      { n: "Jornal do Brasil: dados do IBGE (2022)", u: "https://www.jb.com.br/economia/2022/11/amp/1040665-ibge-renda-media-de-trabalhador-branco-e-757-maior-que-de-pretos.html" }
+    ]
+  },
+  20: {
+    secoes: [
+      { t: "As leis e a pensadora", p: "A Lei nº 10.639/2003 tornou obrigatório o ensino de história e cultura afro-brasileira nas escolas de ensino fundamental e médio, públicas e privadas, resultado de reivindicações do movimento negro. A Lei nº 11.645/2008 incluiu a história e a cultura indígena. Lélia Gonzalez (1935–1994) foi uma intelectual e ativista, cofundadora do Movimento Negro Unificado, em 1978." },
+      { t: "A ideia em detalhe", p: "Lélia Gonzalez criou o conceito de \"amefricanidade\" e chamou de \"pretuguês\" o português falado no Brasil, marcado pela influência das línguas africanas. As duas ideias valorizam a herança africana e indígena na formação da cultura brasileira e das Américas." },
+      { t: "Na prática", p: "Estudos acadêmicos apontam que a obrigatoriedade das leis não garante, sozinha, sua aplicação, por causa de lacunas na formação inicial e continuada dos professores." },
+      { t: "Como usar na redação", p: "\"Embora a Lei nº 10.639/2003 torne obrigatório o ensino da cultura afro-brasileira, sua efetivação depende da formação de professores; só assim os estudantes reconhecerão a herança que, como mostrou Lélia Gonzalez, forma a cultura do país\"." },
+      { t: "Cuidado", p: "Não reduza a herança africana à escravidão. Mostre também a contribuição cultural, linguística e social desses povos." }
+    ],
+    fontes: [
+      { n: "Câmara: Lei nº 11.645/2008", u: "https://www2.camara.leg.br/legin/fed/lei/2008/lei-11645-10-marco-2008-572787-publicacaooriginal-96087-pl.html" },
+      { n: "Planalto: Lei nº 10.639/2003", u: "https://www.planalto.gov.br/ccivil_03/leis/2003/l10.639.htm" },
+      { n: "Revista Em Tese (UFSC): aplicação das leis", u: "https://periodicos.ufsc.br/index.php/emtese/article/download/1806-5023.2019v16n1p196/40132/225905" },
+      { n: "Jornal da USP: Lélia, a amefricana", u: "https://jornal.usp.br/?p=785360" }
+    ]
+  },
+  21: {
+    secoes: [
+      { t: "Quem é Ailton Krenak", p: "Ailton Krenak é líder indígena, ambientalista e escritor mineiro. Durante a Assembleia Nacional Constituinte (1987–1988), pintou o rosto de preto com tinta de jenipapo em protesto, num discurso que ficou marcado na história. Em outubro de 2023, foi eleito o primeiro indígena da Academia Brasileira de Letras, e tomou posse em 2024." },
+      { t: "A ideia em detalhe", p: "Ideias para Adiar o Fim do Mundo (2019) reúne duas palestras e uma entrevista feitas em Portugal. Krenak critica a ideia de uma humanidade separada da natureza e guiada pelos mesmos objetivos de desenvolvimento. Para ele, essa separação é uma ilusão da modernidade ligada à colonização: humanidade e natureza são uma coisa só." },
+      { t: "No ENEM", p: "O tema da redação do ENEM 2022 foi \"Desafios para a valorização de comunidades e povos tradicionais no Brasil\"." },
+      { t: "Como usar na redação", p: "\"Como alerta Ailton Krenak, a ideia de uma humanidade separada da natureza alimenta a exploração; por isso, valorizar os saberes dos povos tradicionais é também uma estratégia de preservação\"." },
+      { t: "Cuidado", p: "Evite estereótipos: não trate os povos indígenas como algo do passado nem como um grupo único." }
+    ],
+    fontes: [
+      { n: "CNN Brasil: Krenak eleito para a ABL", u: "https://www.cnnbrasil.com.br/pop/ailton-krenak-e-primeiro-indigena-eleito-como-imortal-pela-academia-brasileira-de-letras/" },
+      { n: "Jornal Opção: posse na ABL", u: "https://www.jornalopcao.com.br/ultimas-noticias/ailton-krenak-toma-posse-e-e-o-primeiro-indigena-na-academia-brasileira-de-letras-596108/" },
+      { n: "Extra Classe: trajetória e a Constituinte", u: "https://www.extraclasse.org.br/?p=97449" },
+      { n: "Companhia das Letras: Ideias para Adiar o Fim do Mundo", u: "https://www.companhiadasletras.com.br/livro/9788535933581/ideias-para-adiar-o-fim-do-mundo-nova-edicao" },
+      { n: "O Povo: tema do ENEM 2022", u: "https://www.opovo.com.br/noticias/brasil/2022/11/13/comunidades-e-povos-tradicionais-e-tema-da-redacao-do-enem-2022.html" }
+    ]
+  },
+  22: {
+    secoes: [
+      { t: "O filósofo e a Constituição", p: "Hans Jonas (1903–1993) foi um filósofo alemão. Em O Princípio Responsabilidade: ensaio de uma ética para a civilização tecnológica (1979), pensou a ética diante do poder da técnica. O artigo 225 da Constituição de 1988 garante a todos o direito ao meio ambiente ecologicamente equilibrado." },
+      { t: "A ideia em detalhe", p: "Jonas propõe um novo imperativo: \"Age de tal forma que os efeitos de tua ação sejam compatíveis com a permanência de uma vida humana autêntica sobre a Terra\". É uma ética voltada às gerações futuras e de caráter coletivo. O art. 225 tem a mesma lógica: impõe ao poder público e à coletividade o dever de defender o meio ambiente para as presentes e futuras gerações." },
+      { t: "Como usar na redação", p: "\"Hans Jonas defende uma ética de responsabilidade com as gerações futuras, princípio que a Constituição de 1988 adota no artigo 225; cumprir esse dever exige ação do Estado, das empresas e da sociedade\"." },
+      { t: "Cuidado", p: "Jonas fala de uma responsabilidade sobretudo coletiva, ligada ao poder da tecnologia. Não reduza o argumento a atitudes individuais." }
+    ],
+    fontes: [
+      { n: "Planalto: Constituição Federal", u: "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm" },
+      { n: "UEPB: o princípio responsabilidade", u: "https://dspace.bc.uepb.edu.br/jspui/bitstream/123456789/3263/1/PDF%20-%20Maria%20Aline%20Nunes%20Soares.pdf" },
+      { n: "Revista Thaumazein: Jonas", u: "https://periodicos.ufn.edu.br/index.php/thaumazein/article/download/164/pdf/499" }
+    ]
+  },
+  23: {
+    secoes: [
+      { t: "Quem foi Ulrich Beck", p: "Ulrich Beck (1944–2015) foi um sociólogo alemão. Sociedade de Risco saiu em 1986, poucos meses antes do acidente nuclear de Chernobyl. Beck revisava as provas do livro quando o acidente aconteceu e acrescentou um prefácio usando o caso como exemplo." },
+      { t: "A ideia em detalhe", p: "Para Beck, os riscos da sociedade atual são efeitos não intencionais do próprio processo de modernização: a sociedade industrial passa a enfrentar perigos que ela mesma produziu. Ele chama essa fase de \"modernização reflexiva\"." },
+      { t: "No Brasil", p: "Em 5 de novembro de 2015, o rompimento da barragem de Fundão, da Samarco, em Mariana (MG), matou 19 pessoas e levou lama à bacia do Rio Doce. Em 25 de janeiro de 2019, o rompimento de uma barragem da Vale em Brumadinho (MG) deixou 272 mortos." },
+      { t: "Como usar na redação", p: "\"Na sociedade de risco descrita por Ulrich Beck, as ameaças nascem do próprio desenvolvimento; os rompimentos de barragens em Mariana e Brumadinho mostram por que a fiscalização é indispensável\"." },
+      { t: "Cuidado", p: "Beck não é contra o progresso: ele analisa os efeitos colaterais da modernização e a necessidade de lidar com eles." }
+    ],
+    fontes: [
+      { n: "USP (GMARX): 40 anos de Chernobyl e a sociedade de risco", u: "https://gmarx.fflch.usp.br/sites/gmarx.fflch.usp.br/files/inline-files/Chernobyl.pdf" },
+      { n: "Revista Quaestio Iuris (UERJ): Beck", u: "https://www.e-publicacoes.uerj.br/quaestioiuris/article/download/18862/14185/63856" },
+      { n: "Human Rights Watch: Brumadinho e Mariana", u: "https://www.hrw.org/pt/news/2019/01/30/327003" },
+      { n: "Correio da Manhã: condenação por Mariana", u: "https://www.correiodamanha.com.br/economia/justica/2026/09/316987-justica-condena-samarco-e-ex-gerentes-por-tragedia-em-mariana-minas-gerais.html" }
+    ]
+  },
+  24: {
+    secoes: [
+      { t: "Quem foi Josué de Castro", p: "Josué de Castro (1908–1973) foi um médico, geógrafo e escritor pernambucano. Presidiu o Conselho da FAO, órgão da ONU para a alimentação, no início dos anos 1950, e foi indicado mais de uma vez ao Prêmio Nobel." },
+      { t: "A ideia em detalhe", p: "Em Geografia da Fome (1946), Josué de Castro mostrou que as causas da fome no Brasil são sociais e políticas, e não naturais: ela depende de como a terra, a renda e o alimento são distribuídos. O livro mapeia as diferentes regiões de fome do país." },
+      { t: "Na lei", p: "Desde a Emenda Constitucional nº 64/2010, a alimentação está entre os direitos sociais do artigo 6º da Constituição." },
+      { t: "Como usar na redação", p: "\"Como demonstrou Josué de Castro, a fome é uma questão política, e não natural; garantir o direito à alimentação, previsto no artigo 6º da Constituição, exige políticas de acesso ao alimento\"." },
+      { t: "Cuidado", p: "Não use números que você não tem certeza. O argumento de Josué de Castro é forte por si só." }
+    ],
+    fontes: [
+      { n: "Portal Latino-Americano (USP): Josué de Castro", u: "https://sites.usp.br/portalatinoamericano/castro-josue-de" },
+      { n: "Brasil de Fato: 50 anos da morte de Josué de Castro", u: "https://www.brasildefato.com.br/2023/09/24/josue-de-castro-ha-50-anos-morria-o-homem-que-explicou-a-pobreza-no-brasil" },
+      { n: "Câmara: Emenda Constitucional nº 64/2010", u: "https://www2.camara.leg.br/legin/fed/emecon/2010/emendaconstitucional-64-4-fevereiro-2010-601824-publicacaooriginal-123345-pl.html" }
+    ]
+  },
+  25: {
+    secoes: [
+      { t: "Quem foi Carolina Maria de Jesus", p: "Carolina Maria de Jesus (1914–1977) foi uma escritora mineira, mulher negra e catadora de papel, que viveu na favela do Canindé, em São Paulo. Seu diário, Quarto de Despejo: diário de uma favelada, foi publicado em agosto de 1960 pela Francisco Alves e traduzido para mais de uma dezena de idiomas." },
+      { t: "A ideia em detalhe", p: "No diário, Carolina descreve a fome e a vida na favela, que ela chama de \"quarto de despejo\" da cidade: o lugar para onde vai aquilo que a cidade não quer ver. O livro mostra a pobreza a partir de dentro, pela voz de quem a vivia." },
+      { t: "Como usar na redação", p: "\"Em Quarto de Despejo, Carolina Maria de Jesus revela a favela como o 'quarto de despejo' da cidade; a imagem ajuda a discutir a invisibilidade de quem vive sem moradia digna\"." },
+      { t: "Cuidado", p: "Valorize Carolina como escritora, e não só como personagem da pobreza: ela escolheu a escrita como forma de resistência." }
+    ],
+    fontes: [
+      { n: "Cadernos de Tradução (UFSC): traduções de Quarto de Despejo", u: "https://periodicos.ufsc.br/index.php/traducao/article/view/2175-7968.2011v2n28p121" },
+      { n: "Revista Belas Infiéis (UnB)", u: "https://periodicos.unb.br/index.php/belasinfieis/article/download/32802/30359/108131" },
+      { n: "Elle: o legado de Carolina Maria de Jesus", u: "https://elle.com.br/cultura/legado-carolina-maria-de-jesus" }
+    ]
+  },
+  26: {
+    secoes: [
+      { t: "Quem foi Milton Santos", p: "Milton Santos (1926–2001) foi um geógrafo baiano. Em 1994 recebeu o Prêmio Vautrin Lud, conhecido como o \"Nobel da Geografia\". Foi o primeiro intelectual de língua materna não inglesa a recebê-lo." },
+      { t: "A ideia em detalhe", p: "Em Por uma Outra Globalização (2000), ele descreve três globalizações: a globalização como fábula, a visão idealizada de um mundo integrado; a globalização como perversidade, com desigualdade, desemprego e pobreza; e a possibilidade de uma outra globalização, mais humana, se houver preocupação real com a inclusão e o bem-estar de todos." },
+      { t: "Como usar na redação", p: "\"Milton Santos mostra que a globalização vendida como fábula também é perversa; por isso, a tecnologia só reduzirá desigualdades se vier acompanhada de inclusão\"." },
+      { t: "Cuidado", p: "Milton Santos não é contra a tecnologia. Feche o argumento com a \"outra globalização\", que combina com a proposta de intervenção." }
+    ],
+    fontes: [
+      { n: "Portal Latino-Americano (USP): Milton Santos", u: "https://sites.usp.br/portalatinoamericano/espanol-santos-milton" },
+      { n: "IHU Unisinos: a atualidade de Milton Santos", u: "https://ihu.unisinos.br/618268-a-atualidade-do-pensamento-e-da-obra-de-milton-santos" },
+      { n: "Revista Percurso (UEM): Por uma outra globalização", u: "https://periodicos.uem.br/ojs/index.php/Percurso/article/view/64246/751375156197" }
+    ]
+  },
+  27: {
+    secoes: [
+      { t: "Quem é Amartya Sen", p: "Amartya Sen é um economista e filósofo indiano. Recebeu o Prêmio Nobel de Economia em 1998. No início dos anos 1990, colaborou com o economista paquistanês Mahbub ul Haq na criação do Índice de Desenvolvimento Humano (IDH), usado pelo PNUD." },
+      { t: "A ideia em detalhe", p: "Em Desenvolvimento como Liberdade (1999), Sen defende que o desenvolvimento deve ser visto como a expansão das liberdades reais das pessoas, que são ao mesmo tempo o meio e o fim do desenvolvimento. A expansão das capacidades individuais é a base do paradigma de desenvolvimento humano." },
+      { t: "Como usar na redação", p: "\"Para Amartya Sen, desenvolvimento é expansão das liberdades; assim, crescimento econômico sem acesso à educação e à saúde não garante qualidade de vida\"." },
+      { t: "Cuidado", p: "Sen não é contra o crescimento econômico: ele o considera insuficiente se não ampliar as liberdades das pessoas." }
+    ],
+    fontes: [
+      { n: "Revista Ecos (Unicamp): Sen e o desenvolvimento", u: "https://periodicos.sbu.unicamp.br/ojs/index.php/ecos/article/view/8642802" },
+      { n: "Revista Rever (UFV): desenvolvimento como liberdade", u: "https://periodicos.ufv.br/rever/article/download/3274/1545/15346" },
+      { n: "Consonancias (UCA): Sen, Haq e o IDH", u: "https://repositorio.uca.edu.ar/bitstream/123456789/7471/1/consonancias25.pdf" }
+    ]
+  },
+  28: {
+    secoes: [
+      { t: "O filósofo e a lei", p: "John Rawls (1921–2002) foi um filósofo norte-americano, autor de Uma Teoria da Justiça (1971). A Lei nº 12.711/2012, a Lei de Cotas, reserva vagas nas universidades e institutos federais. Em 2023, ela passou pela revisão prevista em seu próprio texto, com a Lei nº 14.723, que reduziu o limite de renda e incluiu estudantes quilombolas." },
+      { t: "A ideia em detalhe", p: "Rawls propõe imaginar uma \"posição original\": pessoas livres e iguais escolhem os princípios da sociedade por trás de um \"véu da ignorância\", sem saber que lugar vão ocupar nela. Uma das regras que escolheriam é o princípio da diferença: desigualdades só são aceitáveis se beneficiarem os menos favorecidos." },
+      { t: "Como usar na redação", p: "\"Sob o véu da ignorância de John Rawls, ninguém escolheria uma sociedade em que o acesso à universidade dependesse da origem; políticas como a Lei de Cotas seguem esse princípio de justiça\"." },
+      { t: "Cuidado", p: "Igualdade e equidade não são a mesma coisa. Explicar a diferença mostra domínio do conceito." }
+    ],
+    fontes: [
+      { n: "Planalto: Lei nº 14.723/2023", u: "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/L14723.htm" },
+      { n: "Agência Senado: sancionada a nova Lei de Cotas", u: "https://www12.senado.leg.br/noticias/materias/2023/11/14/sancionada-ampliacao-da-lei-de-cotas" },
+      { n: "Revista Pensar (Unifor): Rawls e o princípio da diferença", u: "https://ojs.unifor.br/rpen/article/download/1709/1559/5750" }
+    ]
+  },
+  29: {
+    secoes: [
+      { t: "A lei", p: "O Estatuto da Pessoa Idosa, Lei nº 10.741/2003, garante direitos às pessoas com 60 anos ou mais. Em 2022, a Lei nº 14.423 trocou o nome de \"Estatuto do Idoso\" para \"Estatuto da Pessoa Idosa\" e substituiu \"idoso\" por \"pessoa idosa\" em todo o texto." },
+      { t: "A ideia em detalhe", p: "O Estatuto parte da ideia de que envelhecer com dignidade é um direito, e que família, comunidade, sociedade e poder público têm o dever de assegurá-lo. A mudança de nome em 2022 reforça a pessoa por trás da idade." },
+      { t: "Como usar na redação", p: "\"O Estatuto da Pessoa Idosa assegura o envelhecimento com dignidade; para cumpri-lo, é preciso combater o preconceito por idade e garantir o acesso das pessoas idosas aos serviços, inclusive digitais\"." },
+      { t: "Cuidado", p: "Use \"pessoa idosa\", como a lei faz desde 2022. E não trate as pessoas idosas só como frágeis: elas têm direito à autonomia e à participação social." }
+    ],
+    fontes: [
+      { n: "Planalto: Lei nº 14.423/2022", u: "https://www.planalto.gov.br/ccivil_03/_Ato2019-2022/2022/Lei/L14423.htm" },
+      { n: "Planalto: Estatuto da Pessoa Idosa (Lei nº 10.741/2003)", u: "https://www.planalto.gov.br/ccivil_03/LEIS/2003/L10.741.htm" },
+      { n: "Ministério dos Direitos Humanos: Estatuto da Pessoa Idosa", u: "https://www.gov.br/mdh/pt-br/centrais-de-conteudo/pessoa-idosa/estatuto-da-pessoa-idosa.pdf" }
+    ]
+  },
+  30: {
+    secoes: [
+      { t: "Quem foi Durkheim", p: "Émile Durkheim (1858–1917) foi um sociólogo francês, um dos fundadores da sociologia. Publicou Da Divisão do Trabalho Social em 1893 e O Suicídio em 1897." },
+      { t: "A ideia em detalhe", p: "Durkheim usa o conceito de anomia para explicar crises sociais: é o enfraquecimento das normas que orientam e regulam a vida coletiva. Em O Suicídio, ele mostra que até um ato que parece só individual tem causas sociais, ligadas a dois eixos: a integração (os laços sociais) e a regulação (as normas). O suicídio anômico aparece em momentos de mudança brusca, como crises econômicas." },
+      { t: "Como usar na redação", p: "\"Segundo Durkheim, a anomia surge quando as normas deixam de orientar a vida coletiva; fortalecer os vínculos na escola é uma forma de prevenir a violência e o sofrimento entre os jovens\"." },
+      { t: "Cuidado", p: "Ao tratar de suicídio, use linguagem cuidadosa e foque em prevenção e acolhimento. Se você precisar conversar, o CVV atende de graça, 24 horas, pelo telefone 188." }
+    ],
+    fontes: [
+      { n: "Politize!: o que é anomia social", u: "https://www.politize.com.br/anomia-social/" },
+      { n: "Revista Caboré (UFRPE): anomia em Durkheim", u: "https://www.journals.ufrpe.br/index.php/revistacabore/article/download/7882/482485639/482525925" },
+      { n: "Conass: CVV e a ligação gratuita 188", u: "https://www.conass.org.br/prevencao-ao-suicidio-conta-com-ligacao-gratuita-em-todo-pais/" }
+    ]
+  }
 };

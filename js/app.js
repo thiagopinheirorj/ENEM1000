@@ -541,7 +541,10 @@
         leitura +
         '<div class="tags">' + tags + "</div>" +
         (APROF[id] ? '<details class="aprofundar" id="aprofundar"><summary>📖 Ler o texto completo sobre o tema <span class="muted">(~3 min)</span></summary>' +
-          APROF[id].map(function (s) { return "<h3>" + esc(s.t) + "</h3><p>" + esc(s.p) + "</p>"; }).join("") + "</details>" : "") +
+          APROF[id].secoes.map(function (s) { return "<h3>" + esc(s.t) + "</h3><p>" + esc(s.p) + "</p>"; }).join("") +
+          '<h3>Fontes</h3><ul class="fontes">' + APROF[id].fontes.map(function (f) {
+            return '<li><a href="' + esc(f.u) + '" target="_blank" rel="noopener">' + esc(f.n) + "</a></li>";
+          }).join("") + "</ul></details>" : "") +
       "</article>" +
 
       '<article class="card">' +

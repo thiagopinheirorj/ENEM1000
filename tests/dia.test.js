@@ -159,13 +159,15 @@ describe("AP · Texto completo da leitura", () => {
   let env3;
   before(async () => { env3 = await setup(); });
   after(async () => { await env3.teardown(); });
-  it("AP01 · todos os 30 dias têm texto completo com 5 seções", () => {
+  it("AP01 · todos os 30 dias têm texto completo com fontes", () => {
     const vm = require("vm"), fs = require("fs"), ctx = { window: {} };
     vm.runInNewContext(fs.readFileSync(require("path").join(__dirname, "..", "js", "aprofundar.js"), "utf8"), ctx);
     for (let i = 1; i <= 30; i++) {
       const a = ctx.window.APROFUNDAR[i];
-      assert.ok(Array.isArray(a) && a.length === 5, "dia " + i);
-      a.forEach((s) => assert.ok(s.t && s.p.length > 80, "dia " + i + ": " + s.t));
+      assert.ok(a && a.secoes.length >= 4, "dia " + i);
+      a.secoes.forEach((s) => assert.ok(s.t && s.p.length > 60, "dia " + i + ": " + s.t));
+      assert.ok(a.fontes.length >= 2, "dia " + i + " sem fontes");
+      a.fontes.forEach((f) => assert.match(f.u, /^https:\/\//, "dia " + i + ": " + f.n));
     }
   });
   it("AP02 · fica no fim da Leitura, fechado, e abre ao tocar", async () => {
@@ -174,6 +176,7 @@ describe("AP · Texto completo da leitura", () => {
     assert.equal(await page.isVisible("#aprofundar h3"), false);
     await page.click("#aprofundar summary");
     assert.equal(await page.isVisible("#aprofundar h3"), true);
-    assert.match(await page.textContent("#aprofundar"), /Quem foi Bauman.*Como usar na redação/s);
+    assert.match(await page.textContent("#aprofundar"), /Quem foi Bauman.*Como usar na redação.*Fontes/s);
+    assert.equal(await page.getAttribute("#aprofundar .fontes a >> nth=0", "target"), "_blank");
   });
 });
