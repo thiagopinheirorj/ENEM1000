@@ -527,3 +527,13 @@ button.chip.on { background: var(--primary); color: #fff; border-color: var(--pr
 .plano-preco { font-size: 1.6rem; font-weight: 700; margin: 2px 0 8px; }
 .plano-itens { padding-left: 1.2em; margin: 0 0 12px; }
 .plano-itens li { margin: 4px 0; }
+
+/* Painéis do professor e da direção */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 8px; }
+.kpis div { border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: grid; }
+.kpis strong { font-size: 1.8rem; }
+.kpis span { color: var(--muted); font-size: .8rem; }
+.tabela-wrap { overflow-x: auto; margin-top: 8px; }
+.tabela { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.tabela th, .tabela td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tabela tr.alerta td { background: rgba(217, 119, 6, .08); }

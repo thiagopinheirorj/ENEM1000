@@ -196,7 +196,7 @@ describe("P · Progresso", () => {
     await page.waitForSelector(".toast");
     assert.equal(await page.textContent(".toast"), "Trilha reiniciada");
     const s = await getState(page);
-    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08", simulados: [], sim: {}, lembrete: {}, envios: [], correcoes: 0, turma: {} });
+    assert.deepEqual(s, { inicio: "2026-10-15", done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: "2026-11-08", simulados: [], sim: {}, lembrete: {}, envios: [], correcoes: 0, turma: {}, painel: {}, direcao: {} });
     assert.equal(await page.textContent("#streak-count"), "0");
     const stats = await page.$$eval(".stat .v", (v) => v.map((x) => x.textContent));
     assert.deepEqual(stats, ["0", "0", "0/30", "—"]);
@@ -476,5 +476,57 @@ describe("PR · Plano premium", () => {
     assert.match(decodeURIComponent(await page.getAttribute('[data-quero="escola"]', "href")), /plano Escola/);
     assert.equal(await page.locator("form, input[type=password]").count(), 0);
     assert.equal(await page.getAttribute('.tabbar a[data-tab="progresso"]', "aria-current"), "page");
+  });
+});
+
+describe("PN · Painéis do professor e da direção", () => {
+  const cod = (o) => Buffer.from(JSON.stringify(o)).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const aluno = (a, extra) => Object.assign({ e: "Colégio Ação", t: "3º ano B", a, d: "2026-10-15", dn: 5, st: 2, bs: 3, qa: 4, qt: 5, si: 1, en: 0, pts: 40, ul: "2026-10-15" }, extra);
+
+  it("PN01 · o código do relatório do aluno vira linha no painel do professor", async () => {
+    const st = { inicio: "2026-10-15", done: { 1: "2026-10-15" }, dias: ["2026-10-15"], turma: { escola: "Colégio Ação", nome: "3º ano B", aluno: "Ana" } };
+    const { page } = await env.open({ hash: "#/progresso", state: st, init: () => { window.__t = []; navigator.share = (d) => { window.__t.push(d.text); return Promise.resolve(); }; } });
+    await page.click("#tm-relatorio");
+    const rel = await page.evaluate(() => window.__t[0]);
+    assert.match(rel, /Código do painel: R1KA\.[A-Za-z0-9_-]+$/);
+    await page.evaluate(() => { location.hash = "#/painel"; });
+    await page.waitForSelector("#pn-txt");
+    await page.fill("#pn-txt", "[15/10 10:00] Ana: " + rel + "\n[15/10 10:05] Bruno: R1KA." + cod(aluno("Bruno", { dn: 12, ul: "2026-10-01" })));
+    await page.click("#pn-add");
+    await page.waitForSelector("#pn-tabela");
+    assert.equal(await page.textContent("#kpi-alunos"), "2");
+    assert.equal(await page.textContent("#kpi-ativos"), "1");
+    const linhas = await page.$$eval("#pn-tabela tbody tr", (r) => r.map((x) => x.textContent));
+    assert.match(linhas[0], /^Bruno12\/30.*há 14 dia\(s\) ⚠️/);
+    assert.match(linhas[1], /^Ana1\/30.*hoje/);
+  });
+
+  it("PN02 · relatório mais novo substitui o antigo; códigos inválidos são ignorados", async () => {
+    const { page } = await env.open({ hash: "#/painel" });
+    await page.fill("#pn-txt", "R1KA." + cod(aluno("Ana", { dn: 3, d: "2026-10-10" })) + " R1KA." + cod(aluno("Ana", { dn: 7, d: "2026-10-14" })) + " R1KA.lixo_invalido_xx R1KA." + cod({ a: "<b>x</b>" }));
+    await page.click("#pn-add");
+    await page.waitForSelector("#pn-tabela");
+    assert.equal(await page.textContent("#kpi-alunos"), "1");
+    assert.match(await page.textContent("#pn-tabela tbody"), /Ana7\/30/);
+  });
+
+  it("PN03 · resumo da turma alimenta o painel da direção", async () => {
+    const { page } = await env.open({ hash: "#/painel", init: () => { window.__t = []; navigator.share = (d) => { window.__t.push(d.text); return Promise.resolve(); }; } });
+    await page.fill("#pn-txt", ["Ana", "Bruno", "Caio"].map((n, i) => "R1KA." + cod(aluno(n, { ul: i === 2 ? "2026-09-01" : "2026-10-14" }))).join("\n"));
+    await page.click("#pn-add");
+    await page.click("#pn-resumo");
+    const resumo = await page.evaluate(() => window.__t[0]);
+    assert.match(resumo, /3 alunos · 2 ativos em 7 dias.*\n\nCódigo do painel: R1KT\./);
+    await page.evaluate(() => { location.hash = "#/diretor"; });
+    await page.waitForSelector("#dr-txt");
+    await page.fill("#dr-txt", resumo + "\nR1KT." + cod({ e: "Colégio Ação", t: "3º ano A", d: "2026-10-15", n: 4, at: 1, md: 2, si: 0, en: 1, qp: 50 }));
+    await page.click("#dr-add");
+    await page.waitForSelector("#dr-tabela");
+    assert.equal(await page.textContent("#kd-turmas"), "2");
+    assert.equal(await page.textContent("#kd-alunos"), "7");
+    assert.equal(await page.textContent("#kd-ativos"), "43%");
+    const linhas = await page.$$eval("#dr-tabela tbody tr", (r) => r.map((x) => x.textContent));
+    assert.match(linhas[0], /^3º ano AColégio Ação425% ⚠️/);
+    assert.match(linhas[1], /^3º ano BColégio Ação367%/);
   });
 });

@@ -54,7 +54,7 @@
 
   /* ---------- Armazenamento local ---------- */
   function emptyState() {
-    return { inicio: today, done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO, simulados: [], sim: {}, lembrete: {}, envios: [], correcoes: 0, turma: {} };
+    return { inicio: today, done: {}, quiz: {}, textos: {}, treino: {}, favoritos: [], dias: [], fotos: {}, prova: PROVA_PADRAO, simulados: [], sim: {}, lembrete: {}, envios: [], correcoes: 0, turma: {}, painel: {}, direcao: {} };
   }
   function load() {
     try {
@@ -1136,6 +1136,28 @@
     } catch (e) {}
     return null;
   }
+  function b64(o) { return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+  function de64(c) {
+    try { return JSON.parse(decodeURIComponent(escape(atob(c.replace(/-/g, "+").replace(/_/g, "/"))))); } catch (e) { return null; }
+  }
+  function dadosAluno() {
+    var t = state.turma;
+    var acertos = Object.keys(state.quiz).filter(function (id) { var d = byId(+id); return d && d.quiz.correta === state.quiz[id]; }).length;
+    return { e: t.escola, t: t.nome, a: t.aluno, d: today, dn: Object.keys(state.done).length, st: streak(), bs: bestStreak(),
+      qa: acertos, qt: Object.keys(state.quiz).length, si: state.simulados.length, en: state.envios.length,
+      pts: pontosSemana(inicioSemana(today)), ul: state.dias.slice().sort().pop() || "" };
+  }
+  /* Lê os códigos colados (uma conversa inteira do WhatsApp serve) */
+  function lerCodigos(txt, prefixo) {
+    var re = new RegExp(prefixo + "\\.([A-Za-z0-9_-]{8,4000})", "g"), m, out = [];
+    while ((m = re.exec(txt))) { var o = de64(m[1]); if (o && typeof o === "object") out.push(o); }
+    return out;
+  }
+  function str(v, n) { return typeof v === "string" ? v.slice(0, n) : ""; }
+  function num(v) { return typeof v === "number" && isFinite(v) && v >= 0 ? Math.min(v, 100000) : 0; }
+  function data(v) { return typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : ""; }
+  function diasSem(d) { return d ? daysBetween(d, today) : null; }
+
   function linkTurma(t) { return APP_URL + "#/turma/" + codTurma(t); }
   function relatorioTurma() {
     var t = state.turma, sem = pontosSemana(inicioSemana(today));
@@ -1147,7 +1169,8 @@
       "Quizzes certos: " + acertos + "/" + Object.keys(state.quiz).length + "\n" +
       "Simulados: " + state.simulados.length + " · redações enviadas: " + state.envios.length + "\n" +
       "Pontos nesta semana: " + sem + "\n" +
-      "Atualizado em " + parseIso(today).toLocaleDateString("pt-BR");
+      "Atualizado em " + parseIso(today).toLocaleDateString("pt-BR") + "\n\n" +
+      "Código do painel: R1KA." + b64(dadosAluno());
   }
   function renderProfessor() {
     app.innerHTML =
@@ -1157,7 +1180,7 @@
         '<label for="pf-turma" style="display:block;margin-top:10px"><strong>Turma</strong></label><input type="text" id="pf-turma" maxlength="60" placeholder="Ex.: 3º ano B" style="width:100%">' +
         '<button class="btn" id="pf-gerar" style="margin-top:12px">Gerar convite</button>' +
         '<div id="pf-res"></div></section>' +
-      '<section class="card"><h2>Quer um painel da turma?</h2><p>Para acompanhar todos os alunos num só lugar, com correções do professor Thiago, fale com a gente.</p>' +
+      '<section class="card"><h2>Acompanhe a turma</h2><p>Os relatórios que os alunos mandarem viram uma tabela no <a href="#/painel">Painel do professor</a>. A direção vê todas as turmas no <a href="#/diretor">Painel da escola</a>.</p>' +
         '<a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/' + WHATS_PROF + "?text=" + encodeURIComponent("Oi, Thiago! Sou de uma escola/cursinho e quero o Redação 1000 com painel da turma.") + '">🏫 Quero para minha escola</a></section>' + AVISO;
     document.getElementById("pf-gerar").addEventListener("click", function () {
       var t = { escola: document.getElementById("pf-escola").value.trim(), nome: document.getElementById("pf-turma").value.trim() };
@@ -1171,6 +1194,119 @@
       document.getElementById("pf-copiar").addEventListener("click", function () { copiar(convite, "pf-texto", "Convite copiado ✓"); });
     });
   }
+  /* ---------- Painel do professor: cola os relatórios dos alunos ---------- */
+  function renderPainel() {
+    var alunos = Object.keys(state.painel).map(function (k) { return state.painel[k]; });
+    var turmas = alunos.map(function (a) { return a.e + " · " + a.t; }).filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort();
+    var filtro = sessionFiltro && turmas.indexOf(sessionFiltro) >= 0 ? sessionFiltro : (turmas[0] || "");
+    var lista = alunos.filter(function (a) { return a.e + " · " + a.t === filtro; }).sort(function (x, y) { return y.dn - x.dn || x.a.localeCompare(y.a); });
+    var ativos = lista.filter(function (a) { var n = diasSem(a.ul); return n !== null && n <= 7; }).length;
+    var media = lista.length ? Math.round(lista.reduce(function (s, a) { return s + a.dn; }, 0) / lista.length) : 0;
+    var sims = lista.reduce(function (s, a) { return s + a.si; }, 0);
+    app.innerHTML =
+      '<a class="back" href="#/progresso">‹ Progresso</a><p class="eyebrow">Para o professor</p><h1>Painel da turma</h1>' +
+      '<section class="card"><p>Cole aqui as mensagens de progresso que os alunos mandaram. Pode colar a conversa inteira do WhatsApp: o painel acha os códigos sozinho.</p>' +
+        '<textarea id="pn-txt" rows="4" style="margin-top:8px" aria-label="Mensagens dos alunos" placeholder="Cole as mensagens aqui"></textarea>' +
+        '<button class="btn" id="pn-add" style="margin-top:8px">Atualizar painel</button>' +
+        '<p class="empty" style="margin-top:6px">Os dados ficam só neste aparelho.</p></section>' +
+      (turmas.length ?
+        (turmas.length > 1 ? '<label for="pn-turma"><strong>Turma</strong></label><select id="pn-turma" style="width:100%;margin:6px 0 12px">' +
+          turmas.map(function (t) { return "<option" + (t === filtro ? " selected" : "") + ">" + esc(t) + "</option>"; }).join("") + "</select>" : "") +
+        '<section class="card"><h2>' + esc(filtro) + '</h2><div class="kpis">' +
+          '<div><strong id="kpi-alunos">' + lista.length + "</strong><span>alunos</span></div>" +
+          '<div><strong id="kpi-ativos">' + ativos + "</strong><span>ativos em 7 dias</span></div>" +
+          '<div><strong id="kpi-media">' + media + "</strong><span>devocionais em média</span></div>" +
+          '<div><strong id="kpi-sims">' + sims + "</strong><span>simulados</span></div></div></section>" +
+        '<section class="card"><h2>Alunos</h2><div class="tabela-wrap"><table class="tabela" id="pn-tabela"><thead><tr><th>Aluno</th><th>Dias</th><th>Seq.</th><th>Quiz</th><th>Sim.</th><th>Último acesso</th></tr></thead><tbody>' +
+          lista.map(function (a) {
+            var n = diasSem(a.ul), alerta = n === null || n > 7;
+            return "<tr" + (alerta ? ' class="alerta"' : "") + "><td>" + esc(a.a) + "</td><td>" + a.dn + "/30</td><td>" + a.st + "</td><td>" + (a.qt ? Math.round(a.qa / a.qt * 100) + "%" : "—") + "</td><td>" + a.si + "</td><td>" +
+              (n === null ? "nunca" : n === 0 ? "hoje" : "há " + n + " dia(s)") + (alerta ? " ⚠️" : "") + '<br><span class="muted">relatório de ' + esc(parseIso(a.d).toLocaleDateString("pt-BR")) + "</span></td></tr>";
+          }).join("") + "</tbody></table></div>" +
+          '<p class="empty" style="margin-top:8px">⚠️ = sem estudar há mais de 7 dias. Vale uma conversa.</p></section>' +
+        '<section class="card"><h2>Enviar à direção</h2><p class="empty">Gera um resumo desta turma para o painel da direção.</p>' +
+          '<button class="btn small" id="pn-resumo">📤 Gerar resumo da turma</button><textarea id="pn-texto" hidden readonly aria-label="Resumo"></textarea>' +
+          '<button class="btn small ghost" id="pn-limpar" style="margin-top:8px">Apagar esta turma do painel</button></section>'
+        : '<p class="empty">Nenhum aluno ainda. Peça aos alunos para tocar em “Mandar meu progresso ao professor” na aba Progresso.</p>') +
+      '<p><a href="#/diretor">Painel da direção ›</a> · <a href="#/professor">Criar convite de turma ›</a></p>' + AVISO;
+    document.getElementById("pn-add").addEventListener("click", function () {
+      var cods = lerCodigos(document.getElementById("pn-txt").value, "R1KA"), novos = 0;
+      cods.forEach(function (o) {
+        var a = { e: str(o.e, 80), t: str(o.t, 60), a: str(o.a, 60), d: data(o.d), dn: num(o.dn), st: num(o.st), bs: num(o.bs), qa: num(o.qa), qt: num(o.qt), si: num(o.si), en: num(o.en), pts: num(o.pts), ul: data(o.ul) };
+        if (!a.e || !a.t || !a.a || !a.d) return;
+        var k = (a.e + "|" + a.t + "|" + a.a).toLowerCase();
+        if (!state.painel[k] || state.painel[k].d <= a.d) { state.painel[k] = a; novos++; }
+        sessionFiltro = a.e + " · " + a.t;
+      });
+      save();
+      track("painel_professor", { relatorios: novos });
+      toast(novos ? novos + " relatório(s) lido(s)" : "Nenhum código de progresso encontrado");
+      renderPainel();
+    });
+    var sel = document.getElementById("pn-turma");
+    if (sel) sel.addEventListener("change", function () { sessionFiltro = sel.value; renderPainel(); });
+    if (!turmas.length) return;
+    document.getElementById("pn-resumo").addEventListener("click", function () {
+      var r = { e: lista[0].e, t: lista[0].t, d: today, n: lista.length, at: ativos, md: media, si: sims,
+        en: lista.reduce(function (s, a) { return s + a.en; }, 0), qp: (function () { var q = 0, t = 0; lista.forEach(function (a) { q += a.qa; t += a.qt; }); return t ? Math.round(q / t * 100) : 0; })() };
+      var txt = "📊 Resumo da turma " + r.t + " (" + r.e + ")\n" + r.n + " alunos · " + r.at + " ativos em 7 dias · média de " + r.md + " devocionais · " + r.si + " simulados\n\nCódigo do painel: R1KT." + b64(r);
+      track("painel_resumo");
+      if (navigator.share) navigator.share({ text: txt }).catch(function (e) { if (!e || e.name !== "AbortError") copiar(txt, "pn-texto", "Resumo copiado ✓"); });
+      else copiar(txt, "pn-texto", "Resumo copiado ✓ Envie à direção.");
+    });
+    document.getElementById("pn-limpar").addEventListener("click", function () {
+      Object.keys(state.painel).forEach(function (k) { var a = state.painel[k]; if (a.e + " · " + a.t === filtro) delete state.painel[k]; });
+      sessionFiltro = ""; save(); renderPainel(); toast("Turma apagada do painel");
+    });
+  }
+  var sessionFiltro = "";
+
+  /* ---------- Painel da direção: cola os resumos das turmas ---------- */
+  function renderDiretor() {
+    var turmas = Object.keys(state.direcao).map(function (k) { return state.direcao[k]; }).sort(function (x, y) { return (x.e + x.t).localeCompare(y.e + y.t); });
+    var tot = turmas.reduce(function (s, t) { return s + t.n; }, 0), at = turmas.reduce(function (s, t) { return s + t.at; }, 0);
+    var sims = turmas.reduce(function (s, t) { return s + t.si; }, 0), envs = turmas.reduce(function (s, t) { return s + t.en; }, 0);
+    app.innerHTML =
+      '<a class="back" href="#/progresso">‹ Progresso</a><p class="eyebrow">Para a direção</p><h1>Painel da escola</h1>' +
+      '<section class="card"><p>Cole aqui os resumos que os professores enviaram. Cada resumo atualiza a sua turma.</p>' +
+        '<textarea id="dr-txt" rows="4" style="margin-top:8px" aria-label="Resumos das turmas" placeholder="Cole os resumos aqui"></textarea>' +
+        '<button class="btn" id="dr-add" style="margin-top:8px">Atualizar painel</button>' +
+        '<p class="empty" style="margin-top:6px">Os dados ficam só neste aparelho.</p></section>' +
+      (turmas.length ?
+        '<section class="card"><h2>Visão geral</h2><div class="kpis">' +
+          '<div><strong id="kd-turmas">' + turmas.length + "</strong><span>turmas</span></div>" +
+          '<div><strong id="kd-alunos">' + tot + "</strong><span>alunos</span></div>" +
+          '<div><strong id="kd-ativos">' + (tot ? Math.round(at / tot * 100) : 0) + "%</strong><span>ativos em 7 dias</span></div>" +
+          '<div><strong id="kd-sims">' + sims + "</strong><span>simulados</span></div>" +
+          '<div><strong>' + envs + "</strong><span>redações enviadas</span></div></div></section>" +
+        '<section class="card"><h2>Turmas</h2><div class="tabela-wrap"><table class="tabela" id="dr-tabela"><thead><tr><th>Turma</th><th>Alunos</th><th>Ativos</th><th>Média dias</th><th>Quiz</th><th>Simulados</th><th>Resumo de</th></tr></thead><tbody>' +
+          turmas.map(function (t) {
+            var pa = t.n ? Math.round(t.at / t.n * 100) : 0;
+            return "<tr" + (pa < 50 ? ' class="alerta"' : "") + "><td>" + esc(t.t) + '<br><span class="muted">' + esc(t.e) + "</span></td><td>" + t.n + "</td><td>" + pa + "%" + (pa < 50 ? " ⚠️" : "") + "</td><td>" + t.md + "/30</td><td>" + t.qp + "%</td><td>" + t.si + "</td><td>" + esc(parseIso(t.d).toLocaleDateString("pt-BR")) + "</td></tr>";
+          }).join("") + "</tbody></table></div>" +
+          '<p class="empty" style="margin-top:8px">⚠️ = menos da metade da turma ativa na última semana.</p>' +
+          '<button class="btn small ghost" id="dr-limpar" style="margin-top:8px">Apagar painel</button></section>'
+        : '<p class="empty">Nenhuma turma ainda. O professor gera o resumo no Painel da turma.</p>') +
+      '<section class="card"><h2>Correções e plano Escola</h2><p>Para incluir correções comentadas e simulados aplicados, fale com o professor Thiago.</p>' +
+        '<a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/' + WHATS_PROF + "?text=" + encodeURIComponent("Oi, Thiago! Sou da direção de uma escola e quero conversar sobre o plano Escola do Redação 1000.") + '">🏫 Falar sobre o plano Escola</a></section>' + AVISO;
+    document.getElementById("dr-add").addEventListener("click", function () {
+      var n = 0;
+      lerCodigos(document.getElementById("dr-txt").value, "R1KT").forEach(function (o) {
+        var t = { e: str(o.e, 80), t: str(o.t, 60), d: data(o.d), n: num(o.n), at: num(o.at), md: num(o.md), si: num(o.si), en: num(o.en), qp: num(o.qp) };
+        if (!t.e || !t.t || !t.d) return;
+        t.at = Math.min(t.at, t.n);
+        var k = (t.e + "|" + t.t).toLowerCase();
+        if (!state.direcao[k] || state.direcao[k].d <= t.d) { state.direcao[k] = t; n++; }
+      });
+      save();
+      track("painel_direcao", { resumos: n });
+      toast(n ? n + " turma(s) atualizada(s)" : "Nenhum resumo de turma encontrado");
+      renderDiretor();
+    });
+    var lp = document.getElementById("dr-limpar");
+    if (lp) lp.addEventListener("click", function () { state.direcao = {}; save(); renderDiretor(); });
+  }
+
   function renderEntrarTurma(cod) {
     var t = lerTurma(cod);
     if (!t) { app.innerHTML = '<h1>Convite inválido</h1><p class="empty">Peça um novo link ao seu professor.</p><a class="btn" href="#/hoje">Ir para o app</a>'; return; }
@@ -1371,7 +1507,7 @@
             '<div class="row" style="margin-top:10px;flex-wrap:wrap"><button class="btn small" id="tm-relatorio">📋 Mandar meu progresso ao professor</button>' +
             '<button class="btn small ghost" id="tm-sair">Sair da turma</button></div><textarea id="tm-texto" hidden readonly aria-label="Relatório"></textarea>'
           : '<p class="empty">Seu professor pode criar uma turma e te mandar um link de convite.</p>') +
-        '<p style="margin-top:10px"><a href="#/professor">É professor? Crie uma turma ›</a></p>' +
+        '<p style="margin-top:10px"><a href="#/professor">É professor? Crie uma turma ›</a><br><a href="#/painel">Painel do professor ›</a> · <a href="#/diretor">Painel da direção ›</a></p>' +
       "</section>" +
 
       '<section class="card" id="lembrete"><h2>Lembrete diário</h2>' +
@@ -1529,6 +1665,8 @@
     else if (h === "#/treino") { tab = "treino"; renderTreino(); }
     else if ((m = h.match(/^#\/treino\/(\d+)$/))) { tab = "treino"; renderOficina(+m[1]); }
     else if (h === "#/premium") { tab = "progresso"; renderPremium(); }
+    else if (h === "#/painel") { tab = "progresso"; renderPainel(); }
+    else if (h === "#/diretor") { tab = "progresso"; renderDiretor(); }
     else if (h === "#/professor") { tab = "progresso"; renderProfessor(); }
     else if ((m = h.match(/^#\/turma\/([A-Za-z0-9_-]{4,400})$/))) { tab = "progresso"; renderEntrarTurma(m[1]); }
     else if (h === "#/correcao") { tab = "treino"; renderCorrecao(); }
