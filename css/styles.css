@@ -25,7 +25,7 @@
   --blob-2: rgba(56, 189, 248, .22);
   --blob-3: rgba(249, 115, 82, .16);
   --radius: 22px;
-  --shadow: 0 1px 2px rgba(22, 24, 39, .04), 0 10px 30px rgba(79, 70, 229, .08);
+  --shadow: 0 1px 2px rgba(22, 24, 39, .04), 0 10px 30px rgba(37, 99, 235, .08);
   --serif: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   color-scheme: light;
@@ -590,7 +590,7 @@ h1 { font-size: 30px; }
 .btn:not(.ghost):not(.danger):not(.insta) {
   background: linear-gradient(135deg, var(--primary), var(--primary-2));
   color: var(--primary-ink);
-  box-shadow: 0 6px 18px rgba(79, 70, 229, .28);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, .28);
 }
 .btn:active { transform: scale(.98); }
 .btn.ghost { background: var(--surface); }
@@ -615,7 +615,7 @@ textarea:focus, input:focus, select:focus { outline: 2px solid var(--primary); o
 .fab-prof { bottom: calc(92px + env(safe-area-inset-bottom)); }
 .prof-sheet { bottom: calc(146px + env(safe-area-inset-bottom)); background: var(--surface-solid); }
 @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
-.card.key { background: linear-gradient(140deg, var(--primary) 0%, var(--primary-2) 100%); border: 0; box-shadow: 0 14px 34px rgba(79, 70, 229, .30); }
+.card.key { background: linear-gradient(140deg, var(--primary) 0%, var(--primary-2) 100%); border: 0; box-shadow: 0 14px 34px rgba(37, 99, 235, .30); }
 .fab-prof { padding: 9px 13px; }
 .fab-prof .fab-txt { font-size: .8rem; }
 
@@ -670,13 +670,13 @@ body::before {
   background: linear-gradient(180deg, var(--glass-hi), transparent 45%), var(--surface);
   border: 1.5px solid var(--line);
   border-radius: 28px;
-  box-shadow: inset 0 1px 0 var(--glass-edge), inset 0 -1px 0 rgba(255, 255, 255, .12), 0 18px 40px rgba(20, 16, 70, .14);
+  box-shadow: inset 0 1px 0 var(--glass-edge), inset 0 -1px 0 rgba(255, 255, 255, .12), 0 18px 40px rgba(10, 30, 60, .14);
 }
 .topbar { background: linear-gradient(180deg, var(--glass-hi), transparent), var(--surface); border-bottom: 1px solid var(--line); }
 .tabbar {
   background: linear-gradient(180deg, var(--glass-hi), transparent 60%), var(--surface);
   border: 1.5px solid var(--line); border-radius: 28px;
-  box-shadow: inset 0 1px 0 var(--glass-edge), 0 16px 40px rgba(20, 16, 70, .22);
+  box-shadow: inset 0 1px 0 var(--glass-edge), 0 16px 40px rgba(10, 30, 60, .22);
 }
 .btn.ghost, .chip.outline, .streak, .kpis div, .badge {
   background: linear-gradient(180deg, var(--glass-hi), transparent), var(--surface);
@@ -684,12 +684,12 @@ body::before {
   box-shadow: inset 0 1px 0 var(--glass-edge);
 }
 .btn:not(.ghost):not(.danger):not(.insta) {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 10px 24px rgba(79, 70, 229, .35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 10px 24px rgba(37, 99, 235, .35);
 }
 .card.key {
-  background: linear-gradient(180deg, rgba(255, 255, 255, .28), transparent 45%), linear-gradient(140deg, rgba(91, 75, 255, .88), rgba(150, 70, 240, .85));
+  background: linear-gradient(180deg, rgba(255, 255, 255, .28), transparent 45%), linear-gradient(140deg, rgba(37, 99, 235, .90), rgba(13, 148, 136, .88));
   border: 1.5px solid rgba(255, 255, 255, .5);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7), 0 20px 44px rgba(79, 70, 229, .35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7), 0 20px 44px rgba(37, 99, 235, .35);
 }
 .prof-sheet { background: linear-gradient(180deg, var(--glass-hi), transparent 45%), color-mix(in srgb, var(--surface-solid) 70%, transparent); }
 textarea, input[type="text"], input[type="time"], input[type="date"], select { background: color-mix(in srgb, var(--surface-solid) 75%, transparent); }
@@ -697,8 +697,63 @@ textarea, input[type="text"], input[type="time"], input[type="date"], select { b
   background: linear-gradient(180deg, var(--glass-hi), transparent 50%), linear-gradient(135deg, rgba(255, 143, 115, .30), rgba(255, 95, 162, .22)), var(--surface);
   border: 1.5px solid var(--line);
   border-radius: 28px;
-  box-shadow: inset 0 1px 0 var(--glass-edge), 0 18px 40px rgba(20, 16, 70, .12);
+  box-shadow: inset 0 1px 0 var(--glass-edge), 0 18px 40px rgba(10, 30, 60, .12);
   -webkit-backdrop-filter: blur(26px) saturate(180%);
   backdrop-filter: blur(26px) saturate(180%);
 }
 .tema-btn { font: inherit; cursor: pointer; color: var(--ink); line-height: 1; }
+
+/* ---------- Paleta de engajamento: azul (calma e foco), verde-água (domínio e progresso),
+   tons quentes só para conquistas e chamadas; erro em laranja, sem vermelho ---------- */
+:root {
+  --primary: #1d4ed8;
+  --primary-2: #0f8b84;
+  --accent: #ea7a0c;
+  --accent-soft: #fff3e2;
+  --ok: #0f7a52;
+  --ok-soft: #dff5ea;
+  --bad: #b45309;
+  --bad-soft: #fff1dc;
+  --bg: #eaf2fb;
+  --blob-1: rgba(59, 130, 246, .45);
+  --blob-2: rgba(20, 184, 166, .40);
+  --blob-3: rgba(251, 191, 36, .32);
+  --blob-4: rgba(56, 189, 248, .35);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --primary: #6aa8ff;
+    --primary-2: #34d3c0;
+    --primary-ink: #08131f;
+    --accent: #fbb25a;
+    --accent-soft: #3a2a12;
+    --ok: #4ade9b;
+    --ok-soft: #0f3326;
+    --bad: #fdba74;
+    --bad-soft: #3a2410;
+    --bg: #07141f;
+    --blob-1: rgba(37, 99, 235, .60);
+    --blob-2: rgba(13, 148, 136, .55);
+    --blob-3: rgba(245, 158, 11, .28);
+    --blob-4: rgba(14, 165, 233, .40);
+  }
+}
+:root[data-theme="dark"] {
+  --primary: #6aa8ff;
+  --primary-2: #34d3c0;
+  --primary-ink: #08131f;
+  --accent: #fbb25a;
+  --accent-soft: #3a2a12;
+  --ok: #4ade9b;
+  --ok-soft: #0f3326;
+  --bad: #fdba74;
+  --bad-soft: #3a2410;
+  --bg: #07141f;
+  --blob-1: rgba(37, 99, 235, .60);
+  --blob-2: rgba(13, 148, 136, .55);
+  --blob-3: rgba(245, 158, 11, .28);
+  --blob-4: rgba(14, 165, 233, .40);
+}
+.brand-mark { background: linear-gradient(135deg, #f59e0b, #f97316); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.countdown { background: linear-gradient(180deg, var(--glass-hi), transparent 50%), linear-gradient(135deg, rgba(251, 191, 36, .28), rgba(249, 115, 22, .16)), var(--surface); }
+.badge.on { border-color: var(--accent); }

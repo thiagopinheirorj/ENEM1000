@@ -166,14 +166,14 @@ describe("V · Visual e acessibilidade", () => {
   it("V04 · tema escuro aplicado pela preferência do sistema e respeitando data-theme", async () => {
     const cor = (page, sel) => page.$eval(sel, (e) => getComputedStyle(e).backgroundColor);
     const claro = await env.open({ colorScheme: "light" });
-    assert.equal(await cor(claro.page, "body"), "rgb(233, 235, 255)");
+    assert.equal(await cor(claro.page, "body"), "rgb(234, 242, 251)");
     const escuro = await env.open({ colorScheme: "dark" });
-    assert.equal(await cor(escuro.page, "body"), "rgb(11, 16, 38)");
+    assert.equal(await cor(escuro.page, "body"), "rgb(7, 20, 31)");
     assert.equal(await escuro.page.$eval("body", (e) => getComputedStyle(e).color), "rgb(236, 238, 248)");
     await escuro.page.evaluate(() => document.documentElement.setAttribute("data-theme", "light"));
-    assert.equal(await cor(escuro.page, "body"), "rgb(233, 235, 255)");
+    assert.equal(await cor(escuro.page, "body"), "rgb(234, 242, 251)");
     await claro.page.evaluate(() => document.documentElement.setAttribute("data-theme", "dark"));
-    assert.equal(await cor(claro.page, "body"), "rgb(11, 16, 38)");
+    assert.equal(await cor(claro.page, "body"), "rgb(7, 20, 31)");
     // elementos com [hidden] continuam escondidos mesmo com display definido no CSS
     assert.ok(await escuro.page.isHidden("#foto-del"));
   });
@@ -244,11 +244,11 @@ describe("TM · Botão de tema", () => {
     assert.equal(await attr(), null);
     await page.click("#tema-btn");
     assert.equal(await attr(), "light");
-    assert.equal(await bg(), "rgb(233, 235, 255)");
+    assert.equal(await bg(), "rgb(234, 242, 251)");
     assert.match(await page.getAttribute("#tema-btn", "aria-label"), /^Tema claro/);
     await page.click("#tema-btn");
     assert.equal(await attr(), "dark");
-    assert.equal(await bg(), "rgb(11, 16, 38)");
+    assert.equal(await bg(), "rgb(7, 20, 31)");
     await page.reload();
     await page.waitForSelector("#tema-btn");
     assert.equal(await attr(), "dark");
