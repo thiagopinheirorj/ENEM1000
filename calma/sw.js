@@ -1,5 +1,5 @@
 /* Service worker do Calma: guarda os arquivos para uso offline. */
-var CACHE = "calma-v4";
+var CACHE = "calma-v5";
 var ASSETS = ["./", "index.html", "manifest.webmanifest", "icon.svg", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", function (e) {

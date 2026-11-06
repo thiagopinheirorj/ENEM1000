@@ -89,7 +89,7 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 <!-- HOJE -->
 <section class="view on" id="v-hoje">
   <div class="card" id="card-fim">
-    <p class="note" style="margin:0 0 4px">Fim do ano letivo</p>
+    <p class="note" style="margin:0 0 4px">Contagem até o fim do ano letivo</p>
     <p class="fim-n" id="fim-n" aria-live="polite"></p>
     <p class="note" id="fim-txt" style="margin:0 0 8px"></p>
     <div class="row">
@@ -359,23 +359,27 @@ grade();
 
 
 /* ---------- Contagem para o fim do ano letivo ---------- */
+/* Dias em que há presença na escola (aulas e formatura), do calendário. */
+const DIAS_ESCOLA = ["2026-11-06", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-13", "2026-11-16", "2026-11-17", "2026-11-18", "2026-11-20", "2026-11-23", "2026-11-24", "2026-11-25", "2026-11-27", "2026-11-30", "2026-12-01", "2026-12-02", "2026-12-04", "2026-12-07", "2026-12-08", "2026-12-09", "2026-12-10", "2026-12-11", "2026-12-14", "2026-12-15", "2026-12-16", "2026-12-18"];
 function mostraFim(){
   const n=$("fim-n"), t=$("fim-txt"), b=$("btn-fim");
   if(!S.fim){
-    n.textContent="Defina a data"; t.textContent="Informe o último dia do ano letivo para ver quantos dias faltam.";
-    b.textContent="Definir data";
-  } else {
-    const d=diasEntre(hoje(), S.fim);
-    if(d>1){
-      const sem=Math.floor(d/7), r=d%7;
-      n.textContent=`Faltam ${d} dias`;
-      t.textContent=(sem>0?`Cerca de ${sem} semana${sem>1?"s":""}${r?` e ${r} dia${r>1?"s":""}`:""}. `:"")+"O que depende de você: como usar cada um deles.";
-    } else if(d===1){ n.textContent="Falta 1 dia"; t.textContent="Amanhã é o último dia. Reserve um momento para agradecer pelo caminho."; }
-    else if(d===0){ n.textContent="Hoje é o último dia"; t.textContent="Respire. Você chegou até aqui."; }
-    else { n.textContent="O ano letivo terminou"; t.textContent="Defina a data do próximo ano quando quiser."; }
-    b.textContent="Alterar data";
-    if(!S.fimEscolhida) t.textContent += " (Data sugerida: último dia de aulas. Altere se precisar.)";
+    n.textContent="Defina a data"; t.textContent="Informe o último dia do ano letivo para ver quantos dias de escola faltam.";
+    b.textContent="Definir data"; return;
   }
+  const h0=hoje();
+  const faltam=DIAS_ESCOLA.filter(d=>d>=h0 && d<=S.fim);
+  const k=faltam.length, ate=S.fim.split("-").reverse().slice(0,2).join("/");
+  if(diasEntre(h0,S.fim)<0){ n.textContent="O ano letivo terminou"; t.textContent="Defina a data do próximo ano quando quiser."; }
+  else if(k===0){ n.textContent="Sem mais dias de escola"; t.textContent=`Nenhum dia de escola até ${ate}. Descanse e recarregue as energias.`; }
+  else if(k===1){ n.textContent = faltam[0]===h0 ? "Hoje é o último dia de escola" : "Falta 1 dia de escola";
+    t.textContent="Respire. Você chegou até aqui."; }
+  else {
+    n.textContent=`Faltam ${k} dias de escola`;
+    t.textContent=`Até ${ate}, contando só os dias em que você vai à escola${faltam[0]===h0?" (hoje incluído)":""}. O que depende de você: como usar cada um deles.`;
+  }
+  if(!S.fimEscolhida && k>1) t.textContent += " Data final sugerida: último dia de aulas.";
+  b.textContent="Alterar data";
 }
 $("btn-fim").addEventListener("click",()=>{
   const i=$("fim-data");
