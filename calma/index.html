@@ -56,6 +56,8 @@ nav button[aria-selected=true]{color:var(--accent)}
 .chip{display:flex;justify-content:space-between;gap:6px;align-items:center;padding:6px 8px;margin:4px 0;
   background:var(--bg);border:1px solid var(--line);border-radius:10px;font-size:.92rem}
 .chip button{padding:2px 8px;min-height:28px;font-size:.8rem}
+.fim-n{font-size:1.9rem;font-weight:700;margin:0 0 2px;line-height:1.2}
+input[type=date]{font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px}
 .timer{font-size:2.6rem;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;margin:6px 0}
 .breath{width:120px;height:120px;border-radius:50%;margin:14px auto;background:var(--accent);opacity:.25;
   transition:transform 4s ease-in-out,opacity 4s ease-in-out}
@@ -86,6 +88,16 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 
 <!-- HOJE -->
 <section class="view on" id="v-hoje">
+  <div class="card" id="card-fim">
+    <p class="note" style="margin:0 0 4px">Fim do ano letivo</p>
+    <p class="fim-n" id="fim-n" aria-live="polite"></p>
+    <p class="note" id="fim-txt" style="margin:0 0 8px"></p>
+    <div class="row">
+      <input type="date" id="fim-data" aria-label="Data do fim do ano letivo" hidden>
+      <button class="ghost small" id="btn-fim"></button>
+    </div>
+  </div>
+
   <div class="card">
     <span class="pill" id="dia-n"></span>
     <p class="quote" id="q-texto" style="margin-top:10px"></p>
@@ -274,7 +286,7 @@ const PRATICAS = [
 
 /* ---------- Armazenamento ---------- */
 const KEY = "calma.v1";
-const DEF = {inicio:null, dias:{}, pens:[], ctl:[]};
+const DEF = {inicio:null, fim:null, dias:{}, pens:[], ctl:[]};
 function load(){
   try{ const r = localStorage.getItem(KEY); return r ? Object.assign({}, DEF, JSON.parse(r)) : structuredClone(DEF); }
   catch(e){ return structuredClone(DEF); }
@@ -341,6 +353,36 @@ $("btn-concluir").addEventListener("click",()=>{
 });
 if(S.dias[h].feito) $("msg-hoje").textContent = "Dia concluído.";
 grade();
+
+
+/* ---------- Contagem para o fim do ano letivo ---------- */
+function mostraFim(){
+  const n=$("fim-n"), t=$("fim-txt"), b=$("btn-fim");
+  if(!S.fim){
+    n.textContent="Defina a data"; t.textContent="Informe o último dia do ano letivo para ver quantos dias faltam.";
+    b.textContent="Definir data";
+  } else {
+    const d=diasEntre(hoje(), S.fim);
+    if(d>1){
+      const sem=Math.floor(d/7), r=d%7;
+      n.textContent=`Faltam ${d} dias`;
+      t.textContent=(sem>0?`Cerca de ${sem} semana${sem>1?"s":""}${r?` e ${r} dia${r>1?"s":""}`:""}. `:"")+"O que depende de você: como usar cada um deles.";
+    } else if(d===1){ n.textContent="Falta 1 dia"; t.textContent="Amanhã é o último dia. Reserve um momento para agradecer pelo caminho."; }
+    else if(d===0){ n.textContent="Hoje é o último dia"; t.textContent="Respire. Você chegou até aqui."; }
+    else { n.textContent="O ano letivo terminou"; t.textContent="Defina a data do próximo ano quando quiser."; }
+    b.textContent="Alterar data";
+  }
+}
+$("btn-fim").addEventListener("click",()=>{
+  const i=$("fim-data");
+  if(i.hidden){ i.hidden=false; i.value=S.fim||""; i.focus(); $("btn-fim").textContent="Fechar"; }
+  else { i.hidden=true; mostraFim(); }
+});
+$("fim-data").addEventListener("change",e=>{
+  S.fim = /^\d{4}-\d{2}-\d{2}$/.test(e.target.value) ? e.target.value : null;
+  save(); e.target.hidden=true; mostraFim();
+});
+mostraFim();
 
 /* ---------- SOS: timer + respiração ---------- */
 let total = 20*60, resto = total, tick = null, bt = null;
