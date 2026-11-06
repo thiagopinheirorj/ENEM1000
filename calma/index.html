@@ -300,6 +300,9 @@ function diasEntre(a,b){ return Math.round((new Date(b+"T00:00:00")-new Date(a+"
 function esc(s){ return s.replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
 if(!S.inicio){ S.inicio = hoje(); save(); }
+/* Data sugerida: último dia de aula (18/12/2026), até a pessoa escolher outra. */
+const FIM_PADRAO = "2026-12-18";
+if(!S.fim && !S.fimEscolhida){ S.fim = FIM_PADRAO; save(); }
 
 /* ---------- Navegação ---------- */
 document.querySelectorAll("nav button").forEach(b=>{
@@ -371,6 +374,7 @@ function mostraFim(){
     else if(d===0){ n.textContent="Hoje é o último dia"; t.textContent="Respire. Você chegou até aqui."; }
     else { n.textContent="O ano letivo terminou"; t.textContent="Defina a data do próximo ano quando quiser."; }
     b.textContent="Alterar data";
+    if(!S.fimEscolhida) t.textContent += " (Data sugerida: último dia de aulas. Altere se precisar.)";
   }
 }
 $("btn-fim").addEventListener("click",()=>{
@@ -380,7 +384,7 @@ $("btn-fim").addEventListener("click",()=>{
 });
 $("fim-data").addEventListener("change",e=>{
   S.fim = /^\d{4}-\d{2}-\d{2}$/.test(e.target.value) ? e.target.value : null;
-  save(); e.target.hidden=true; mostraFim();
+  S.fimEscolhida = true; save(); e.target.hidden=true; mostraFim();
 });
 mostraFim();
 
