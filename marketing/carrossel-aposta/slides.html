@@ -4,31 +4,34 @@
 *{box-sizing:border-box;margin:0}
 body{background:#111;font-family:"PJS",system-ui,sans-serif}
 .s{width:1080px;height:1350px;position:relative;overflow:hidden;color:#fff;padding:90px 84px;display:flex;flex-direction:column;
- background:radial-gradient(circle at 12% 10%,#2563eb 0,transparent 40%),radial-gradient(circle at 90% 28%,#0ea5e9 0,transparent 36%),
- radial-gradient(circle at 22% 95%,#0d9488 0,transparent 42%),radial-gradient(circle at 88% 90%,#f59e0b 0,transparent 30%),#07141f}
-.glass{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.07));border:1.5px solid rgba(255,255,255,.45);
+ background:radial-gradient(ellipse 70% 55% at 8% 0%,rgba(37,99,235,.85) 0,transparent 70%),
+ radial-gradient(ellipse 60% 50% at 100% 100%,rgba(20,184,166,.55) 0,transparent 70%),
+ radial-gradient(ellipse 40% 30% at 95% 15%,rgba(56,189,248,.30) 0,transparent 70%),
+ linear-gradient(160deg,#0b1f4d 0%,#081833 55%,#06222b 100%)}
+.glass{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.06));border:1.5px solid rgba(255,255,255,.35);
  border-radius:44px;backdrop-filter:blur(28px) saturate(170%);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 30px 60px rgba(0,0,0,.25);padding:42px 48px}
 .glass:before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.3),transparent 40%);pointer-events:none}
 .pill{display:inline-block;align-self:flex-start;padding:12px 26px;border-radius:999px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.5);font-weight:700;font-size:26px;letter-spacing:.06em;text-transform:uppercase}
-.warm{background:rgba(245,158,11,.35);border-color:rgba(255,220,150,.8)}
+.warm{background:#fbbf24;border-color:#fde68a;color:#1a1300}
 h1{font-size:82px;line-height:1.03;font-weight:800;letter-spacing:-.02em}
 h2{font-size:58px;line-height:1.08;font-weight:800;letter-spacing:-.01em}
 p,li{font-size:33px;line-height:1.38}
 .sm{font-size:27px;opacity:.9}
-.k{font-size:24px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;font-weight:700}
+.k{font-size:24px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#7dd3fc}
 .gap{height:30px}
 .foot{position:absolute;left:84px;right:84px;bottom:56px;display:flex;justify-content:space-between;font-size:26px;font-weight:600;opacity:.9}
 .tag{display:inline;padding:3px 12px;border-radius:12px;font-weight:700;font-size:inherit;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.a{background:#2563eb}.b{background:#0d9488}.c{background:#0284c7}.d{background:#b45309}.e{background:#7c6a0a}
-.big{font-size:120px;font-weight:800;line-height:1;color:#fcd34d}
+.a{background:#2563eb}.b{background:#0f8f7e}.c{background:#0369a1}.e{background:#334e7a}.d{background:#fbbf24;color:#1a1300}
+.big{font-size:120px;font-weight:800;line-height:1;color:#fbbf24}
 .list p{margin:10px 0}
 </style></head><body>
 
 <section class="s" id="s1">
  <span class="pill warm">Redação ENEM 2026 · Aposta</span><div class="gap"></div>
- <div class="glass" style="margin-top:30px"><h1>A aposta do tema da redação</h1><div class="gap"></div><p>A prova é amanhã, 8/11. Esta é a nossa aposta e como se preparar para ela.</p></div>
+ <div class="glass" style="margin-top:30px"><h1>Se este tema cair amanhã, você vai estar <span style="color:#fbbf24">pronto?</span></h1><div class="gap"></div><p>A aposta da redação do ENEM 2026, com repertório, roteiro e proposta. A prova é dia 8/11.</p></div>
  <div class="glass" style="margin-top:36px"><p class="k">Tema apostado</p><p style="font-weight:800;font-size:44px;margin-top:10px;line-height:1.25">Desafios para a inclusão de pessoas neurodivergentes na sociedade brasileira</p></div>
- <p class="sm" style="margin-top:30px">É uma aposta, não uma garantia. Escreva sobre o tema que estiver na folha.</p>
+ <div style="margin-top:30px;display:flex;align-items:center;gap:18px;background:#fbbf24;color:#1a1300;border-radius:28px;padding:22px 30px"><span style="font-size:44px">🔖</span><p style="font-weight:800;font-size:31px;line-height:1.25">Salve este post e volte depois da prova: vamos conversar sobre ele.</p></div>
+ <p class="sm" style="margin-top:22px">É uma aposta, não uma garantia.</p>
  <div class="foot"><span>@thiagopinheirorj</span><span>arraste ›</span></div>
 </section>
 
@@ -104,7 +107,8 @@ p,li{font-size:33px;line-height:1.38}
 
 <section class="s" id="s10">
  <span class="pill warm">Boa prova!</span><div class="gap"></div>
- <div class="glass" style="margin-top:30px"><h2>Salve este post e revise hoje à noite</h2><div class="gap"></div><p>Durma bem, leve caneta preta de tubo transparente e leia a proposta com calma.</p></div>
+ <div class="glass" style="margin-top:30px"><h2>🔖 Salve este post e vamos conversar sobre ele depois</h2><div class="gap"></div><p>Revise hoje à noite. Depois da prova, volte aqui e conte nos comentários: o tema chegou perto da aposta?</p></div>
+ <p class="sm" style="margin-top:24px">Durma bem, leve caneta preta de tubo transparente e leia a proposta com calma.</p>
  <div class="glass" style="margin-top:32px"><p class="k">Aposta completa e repertórios</p><p style="font-weight:800;font-size:44px;margin-top:8px">App Redação 1000</p><p class="sm" style="margin-top:8px">Link na bio. Depois da prova, mande sua redação para correção comentada.</p></div>
  <div class="foot"><span>@thiagopinheirorj</span><span>10/10</span></div>
 </section>
