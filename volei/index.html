@@ -229,6 +229,11 @@ header.top p{margin:2px 0 0;color:var(--fg-dim);font-size:14px}
 .dock a svg{width:20px;height:20px}
 .dock a[aria-current="page"]{color:var(--on-accent);background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 6px 14px -6px var(--accent2)}
 
+.sync{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 14px;border-radius:18px;font-size:13px;color:var(--fg-dim)}
+.sync .st{flex:1;min-width:180px}
+.sync .grp{display:flex;gap:8px}
+.sd{width:10px;height:10px;border-radius:50%;background:var(--warn);flex:none}
+.sd.ok{background:var(--good)}.sd.offline{background:var(--bad)}
 /* sheet */
 .overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;background:rgba(8,16,40,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:16px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
 .sheet{width:100%;max-width:540px;max-height:92vh;overflow:auto;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));border-radius:28px 28px 0 0;display:flex;flex-direction:column;gap:14px;background:linear-gradient(140deg,var(--glass-hi),var(--glass) 50%,var(--glass-lo)),var(--bg-base)}
@@ -296,18 +301,49 @@ const TIERS=[
   {min:4,n:'Bronze',c:'--t-bro'},{min:0,n:'Iniciante',c:'--t-ini'}
 ];
 const TEAMS=[{n:'Laranja',c:'--team0'},{n:'Azul',c:'--team1'},{n:'Rosa',c:'--team2'},{n:'Verde',c:'--team3'}];
-const KEY='volei-professores-v2';
-
-const ROSTER=["Caco Gesing", "Camila Antunes", "Edmara", "Edson", "Fabiane Fucheter", "Felipe", "Gisele", "Giseli Eloá", "Jaqueline", "Je Medeiros", "Lisiane", "Marcos Sargento", "Kate", "Patrícia Buss", "Cinthia Savi", "Sinara", "Sirlene Spillere", "Jonas", "Victor", "Neide Honorato", "Carlos Della Giustina", "Dodó", "Luísa Feuser", "Jeferson Xavier", "Zqui"];
-const uid=()=>Math.random().toString(36).slice(2,9);
-function sampleState(){
-  return {players:ROSTER.map(name=>({id:uid(),name,pos:'Curinga',u:true,here:true,s:{atq:5,blq:5,saq:5,def:5,pas:5}})),teams:null,k:4,balPos:true};
+const SB_URL='https://dssqjpzshqkibdeeqahg.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzc3FqcHpzaHFraWJkZWVxYWhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMjYxODEsImV4cCI6MjEwOTgwMjE4MX0.AB4EkRlZcOnvFTyp8IvhGbK7XOKXRtgFh7WBPkyEY9I'; /* chave pública (anon): só lê; escrever exige a senha do grupo */
+const KEY='volei-prefs-v3',CACHE='volei-cache-v3',PW='volei-senha-v3';
+const H={apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json'};
+let S={players:[],teams:null,k:3,balPos:true};
+let ui={tab:'ranking',sel:null,copyText:null,sync:'carregando',at:null};
+let senha='';
+try{
+  const pr=JSON.parse(localStorage.getItem(KEY)||'null');
+  if(pr){S.teams=pr.teams||null;S.k=pr.k||3;S.balPos=pr.balPos!==false;}
+  const c=JSON.parse(localStorage.getItem(CACHE)||'null');if(Array.isArray(c))S.players=c;
+  senha=localStorage.getItem(PW)||'';
+}catch(e){}
+const canEdit=()=>!!senha;
+function save(){ try{localStorage.setItem(KEY,JSON.stringify({teams:S.teams,k:S.k,balPos:S.balPos}));}catch(e){} }
+const fromRow=r=>({id:r.id,name:r.nome,pos:r.posicao,here:r.vem_hoje,u:!r.avaliado,s:{atq:r.atq,blq:r.blq,saq:r.saq,def:r.def,pas:r.pas}});
+const sheetOpen=()=>!!document.getElementById('sheetHost').innerHTML;
+async function load(){
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/jogadores?select=*&order=nome.asc',{headers:H});
+    if(!r.ok)throw 0;
+    S.players=(await r.json()).map(fromRow);ui.sync='ok';ui.at=new Date();
+    try{localStorage.setItem(CACHE,JSON.stringify(S.players));}catch(e){}
+  }catch(e){ui.sync=ui.sync==='ok'||S.players.length?'offline':'offline';}
+  if(!sheetOpen())render();
 }
-let S;
-try{ S=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){ S=null; }
-if(!S||!Array.isArray(S.players)) S=sampleState();
-let ui={tab:'ranking',sel:null,copyText:null};
-function save(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} }
+async function rpc(fn,args,soft){
+  const r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(args)});
+  if(!r.ok){
+    let m='';try{m=(await r.json()).message||'';}catch(e){}
+    if(m.includes('senha_invalida')){
+      if(!soft){senha='';try{localStorage.removeItem(PW);}catch(e){}}
+      throw new Error('senha');
+    }
+    throw new Error(m||'erro');
+  }
+  const t=await r.text();return t?JSON.parse(t):null;
+}
+function fail(e){
+  if(e.message==='senha'){closeSheet();openAcct('A senha está incorreta ou foi trocada. Entre de novo.');}
+  else toast('Sem conexão. Tente de novo.');
+}
+function need(){if(canEdit())return true;openAcct();return false;}
 
 /* helpers */
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -405,6 +441,7 @@ function rankingView(){
       <button class="btn primary" data-a="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Novo jogador</button>
     </div></div>`;
   if(!R.length){
+    if(ui.sync==='carregando'){h+=`<div class="empty glass"><b>Carregando jogadores…</b></div>`;} else
     h+=`<div class="empty glass"><b>Nenhum jogador ainda</b><span>Adicione os professores e dê uma nota de 1 a 10 em cada fundamento.</span><button class="btn primary" data-a="add">Adicionar o primeiro</button></div>`;
   } else {
     h+=`<div class="list">`+R.map((p,i)=>{const t=tierOf(p.ov);
@@ -467,12 +504,19 @@ function teamsView(){
   return h;
 }
 
+function syncBar(){
+  const hh=ui.at?ui.at.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'';
+  const st=ui.sync==='ok'?'Compartilhado com todos · atualizado às '+hh:ui.sync==='offline'?'Sem conexão · mostrando os últimos dados':'Carregando…';
+  return `<div class="sync glass"><span class="sd ${ui.sync}"></span><span class="st">${st}</span>
+    <span class="grp"><button class="btn sm" data-a="refresh">Atualizar</button>
+    <button class="btn sm ${canEdit()?'':'primary'}" data-a="acct">${canEdit()?'Edição liberada':'Entrar para editar'}</button></span></div>`;
+}
 function render(){
   document.getElementById('tab-ranking').toggleAttribute('aria-current',ui.tab==='ranking');
   document.getElementById('tab-times').toggleAttribute('aria-current',ui.tab==='times');
   ['ranking','times'].forEach(t=>{const a=document.getElementById('tab-'+t);if(ui.tab===t)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   if(ui.tab==='times') ensureTeams();
-  document.getElementById('app').innerHTML=`<div style="display:flex;flex-direction:column;gap:16px">${ui.tab==='ranking'?rankingView():teamsView()}</div>`;
+  document.getElementById('app').innerHTML=`<div style="display:flex;flex-direction:column;gap:16px">${syncBar()}${ui.tab==='ranking'?rankingView():teamsView()}</div>`;
 }
 
 /* player sheet */
@@ -481,18 +525,19 @@ function openSheet(id){
   const p=id?byId(id):null;
   draft=p?{id:p.id,name:p.name,pos:p.pos,s:{...p.s},ex:p.ex}:{id:null,name:'',pos:'Ponteiro',s:{atq:5,blq:5,saq:5,def:5,pas:5}};
   draft.confirmDel=false;
+  const ro=!canEdit(),dis=ro?'disabled':'';
   document.getElementById('sheetHost').innerHTML=`<div class="overlay" id="ov" data-a="overlay"><form class="sheet glass" id="sheetForm" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" autocomplete="off">
     <h2 id="sheetTitle">${p?'Editar jogador':'Novo jogador'}</h2>
     <div class="two">
-      <div class="field"><label class="lbl" for="f-name">Nome</label><input class="input" id="f-name" value="${p?esc(p.name):''}" maxlength="30" placeholder="Ex.: Marcos"></div>
-      <div class="field"><label class="lbl" for="f-pos">Posição</label><select class="input" id="f-pos">${POS.map(x=>`<option ${x===draft.pos?'selected':''}>${x}</option>`).join('')}</select></div>
+      <div class="field"><label class="lbl" for="f-name">Nome</label><input class="input" id="f-name" value="${p?esc(p.name):''}" maxlength="30" placeholder="Ex.: Marcos" ${dis}></div>
+      <div class="field"><label class="lbl" for="f-pos">Posição</label><select class="input" id="f-pos" ${dis}>${POS.map(x=>`<option ${x===draft.pos?'selected':''}>${x}</option>`).join('')}</select></div>
     </div>
     <div class="prev"><div id="pv-radar"></div><div class="res" id="pv-res"></div></div>
     <div>${SK.map(s=>`<div class="slider" style="margin-bottom:12px"><label for="s-${s.k}">${s.n}<small>${s.h}</small></label>
-      <input type="range" id="s-${s.k}" min="1" max="10" step="1" value="${draft.s[s.k]}" data-k="${s.k}"><output id="o-${s.k}" class="num">${draft.s[s.k]}</output></div>`).join('')}</div>
+      <input type="range" id="s-${s.k}" min="1" max="10" step="1" value="${draft.s[s.k]}" data-k="${s.k}" ${dis}><output id="o-${s.k}" class="num">${draft.s[s.k]}</output></div>`).join('')}</div>
     <div class="err" id="f-err"></div>
-    <div class="acts"><div>${p?`<button type="button" class="btn danger" data-a="del" id="delBtn">Excluir</button>`:''}</div>
-      <div class="r"><button type="button" class="btn" data-a="sheetClose">Cancelar</button><button type="submit" class="btn primary">Salvar</button></div></div>
+    <div class="acts"><div>${p&&!ro?`<button type="button" class="btn danger" data-a="del" id="delBtn">Excluir</button>`:''}</div>
+      <div class="r"><button type="button" class="btn" data-a="sheetClose">${ro?'Fechar':'Cancelar'}</button>${ro?'<button type="button" class="btn primary" data-a="acct">Entrar para editar</button>':'<button type="submit" class="btn primary">Salvar</button>'}</div></div>
   </form></div>`;
   updatePreview();
   document.querySelectorAll('#sheetForm input[type=range]').forEach(r=>r.style.setProperty('--p',((r.value-1)/9*100)+'%'));
@@ -504,13 +549,57 @@ function updatePreview(){
   document.getElementById('pv-res').innerHTML=`<span class="lbl">Nota geral</span><span class="ov num">${fmt(ov)}</span><span class="chip" style="--tc:var(${t.c})">${t.n}</span>`;
 }
 function closeSheet(){document.getElementById('sheetHost').innerHTML='';draft=null;}
-function saveSheet(){
+async function saveSheet(){
   const name=document.getElementById('f-name').value.trim();
   if(!name){document.getElementById('f-err').textContent='Digite o nome do jogador.';document.getElementById('f-name').focus();return;}
-  draft.name=name;draft.pos=document.getElementById('f-pos').value;
-  if(draft.id){const p=byId(draft.id);Object.assign(p,{name:draft.name,pos:draft.pos,s:{...draft.s},u:false});}
-  else S.players.push({id:uid(),name:draft.name,pos:draft.pos,s:{...draft.s},here:true});
-  S.teams=null;save();closeSheet();render();toast('Jogador salvo');
+  const pos=document.getElementById('f-pos').value,b=document.querySelector('#sheetForm button[type=submit]');
+  b.disabled=true;
+  try{
+    await rpc('salvar_jogador',{p_senha:senha,p_id:draft.id||null,p_nome:name,p_posicao:pos,
+      p_atq:draft.s.atq,p_blq:draft.s.blq,p_saq:draft.s.saq,p_def:draft.s.def,p_pas:draft.s.pas});
+    closeSheet();await load();toast('Salvo para todos os professores');
+  }catch(e){b.disabled=false;fail(e);}
+}
+
+/* acesso */
+function openAcct(msg){
+  const on=canEdit();
+  document.getElementById('sheetHost').innerHTML=`<div class="overlay" data-a="overlay"><form class="sheet glass" id="acctForm" autocomplete="off" role="dialog" aria-modal="true">
+    <h2>${on?'Edição liberada':'Entrar para editar'}</h2>
+    ${on?`<p class="hint">Este aparelho pode alterar jogadores. As mudanças aparecem para todos os professores.</p>
+      <div class="two"><div class="field"><label class="lbl" for="a-old">Senha atual</label><input class="input" id="a-old" type="password" autocomplete="current-password"></div>
+      <div class="field"><label class="lbl" for="a-new">Nova senha (mín. 6)</label><input class="input" id="a-new" type="password" autocomplete="new-password"></div></div>
+      <div class="err" id="a-err"></div>
+      <div class="acts"><button type="button" class="btn danger" data-a="logout">Sair deste aparelho</button>
+      <div class="r"><button type="button" class="btn" data-a="sheetClose">Fechar</button><button type="submit" class="btn primary">Trocar senha</button></div></div>`
+    :`<p class="hint">Todos podem ver o ranking e sortear os times. Para alterar jogadores, digite a senha do grupo.</p>
+      <div class="field"><label class="lbl" for="a-pw">Senha do grupo</label><input class="input" id="a-pw" type="password" autocomplete="current-password"></div>
+      <div class="err" id="a-err">${esc(msg||'')}</div>
+      <div class="acts"><span></span><div class="r"><button type="button" class="btn" data-a="sheetClose">Cancelar</button><button type="submit" class="btn primary">Entrar</button></div></div>`}
+  </form></div>`;
+  setTimeout(()=>{const f=document.getElementById('a-pw')||document.getElementById('a-old');if(f)f.focus();},30);
+}
+async function submitAcct(){
+  const err=document.getElementById('a-err'),b=document.querySelector('#acctForm button[type=submit]');
+  b.disabled=true;err.textContent='';
+  try{
+    if(canEdit()){
+      const o=document.getElementById('a-old').value,n=document.getElementById('a-new').value;
+      if(n.length<6){err.textContent='A nova senha precisa de pelo menos 6 caracteres.';b.disabled=false;return;}
+      await rpc('trocar_senha',{p_atual:o,p_nova:n},true);
+      senha=n;try{localStorage.setItem(PW,n);}catch(e){}
+      closeSheet();render();toast('Senha trocada. Avise os outros professores.');
+    }else{
+      const p=document.getElementById('a-pw').value;
+      const ok=await rpc('verificar_senha',{p_senha:p},true);
+      if(!ok){err.textContent='Senha incorreta.';b.disabled=false;return;}
+      senha=p;try{localStorage.setItem(PW,p);}catch(e){}
+      closeSheet();render();toast('Edição liberada neste aparelho');
+    }
+  }catch(e){
+    b.disabled=false;
+    err.textContent=e.message==='senha'?'Senha atual incorreta.':'Sem conexão. Tente de novo.';
+  }
 }
 
 /* misc */
@@ -534,22 +623,33 @@ document.addEventListener('input',e=>{
     e.target.style.setProperty('--p',((v-1)/9*100)+'%');updatePreview();
   }
 });
-document.addEventListener('submit',e=>{if(e.target.id==='sheetForm'){e.preventDefault();saveSheet();}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&draft)closeSheet();});
+document.addEventListener('submit',e=>{if(e.target.id==='sheetForm'){e.preventDefault();saveSheet();}else if(e.target.id==='acctForm'){e.preventDefault();submitAcct();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sheetOpen())closeSheet();});
 document.addEventListener('click',e=>{
   const el=e.target.closest('[data-a]');if(!el)return;
   const a=el.dataset.a,id=el.dataset.id;
   if(a==='overlay'){if(e.target===el)closeSheet();return;}
   if(a==='edit')openSheet(id);
-  else if(a==='add')openSheet(null);
+  else if(a==='add'){if(need())openSheet(null);}
+  else if(a==='acct')openAcct();
+  else if(a==='refresh'){ui.sync='carregando';render();load();}
+  else if(a==='logout'){senha='';try{localStorage.removeItem(PW);}catch(e){}closeSheet();render();toast('Este aparelho voltou a ser só leitura');}
   else if(a==='sheetClose')closeSheet();
   else if(a==='del'){
     if(!draft.confirmDel){draft.confirmDel=true;el.textContent='Confirmar exclusão';return;}
-    S.players=S.players.filter(p=>p.id!==draft.id);S.teams=null;save();closeSheet();render();toast('Jogador excluído');
+    const did=draft.id;
+    rpc('excluir_jogador',{p_senha:senha,p_id:did}).then(()=>{closeSheet();return load();}).then(()=>toast('Jogador excluído')).catch(fail);
   }
-  else if(a==='toggle'){const p=byId(id);p.here=!p.here;S.teams=null;save();render();}
-  else if(a==='all'||a==='none'){S.players.forEach(p=>p.here=a==='all');S.teams=null;S.k=0;save();render();}
-  else if(a==='clearEx'){S.players=S.players.filter(p=>!p.ex);S.teams=null;save();render();}
+  else if(a==='toggle'){
+    if(!need())return;
+    const p=byId(id);p.here=!p.here;render();
+    rpc('definir_presenca',{p_senha:senha,p_ids:[id],p_vem:p.here}).catch(e=>{fail(e);load();});
+  }
+  else if(a==='all'||a==='none'){
+    if(!need())return;
+    S.players.forEach(p=>p.here=a==='all');render();
+    rpc('definir_presenca',{p_senha:senha,p_ids:null,p_vem:a==='all'}).catch(e=>{fail(e);load();});
+  }
   else if(a==='kminus'||a==='kplus'){S.k+=a==='kplus'?1:-1;S.teams=null;ui.sel=null;ui.copyText=null;save();render();}
   else if(a==='balpos'){S.balPos=!S.balPos;S.teams=null;save();render();}
   else if(a==='gen'){S.teams=null;ui.sel=null;ui.copyText=null;render();toast('Times sorteados');}
@@ -575,6 +675,9 @@ document.addEventListener('click',e=>{
 function route(){ui.tab=location.hash==='#times'?'times':'ranking';ui.sel=null;render();window.scrollTo(0,0);}
 window.addEventListener('hashchange',route);
 route();
+load();
+setInterval(()=>{if(!document.hidden)load();},20000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)load();});
 </script>
 
 </body>
