@@ -324,6 +324,17 @@ async function load(){
     if(!r.ok)throw 0;
     S.players=(await r.json()).map(fromRow);ui.sync='ok';ui.at=new Date();
     try{localStorage.setItem(CACHE,JSON.stringify(S.players));}catch(e){}
+    try{
+      const sr=await fetch(SB_URL+'/rest/v1/sorteio?select=*&id=eq.1',{headers:H});
+      const row=sr.ok?(await sr.json())[0]:null;
+      if(row&&!saving){
+        const has=Array.isArray(row.times)&&row.times.length>0;
+        S.teams=has?row.times:null;S.balPos=row.bal_pos;S.sorteioAt=has?new Date(row.atualizado_em):null;
+        if(has)S.k=S.teams.length;
+        if(ui.sel&&!(S.teams||[]).flat().includes(ui.sel.id))ui.sel=null;
+        save();
+      }
+    }catch(e){}
   }catch(e){ui.sync=ui.sync==='ok'||S.players.length?'offline':'offline';}
   if(!sheetOpen())render();
 }
@@ -342,6 +353,20 @@ async function rpc(fn,args,soft){
 function fail(e){
   if(e.message==='senha'){closeSheet();openAcct('A senha está incorreta ou foi trocada. Entre de novo.');}
   else toast('Sem conexão. Tente de novo.');
+}
+let saving=0;
+function saveTeams(){
+  saving++;
+  rpc('salvar_sorteio',{p_senha:senha,p_times:S.teams,p_bal:S.balPos})
+    .then(()=>{ui.at=new Date();toast('Sorteio salvo para todos');})
+    .catch(fail).finally(()=>{saving--;});
+}
+function drawTeams(){
+  const pres=present();
+  if(pres.length<4){toast('Confirme pelo menos 4 jogadores.');return;}
+  const [lo,hi]=kBounds();S.k=Math.min(hi,Math.max(lo,S.k||autoK()));
+  S.teams=generate(pres,S.k,S.balPos);S.sorteioAt=new Date();ui.sel=null;ui.copyText=null;
+  save();render();saveTeams();
 }
 function need(){if(canEdit())return true;openAcct();return false;}
 
@@ -403,14 +428,6 @@ function generate(players,k,balPos){
 }
 function kBounds(){const n=present().length;return [2,Math.max(2,Math.min(4,Math.floor(n/2)))];}
 function autoK(){const n=present().length;return Math.max(2,Math.min(4,Math.round(n/6)));}
-function ensureTeams(){
-  const pres=present();
-  if(pres.length<4){S.teams=null;return;}
-  const [lo,hi]=kBounds();S.k=Math.min(hi,Math.max(lo,S.k||autoK()));
-  const ids=new Set(pres.map(p=>p.id));
-  const ok=S.teams&&S.teams.length===S.k&&S.teams.flat().length===ids.size&&S.teams.flat().every(id=>ids.has(id));
-  if(!ok){S.teams=generate(pres,S.k,S.balPos);save();}
-}
 
 /* views */
 function rankingView(){
@@ -468,15 +485,17 @@ function teamsView(){
     <div><div class="lbl">Times</div><div class="stepper"><button data-a="kminus" aria-label="Menos um time" ${S.k<=lo?'disabled':''}>−</button><b class="num">${S.k}</b><button data-a="kplus" aria-label="Mais um time" ${S.k>=hi?'disabled':''}>+</button></div></div>
     <label class="togrow"><button class="switch" data-a="balpos" aria-pressed="${S.balPos}" id="balpos"></button><span>Equilibrar posições</span></label>
     <div class="grp" style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn primary" data-a="gen" ${pres.length<4?'disabled':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>Sortear de novo</button>
+      <button class="btn primary" data-a="gen" ${pres.length<4?'disabled':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>${S.teams?'Sortear de novo':'Sortear times'}</button>
       <button class="btn" data-a="copy" ${S.teams?'':'disabled'}>Copiar para WhatsApp</button>
     </div></div>
     ${ui.copyText?`<textarea class="copybox" id="copybox" readonly>${esc(ui.copyText)}</textarea>`:''}
   </div>`;
-  if(pres.length<4||!S.teams){
-    return h+`<div class="empty glass"><b>Confirme pelo menos 4 jogadores</b><span>Na aba Ranking, ligue o botão dos professores que vão jogar hoje.</span><a class="btn primary" href="#ranking" style="text-decoration:none">Ir para o Ranking</a></div>`;
+  if(!S.teams){
+    return h+`<div class="empty glass"><b>Ainda não há sorteio</b><span>${pres.length<4?'Confirme pelo menos 4 jogadores na aba Ranking e depois sorteie.':'Toque em Sortear times. O resultado fica salvo e todos os professores veem.'}</span>${pres.length<4?'<a class="btn primary" href="#ranking" style="text-decoration:none">Ir para o Ranking</a>':'<button class="btn primary" data-a="gen">Sortear times</button>'}</div>`;
   }
-  const teams=S.teams.map(t=>t.map(id=>{const p=byId(id);return {...p,ov:overall(p)};}).sort((a,b)=>b.ov-a.ov));
+  const teams=S.teams.map(t=>t.map(id=>byId(id)).filter(Boolean).map(p=>({...p,ov:overall(p)})).sort((a,b)=>b.ov-a.ov));
+  const savedIds=S.teams.flat().filter(id=>byId(id)).sort().join(),nowIds=pres.map(p=>p.id).sort().join();
+  if(savedIds!==nowIds) h+=`<div class="notice glass"><span><b>A lista de presentes mudou depois do sorteio.</b> Sorteie de novo para incluir as mudanças.</span><button class="btn sm primary" data-a="gen">Sortear de novo</button></div>`;
   const means=teams.map(t=>mean(t.map(p=>p.ov)));
   const diff=Math.max(...means)-Math.min(...means);
   const pct=Math.max(0,Math.min(100,Math.round(100*(1-diff/1.5))));
@@ -493,7 +512,7 @@ function teamsView(){
     <div style="display:flex;flex-direction:column;gap:10px;grid-column:1/-1">
       ${teams.map((t,i)=>`<div class="sbar"><span>${TEAMS[i].n}</span><span class="bar" style="--tc:var(${TEAMS[i].c});height:12px"><i style="width:${means[i]*10}%"></i></span><span class="num">${fmt(means[i])}</span></div>`).join('')}
     </div></div></div>
-    <p class="hint" style="margin:0">Toque em um jogador e depois em outro de um time diferente para trocar os dois. O equilíbrio se atualiza na hora.</p>
+    <p class="hint" style="margin:0">${S.sorteioAt?'Sorteio compartilhado, feito às '+S.sorteioAt.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'. ':''}${canEdit()?'Toque em um jogador e depois em outro de um time diferente para trocar os dois.':'Para sortear ou trocar jogadores, entre com a senha do grupo.'}</p>
     <div class="teams">`+teams.map((t,ti)=>`<section class="team glass" style="--c:var(${TEAMS[ti].c})">
       <div class="hd"><h3><i class="dot"></i>Time ${TEAMS[ti].n}</h3><div class="avg num">${fmt(means[ti])}<small>${t.length} jogadores</small></div></div>
       <div class="mem">`+t.map((p,pi)=>{const tr=tierOf(p.ov);const sel=ui.sel&&ui.sel.id===p.id;
@@ -515,7 +534,6 @@ function render(){
   document.getElementById('tab-ranking').toggleAttribute('aria-current',ui.tab==='ranking');
   document.getElementById('tab-times').toggleAttribute('aria-current',ui.tab==='times');
   ['ranking','times'].forEach(t=>{const a=document.getElementById('tab-'+t);if(ui.tab===t)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
-  if(ui.tab==='times') ensureTeams();
   document.getElementById('app').innerHTML=`<div style="display:flex;flex-direction:column;gap:16px">${syncBar()}${ui.tab==='ranking'?rankingView():teamsView()}</div>`;
 }
 
@@ -608,7 +626,7 @@ function toast(m){const e=document.getElementById('toast');e.textContent=m;e.cla
 function teamText(){
   const lines=['🏐 Times de hoje',''];
   S.teams.forEach((t,i)=>{
-    const ps=t.map(id=>byId(id));
+    const ps=t.map(id=>byId(id)).filter(Boolean);
     lines.push(`Time ${TEAMS[i].n} (média ${fmt(mean(ps.map(overall)))})`);
     ps.sort((a,b)=>overall(b)-overall(a)).forEach(p=>lines.push(`• ${p.name} (${p.pos})`));
     lines.push('');
@@ -650,15 +668,16 @@ document.addEventListener('click',e=>{
     S.players.forEach(p=>p.here=a==='all');render();
     rpc('definir_presenca',{p_senha:senha,p_ids:null,p_vem:a==='all'}).catch(e=>{fail(e);load();});
   }
-  else if(a==='kminus'||a==='kplus'){S.k+=a==='kplus'?1:-1;S.teams=null;ui.sel=null;ui.copyText=null;save();render();}
-  else if(a==='balpos'){S.balPos=!S.balPos;S.teams=null;save();render();}
-  else if(a==='gen'){S.teams=null;ui.sel=null;ui.copyText=null;render();toast('Times sorteados');}
+  else if(a==='kminus'||a==='kplus'){if(!need())return;S.k+=a==='kplus'?1:-1;drawTeams();}
+  else if(a==='balpos'){if(!need())return;S.balPos=!S.balPos;if(S.teams)drawTeams();else{save();render();}}
+  else if(a==='gen'){if(!need())return;drawTeams();}
   else if(a==='copy'){
     const txt=teamText();
     const fb=()=>{ui.copyText=txt;render();const b=document.getElementById('copybox');if(b)b.select();};
     try{navigator.clipboard.writeText(txt).then(()=>toast('Times copiados'),fb);}catch(err){fb();}
   }
   else if(a==='pick'){
+    if(!need())return;
     const t=+el.dataset.t;
     if(!ui.sel){ui.sel={id,t};}
     else if(ui.sel.id===id){ui.sel=null;}
@@ -667,7 +686,7 @@ document.addEventListener('click',e=>{
       const A=S.teams[ui.sel.t],B=S.teams[t];
       const ia=A.indexOf(ui.sel.id),ib=B.indexOf(id);
       const n1=byId(ui.sel.id).name,n2=byId(id).name;
-      A[ia]=id;B[ib]=ui.sel.id;ui.sel=null;ui.copyText=null;save();toast(`${n1} ⇄ ${n2}`);
+      A[ia]=id;B[ib]=ui.sel.id;ui.sel=null;ui.copyText=null;S.sorteioAt=new Date();save();saveTeams();toast(`${n1} ⇄ ${n2}`);
     }
     render();
   }

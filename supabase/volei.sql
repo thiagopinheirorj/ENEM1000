@@ -88,3 +88,23 @@ revoke execute on function public.senha_ok(text) from public, anon, authenticate
 insert into public.jogadores (nome)
 select n from unnest(array['Caco Gesing','Camila Antunes','Edmara','Edson','Fabiane Fucheter','Felipe','Gisele','Giseli Eloá','Jaqueline','Je Medeiros','Lisiane','Marcos Sargento','Kate','Patrícia Buss','Cinthia Savi','Sinara','Sirlene Spillere','Jonas','Victor','Neide Honorato','Carlos Della Giustina','Dodó','Luísa Feuser','Jeferson Xavier','Zqui']) n
 where not exists (select 1 from public.jogadores);
+
+-- Sorteio compartilhado: uma linha com os times (listas de ids de jogadores).
+create table if not exists public.sorteio (
+  id int primary key check (id = 1),
+  times jsonb not null default '[]' check (jsonb_typeof(times) = 'array' and pg_column_size(times) < 20000),
+  bal_pos boolean not null default true,
+  atualizado_em timestamptz not null default now()
+);
+alter table public.sorteio enable row level security;
+create policy "todos leem sorteio" on public.sorteio for select to anon, authenticated using (true);
+revoke insert, update, delete on public.sorteio from anon, authenticated;
+insert into public.sorteio (id) values (1) on conflict do nothing;
+
+create or replace function public.salvar_sorteio(p_senha text, p_times jsonb, p_bal boolean) returns void
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public.senha_ok(p_senha) then raise exception 'senha_invalida'; end if;
+  update public.sorteio set times = coalesce(p_times,'[]'::jsonb), bal_pos = coalesce(p_bal,true), atualizado_em = now() where id = 1;
+end $$;
+grant execute on function public.salvar_sorteio(text,jsonb,boolean) to anon, authenticated;
