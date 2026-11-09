@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vôlei dos Professores</title>
 <meta name="description" content="Avalie cada jogador, veja o ranking e sorteie times equilibrados para o vôlei.">
-<meta name="theme-color" content="#ff8a3d">
+<meta name="theme-color" content="#2b6fee">
 <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,16 +17,16 @@
   --f-display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
   --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
 
-  --bg-base:#cfe8ff;
-  --bg-grad:linear-gradient(160deg,#d9efff 0%,#ffe9cf 55%,#ffd6e0 100%);
-  --blob-sun:#ffb23e; --blob-coral:#ff6b8b; --blob-sea:#2fc4f2; --blob-lime:#9be15d;
+  --bg-base:#d3e6ff;
+  --bg-grad:linear-gradient(160deg,#e6f2ff 0%,#cfe2ff 55%,#c4d6ff 100%);
+  --blob-sun:#3b82f6; --blob-coral:#6366f1; --blob-sea:#22b8e6; --blob-lime:#7dd3fc;
   --blob-o:.75;
-  --fg:#0f2142; --fg-dim:#46587a; --fg-faint:#6e7f9d;
+  --fg:#0b1f44; --fg-dim:#3b5280; --fg-faint:#62779f;
   --glass:rgba(255,255,255,.34); --glass-hi:rgba(255,255,255,.55); --glass-lo:rgba(255,255,255,.18);
   --glass-border:rgba(255,255,255,.65); --spec:rgba(255,255,255,.9); --rim:.9;
   --glass-shadow:rgba(31,60,120,.22);
   --track:rgba(15,33,66,.12);
-  --accent:#ff8a3d; --accent2:#ff5d7d; --on-accent:#2a1020;
+  --accent:#2b6fee; --accent2:#1b4fd0; --on-accent:#ffffff;
   --good:#12915a; --warn:#b86a00; --bad:#c2334d;
   --t-dia:#7fe3ff; --t-our:#ffc83d; --t-pra:#d3dbe8; --t-bro:#e59a64; --t-ini:#a9b6cc; --on-tier:#14213d;
   --team0:#ff8a1f; --team1:#1b8fff; --team2:#ff4f8b; --team3:#2fb85a;
@@ -34,10 +34,11 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg-base:#081230;
-    --bg-grad:linear-gradient(160deg,#071029 0%,#10163f 55%,#2a1138 100%);
+    --bg-base:#061330;
+    --bg-grad:linear-gradient(160deg,#040c22 0%,#0a1f50 55%,#0e3278 100%);
     --blob-o:.5;
-    --fg:#eef4ff; --fg-dim:#b4c3e2; --fg-faint:#8a9bc0;
+    --accent:#6aa8ff; --accent2:#3b82f6; --on-accent:#04122e;
+    --fg:#eaf2ff; --fg-dim:#b0c6ee; --fg-faint:#869fcd;
     --glass:rgba(255,255,255,.09); --glass-hi:rgba(255,255,255,.17); --glass-lo:rgba(255,255,255,.04);
     --glass-border:rgba(255,255,255,.2); --spec:rgba(255,255,255,.35); --rim:.7;
     --glass-shadow:rgba(0,0,0,.5);
@@ -48,10 +49,11 @@
   }
 }
 :root[data-theme="dark"]{
-  --bg-base:#081230;
-  --bg-grad:linear-gradient(160deg,#071029 0%,#10163f 55%,#2a1138 100%);
+  --bg-base:#061330;
+  --bg-grad:linear-gradient(160deg,#040c22 0%,#0a1f50 55%,#0e3278 100%);
   --blob-o:.5;
-  --fg:#eef4ff; --fg-dim:#b4c3e2; --fg-faint:#8a9bc0;
+    --accent:#6aa8ff; --accent2:#3b82f6; --on-accent:#04122e;
+  --fg:#eaf2ff; --fg-dim:#b0c6ee; --fg-faint:#869fcd;
   --glass:rgba(255,255,255,.09); --glass-hi:rgba(255,255,255,.17); --glass-lo:rgba(255,255,255,.04);
   --glass-border:rgba(255,255,255,.2); --spec:rgba(255,255,255,.35); --rim:.7;
   --glass-shadow:rgba(0,0,0,.5);
