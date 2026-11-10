@@ -486,7 +486,8 @@ function teamsView(){
     <label class="togrow"><button class="switch" data-a="balpos" aria-pressed="${S.balPos}" id="balpos"></button><span>Equilibrar posições</span></label>
     <div class="grp" style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn primary" data-a="gen" ${pres.length<4?'disabled':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>${S.teams?'Sortear de novo':'Sortear times'}</button>
-      <button class="btn" data-a="copy" ${S.teams?'':'disabled'}>Copiar para WhatsApp</button>
+      <button class="btn" data-a="copy" ${S.teams?'':'disabled'}>Copiar texto</button>
+      <button class="btn" data-a="img" ${S.teams?'':'disabled'}>Salvar imagem</button>
     </div></div>
     ${ui.copyText?`<textarea class="copybox" id="copybox" readonly>${esc(ui.copyText)}</textarea>`:''}
   </div>`;
@@ -512,7 +513,7 @@ function teamsView(){
     <div style="display:flex;flex-direction:column;gap:10px;grid-column:1/-1">
       ${teams.map((t,i)=>`<div class="sbar"><span>${TEAMS[i].n}</span><span class="bar" style="--tc:var(${TEAMS[i].c});height:12px"><i style="width:${means[i]*10}%"></i></span><span class="num">${fmt(means[i])}</span></div>`).join('')}
     </div></div></div>
-    <p class="hint" style="margin:0">${S.sorteioAt?'Sorteio compartilhado, feito às '+S.sorteioAt.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'. ':''}${canEdit()?'Toque em um jogador e depois em outro de um time diferente para trocar os dois.':'Para sortear ou trocar jogadores, entre com a senha do grupo.'}</p>
+    <p class="hint" style="margin:0">${S.teams?'A exportação (texto e imagem) mostra só os nomes, sem cores, notas ou categorias. ':''}${S.sorteioAt?'Sorteio compartilhado, feito às '+S.sorteioAt.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'. ':''}${canEdit()?'Toque em um jogador e depois em outro de um time diferente para trocar os dois.':'Para sortear ou trocar jogadores, entre com a senha do grupo.'}</p>
     <div class="teams">`+teams.map((t,ti)=>`<section class="team glass" style="--c:var(${TEAMS[ti].c})">
       <div class="hd"><h3><i class="dot"></i>Time ${TEAMS[ti].n}</h3><div class="avg num">${fmt(means[ti])}<small>${t.length} jogadores</small></div></div>
       <div class="mem">`+t.map((p,pi)=>{const tr=tierOf(p.ov);const sel=ui.sel&&ui.sel.id===p.id;
@@ -623,15 +624,57 @@ async function submitAcct(){
 /* misc */
 let tt;
 function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),2200);}
+/* Exportação neutra: sem cores de time, notas, categorias, posições ou ordem por nível. */
+function exportTeams(){
+  return S.teams.map(t=>t.map(id=>byId(id)).filter(Boolean).map(p=>p.name).sort((a,b)=>a.localeCompare(b,'pt')));
+}
 function teamText(){
   const lines=['🏐 Times de hoje',''];
-  S.teams.forEach((t,i)=>{
-    const ps=t.map(id=>byId(id)).filter(Boolean);
-    lines.push(`Time ${TEAMS[i].n} (média ${fmt(mean(ps.map(overall)))})`);
-    ps.sort((a,b)=>overall(b)-overall(a)).forEach(p=>lines.push(`• ${p.name} (${p.pos})`));
-    lines.push('');
-  });
+  exportTeams().forEach((names,i)=>{lines.push('Time '+(i+1));names.forEach(n=>lines.push('• '+n));lines.push('');});
   return lines.join('\n').trim();
+}
+function teamsCanvas(){
+  const T=exportTeams(),W=1080,P=56,G=28,cols=T.length<=2?T.length:2,cw=(W-2*P-G*(cols-1))/cols;
+  const RH=50,HD=96,PAD=26,head=210,rows=Math.ceil(T.length/cols);
+  const rh=[];for(let r=0;r<rows;r++){const m=Math.max(...T.slice(r*cols,r*cols+cols).map(x=>x.length));rh.push(HD+m*RH+PAD);}
+  const H=head+rh.reduce((a,b)=>a+b,0)+G*(rows-1)+P+20;
+  const c=document.createElement('canvas');c.width=W;c.height=H;
+  const x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#0b2a6b');g.addColorStop(1,'#1f5fe0');x.fillStyle=g;x.fillRect(0,0,W,H);
+  const f='"Figtree","Segoe UI",Helvetica,Arial,sans-serif';
+  x.fillStyle='#fff';x.textBaseline='alphabetic';
+  x.font='800 62px '+f;x.fillText('Times de hoje',P,P+62);
+  x.font='500 30px '+f;x.fillStyle='rgba(255,255,255,.78)';
+  x.fillText(new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}),P,P+110);
+  const rr=(px,py,w,h,r)=>{x.beginPath();x.moveTo(px+r,py);x.arcTo(px+w,py,px+w,py+h,r);x.arcTo(px+w,py+h,px,py+h,r);x.arcTo(px,py+h,px,py,r);x.arcTo(px,py,px+w,py,r);x.closePath();};
+  let y=head;
+  for(let r=0;r<rows;r++){
+    T.slice(r*cols,r*cols+cols).forEach((names,i)=>{
+      const px=P+i*(cw+G);
+      rr(px,y,cw,rh[r],34);x.fillStyle='rgba(255,255,255,.14)';x.fill();x.lineWidth=2;x.strokeStyle='rgba(255,255,255,.4)';x.stroke();
+      x.fillStyle='#fff';x.font='800 44px '+f;x.fillText('Time '+(r*cols+i+1),px+32,y+62);
+      x.font='600 32px '+f;
+      names.forEach((n,j)=>{
+        let t=n;while(x.measureText(t).width>cw-64&&t.length>3)t=t.slice(0,-2);if(t!==n)t=t.trimEnd()+'…';
+        x.fillStyle='rgba(255,255,255,.95)';x.fillText(t,px+32,y+HD+j*RH+34);
+      });
+    });
+    y+=rh[r]+G;
+  }
+  return c;
+}
+async function saveImage(){
+  const c=teamsCanvas();
+  c.toBlob(async blob=>{
+    if(!blob){toast('Não foi possível gerar a imagem.');return;}
+    const file=new File([blob],'times-volei.png',{type:'image/png'});
+    try{
+      if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Times de hoje'});return;}
+    }catch(e){if(e&&e.name==='AbortError')return;}
+    const url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download='times-volei.png';document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),4000);toast('Imagem salva');
+  },'image/png');
 }
 
 document.addEventListener('input',e=>{
@@ -671,6 +714,7 @@ document.addEventListener('click',e=>{
   else if(a==='kminus'||a==='kplus'){if(!need())return;S.k+=a==='kplus'?1:-1;drawTeams();}
   else if(a==='balpos'){if(!need())return;S.balPos=!S.balPos;if(S.teams)drawTeams();else{save();render();}}
   else if(a==='gen'){if(!need())return;drawTeams();}
+  else if(a==='img'){saveImage();}
   else if(a==='copy'){
     const txt=teamText();
     const fb=()=>{ui.copyText=txt;render();const b=document.getElementById('copybox');if(b)b.select();};
