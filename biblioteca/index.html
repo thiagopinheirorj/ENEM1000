@@ -251,6 +251,11 @@ td.escrever{height:2.4rem}
 <div id="app"><noscript><p style="padding:24px">Esta biblioteca precisa de JavaScript para funcionar.</p></noscript></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="dados.js"></script>
+<script src="dados-6a.js"></script>
+<script src="dados-6b.js"></script>
+<script src="dados-6c.js"></script>
+<script src="dados-6d.js"></script>
+<script src="dados-6e.js"></script>
 <script>
 (function () {
   "use strict";
@@ -265,7 +270,7 @@ td.escrever{height:2.4rem}
     { id: "prova", nome: "Provas" },
     { id: "slides", nome: "Slides" },
     { id: "mapa", nome: "Mapas mentais" },
-    { id: "simulado", nome: "Simulados ENEM" },
+    { id: "simulado", nome: "Simulados" },
     { id: "interpretacao", nome: "Interpretação" },
     { id: "gramatica", nome: "Gramática" },
     { id: "emergencia", nome: "Aula de emergência" }
@@ -406,7 +411,7 @@ td.escrever{height:2.4rem}
     h += "</div></header>";
     h += '<main id="principal" class="wrap" tabindex="-1">';
     h += '<section class="hero"><h1 id="titulo" tabindex="-1">' + MAT.length + " materiais de Português <mark>prontos para usar.</mark></h1>";
-    h += "<p><strong>Sem perder horas preparando aulas.</strong> Filtre por ano, assunto ou tipo de material, abra, edite se quiser e imprima só o que vai usar. Do 6º ano ao Ensino Médio, com gabarito do professor e simulados ENEM.</p>";
+    h += "<p><strong>Sem perder horas preparando aulas.</strong> Filtre por ano, assunto ou tipo de material, abra, edite se quiser e imprima só o que vai usar. Do 6º ano ao Ensino Médio, com gabarito do professor e simulados.</p>";
     h += '<ul class="beneficios"><li>6º ano ao Ensino Médio</li><li>Editáveis</li><li>Imprima ou projete</li><li>Gabarito do professor</li></ul></section>';
 
     h += '<section class="vitrine" aria-label="Buscar e filtrar materiais">';
@@ -492,7 +497,7 @@ td.escrever{height:2.4rem}
     lista.forEach(function (m) {
       h += '<li class="item"><a class="card" href="#/m/' + esc(m.id) + '"><span class="ic">' + svg(m.tipo, 26) + "</span><span>";
       h += '<span class="tit">' + esc(m.titulo) + '</span><span class="res">' + esc(m.resumo) + "</span>";
-      h += '<span class="tags"><span>' + esc(nomeTipo(m.tipo)) + "</span><span>" + esc(rotuloSerie(m.serie)) + "</span><span>" + esc(m.assunto[0]) + "</span>";
+      h += '<span class="tags"><span>' + esc(nomeTipo(m.tipo)) + "</span><span>" + esc(rotuloSerie(m.serie)) + "</span>" + (m.assunto[0] !== nomeTipo(m.tipo) ? "<span>" + esc(m.assunto[0]) + "</span>" : "");
       var mt = meta(m);
       if (mt) h += "<span>" + esc(mt) + "</span>";
       h += "</span></span></a>";

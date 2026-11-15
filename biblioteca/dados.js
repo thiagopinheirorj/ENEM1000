@@ -26,6 +26,7 @@
  *
  * Questões: obj(enunciado, alternativas, índiceDaCorreta, comentário, { ctx, fonte })  → múltipla escolha
  *           dis(enunciado, respostaModelo, nLinhas, { ctx, fonte })                    → discursiva
+ * Os materiais do 6º ano ficam em dados-6a…6e.js, que usam os atalhos de `BIBLIOTECA.h` (veja o fim deste arquivo).
  * Formatação nos textos: **negrito**, //itálico//, ++sublinhado++ e \n para quebra de linha.
  */
 (function () {
@@ -897,9 +898,39 @@
     }
   ];
 
+  /* Atalhos para escrever materiais com menos repetição (usados pelos arquivos dados-*.js). */
+  var LET = "ABCDEFGH";
+  function ob(e, alts, g, c, x) {
+    if (typeof g === "string") g = LET.indexOf(g);
+    return obj(e, typeof alts === "string" ? alts.split("|") : alts, g, c, x);
+  }
+  var H = {
+    obj: obj, dis: dis, ob: ob,
+    i: function (p) { return { k: "instr", p: p }; },
+    t: function (t, p, fonte) { return { k: "texto", t: t, fonte: fonte || "Texto original", p: Array.isArray(p) ? p : [p] }; },
+    poema: function (t, p, fonte) { return { k: "texto", t: t, fonte: fonte || "Texto original", p: [p], poema: true }; },
+    te: function (t, li) { return { k: "teoria", t: t, li: li }; },
+    tab: function (t, cab, l) { return { k: "tabela", t: t, cab: cab, l: l }; },
+    qs: function (it, t) { var b = { k: "q", it: it }; if (t) b.t = t; return b; },
+    pf: function (t, li) { return { k: "prof", t: t, li: li }; },
+    ln: function (t, n) { return { k: "linhas", t: t, n: n }; },
+    pl: function (t, et) { return { k: "plano", t: t, et: et }; },
+    /* material do 6º ano: tipo, id, título, assuntos, resumo, blocos, tempo */
+    m6: function (tipo, id, titulo, assunto, resumo, blocos, tempo) {
+      materiais.push({ id: "6-" + id, titulo: titulo, tipo: tipo, serie: ["6"], assunto: assunto, resumo: resumo, tempo: tempo || "1 aula", blocos: blocos });
+    },
+    sl6: function (id, titulo, resumo, slides, assunto) {
+      materiais.push({ id: "6-" + id, titulo: titulo, tipo: "slides", serie: ["6"], assunto: assunto || ["Gramática"], resumo: resumo, tempo: "1 aula", slides: slides });
+    },
+    mp6: function (id, titulo, resumo, mapa, assunto) {
+      materiais.push({ id: "6-" + id, titulo: titulo, tipo: "mapa", serie: ["6"], assunto: assunto || ["Gramática"], resumo: resumo, tempo: "revisão", mapa: mapa });
+    }
+  };
+
   window.BIBLIOTECA = {
     marca: "Português Pronto",
     slogan: "Atividades, provas, slides e mapas mentais de Português, Redação e Literatura.",
-    materiais: materiais
+    materiais: materiais,
+    h: H
   };
 })();

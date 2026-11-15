@@ -9,7 +9,9 @@ const vm = require("vm");
 const { ROOT, loadPlaywright, startServer } = require("./helpers");
 
 const ctx = { window: {} };
-vm.runInNewContext(fs.readFileSync(path.join(ROOT, "biblioteca/dados.js"), "utf8"), ctx);
+/* dados.js primeiro; depois os arquivos dados-*.js em ordem alfabética (mesma ordem do index.html) */
+const ARQUIVOS = ["dados.js"].concat(fs.readdirSync(path.join(ROOT, "biblioteca")).filter((f) => /^dados-.*\.js$/.test(f)).sort());
+ARQUIVOS.forEach((f) => vm.runInNewContext(fs.readFileSync(path.join(ROOT, "biblioteca", f), "utf8"), ctx));
 const DB = JSON.parse(JSON.stringify(ctx.window.BIBLIOTECA));
 const MAT = DB.materiais;
 
@@ -80,6 +82,13 @@ describe("B · Dados da biblioteca", () => {
       const gs = questoes(m).filter((q) => q.alt).map((q) => q.g);
       if (gs.length >= 5) assert.ok(new Set(gs).size >= 3, m.id + ": gabaritos pouco variados " + gs);
     }
+  });
+
+  it("B08 · há 100 materiais do 6º ano, todos só do 6º ano e com ids começando por “6-”", () => {
+    const seis = MAT.filter((m) => m.id.startsWith("6-"));
+    assert.equal(seis.length, 100);
+    seis.forEach((m) => assert.deepEqual(m.serie, ["6"], m.id));
+    assert.equal(MAT.filter((m) => m.serie.length === 1 && m.serie[0] === "6").length >= 100, true);
   });
 
   it("B07 · materiais com questões e textos citados trazem fonte; blocos conhecidos", () => {
