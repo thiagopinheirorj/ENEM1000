@@ -7,6 +7,8 @@
 
 **Também publicado aqui:** [Vôlei dos Professores](https://thiagopinheirorj.github.io/ENEM1000/volei/) · ranking de jogadores e times equilibrados (`volei/index.html`, arquivo único).
 
+**Também publicado aqui:** [Português Pronto · Biblioteca do Professor](https://thiagopinheirorj.github.io/ENEM1000/biblioteca/) · atividades, provas, slides, mapas mentais, simulados ENEM e aulas de emergência de Português, Redação e Literatura, com 138 materiais (100 deles do 6º ano) e filtro por ano, assunto e tipo, versão do professor (gabarito), edição, impressão/PDF e slides para projetar (`biblioteca/index.html` + `biblioteca/dados.js`).
+
 Um app de **5 minutos por dia** para ampliar o repertório da redação do ENEM.
 Cada dia traz um "devocional" com:
 
@@ -83,3 +85,11 @@ São 137 testes (Node `node:test` + Playwright/Chromium) cobrindo conteúdo, flu
 kit, progresso, datas com relógio simulado (sequência, contagem, aposta, virada da meia-noite),
 foto, compartilhamento, podcast (roteiros, player e geração de MP3), segurança, offline e visual/acessibilidade. Resultados, casos e bugs
 corrigidos estão em [`tests/RELATORIO-DE-TESTES.md`](tests/RELATORIO-DE-TESTES.md).
+
+## Biblioteca do Professor
+
+Para adicionar um material, acrescente um objeto à lista `materiais` em `biblioteca/dados.js`
+(o formato está documentado no topo do arquivo). Os materiais do 6º ano ficam em `biblioteca/dados-6a.js` a `dados-6e.js` (gramática, interpretação, produção, avaliações e simulados, slides/mapas/aulas de emergência); novos arquivos `dados-*.js` precisam de uma linha `<script>` em `biblioteca/index.html`. Tipos: `atividade`, `prova`, `slides`, `mapa`,
+`simulado`, `interpretacao`, `gramatica`, `emergencia`. O nome da marca fica em `marca`, no fim do arquivo.
+Os testes (`tests/biblioteca.test.js`) conferem os dados (ids, gabaritos, alternativas) e a tela
+(filtros, busca, favoritos, versão do professor, edição, slides, mapa mental e impressão).
