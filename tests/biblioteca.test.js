@@ -84,8 +84,8 @@ describe("B · Dados da biblioteca", () => {
     }
   });
 
-  it("B08 · há 100 materiais por ano do 6º e do 7º ano, com ids começando pelo ano", () => {
-    for (const ano of ["6", "7"]) {
+  it("B08 · há 100 materiais por ano do 6º ao 8º ano, com ids começando pelo ano", () => {
+    for (const ano of ["6", "7", "8"]) {
       const lista = MAT.filter((m) => m.id.startsWith(ano + "-"));
       assert.equal(lista.length, 100, "ano " + ano);
       lista.forEach((m) => assert.deepEqual(m.serie, [ano], m.id));
