@@ -927,6 +927,21 @@
     }
   };
 
+  /* Fábrica para qualquer ano: BIBLIOTECA.h.para("7") devolve { m, sl, mp } com ids "7-…" e série ["7"]. */
+  H.para = function (ano) {
+    return {
+      m: function (tipo, id, titulo, assunto, resumo, blocos, tempo) {
+        materiais.push({ id: ano + "-" + id, titulo: titulo, tipo: tipo, serie: [ano], assunto: assunto, resumo: resumo, tempo: tempo || "1 aula", blocos: blocos });
+      },
+      sl: function (id, titulo, resumo, slides, assunto) {
+        materiais.push({ id: ano + "-" + id, titulo: titulo, tipo: "slides", serie: [ano], assunto: assunto || ["Gramática"], resumo: resumo, tempo: "1 aula", slides: slides });
+      },
+      mp: function (id, titulo, resumo, mapa, assunto) {
+        materiais.push({ id: ano + "-" + id, titulo: titulo, tipo: "mapa", serie: [ano], assunto: assunto || ["Gramática"], resumo: resumo, tempo: "revisão", mapa: mapa });
+      }
+    };
+  };
+
   window.BIBLIOTECA = {
     marca: "Português Pronto",
     slogan: "Atividades, provas, slides e mapas mentais de Português, Redação e Literatura.",

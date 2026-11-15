@@ -84,11 +84,15 @@ describe("B · Dados da biblioteca", () => {
     }
   });
 
-  it("B08 · há 100 materiais do 6º ano, todos só do 6º ano e com ids começando por “6-”", () => {
-    const seis = MAT.filter((m) => m.id.startsWith("6-"));
-    assert.equal(seis.length, 100);
-    seis.forEach((m) => assert.deepEqual(m.serie, ["6"], m.id));
-    assert.equal(MAT.filter((m) => m.serie.length === 1 && m.serie[0] === "6").length >= 100, true);
+  it("B08 · há 100 materiais por ano do 6º e do 7º ano, com ids começando pelo ano", () => {
+    for (const ano of ["6", "7"]) {
+      const lista = MAT.filter((m) => m.id.startsWith(ano + "-"));
+      assert.equal(lista.length, 100, "ano " + ano);
+      lista.forEach((m) => assert.deepEqual(m.serie, [ano], m.id));
+      const porTipo = {};
+      lista.forEach((m) => { porTipo[m.tipo] = (porTipo[m.tipo] || 0) + 1; });
+      assert.deepEqual(porTipo, { gramatica: 26, interpretacao: 18, atividade: 14, prova: 8, simulado: 4, slides: 10, mapa: 8, emergencia: 12 }, "distribuição do ano " + ano);
+    }
   });
 
   it("B07 · materiais com questões e textos citados trazem fonte; blocos conhecidos", () => {
