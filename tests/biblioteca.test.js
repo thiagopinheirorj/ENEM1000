@@ -16,7 +16,7 @@ const DB = JSON.parse(JSON.stringify(ctx.window.BIBLIOTECA));
 const MAT = DB.materiais;
 
 const TIPOS = ["atividade", "prova", "slides", "mapa", "simulado", "interpretacao", "gramatica", "emergencia"];
-const SERIES = ["6", "7", "8", "9", "EM"];
+const SERIES = ["6", "7", "8", "9", "EM", "1EM", "2EM", "3EM"];
 const ASSUNTOS = ["Gramática", "Interpretação", "Literatura", "Redação"];
 const cheio = (v) => typeof v === "string" && v.trim().length > 0;
 const questoes = (m) => (m.blocos || []).filter((b) => b.k === "q").flatMap((b) => b.it);
@@ -39,7 +39,7 @@ describe("B · Dados da biblioteca", () => {
 
   it("B03 · cada tipo de pasta tem ao menos um material, e cada ano também", () => {
     TIPOS.forEach((t) => assert.ok(MAT.some((m) => m.tipo === t), "tipo sem material: " + t));
-    SERIES.forEach((s) => assert.ok(MAT.some((m) => m.serie.includes(s)), "ano sem material: " + s));
+    SERIES.filter((s) => !["3EM"].includes(s)).forEach((s) => assert.ok(MAT.some((m) => m.serie.includes(s)), "ano sem material: " + s));
     ASSUNTOS.forEach((a) => assert.ok(MAT.some((m) => m.assunto.includes(a)), "assunto sem material: " + a));
   });
 
@@ -84,11 +84,18 @@ describe("B · Dados da biblioteca", () => {
     }
   });
 
-  it("B08 · há 100 materiais do 6º ano, todos só do 6º ano e com ids começando por “6-”", () => {
-    const seis = MAT.filter((m) => m.id.startsWith("6-"));
-    assert.equal(seis.length, 100);
-    seis.forEach((m) => assert.deepEqual(m.serie, ["6"], m.id));
-    assert.equal(MAT.filter((m) => m.serie.length === 1 && m.serie[0] === "6").length >= 100, true);
+  it("B08 · há 100 materiais por ano, com ids começando pelo ano e a distribuição esperada por tipo", () => {
+    const FUND = { gramatica: 26, interpretacao: 18, atividade: 14, prova: 8, simulado: 4, slides: 10, mapa: 8, emergencia: 12 };
+    const MEDIO = { gramatica: 18, interpretacao: 20, atividade: 16, prova: 8, simulado: 4, slides: 12, mapa: 10, emergencia: 12 };
+    const anos = [["6", FUND], ["7", FUND], ["8", FUND], ["9", FUND], ["1EM", MEDIO], ["2EM", MEDIO]];
+    for (const [ano, esperado] of anos) {
+      const lista = MAT.filter((m) => m.id.startsWith(ano + "-"));
+      assert.equal(lista.length, 100, "ano " + ano);
+      lista.forEach((m) => assert.deepEqual(m.serie, [ano], m.id));
+      const porTipo = {};
+      lista.forEach((m) => { porTipo[m.tipo] = (porTipo[m.tipo] || 0) + 1; });
+      assert.deepEqual(porTipo, esperado, "distribuição do ano " + ano);
+    }
   });
 
   it("B07 · materiais com questões e textos citados trazem fonte; blocos conhecidos", () => {
@@ -139,9 +146,10 @@ describe("T · Tela da biblioteca", () => {
     await page.click('[data-tipo="prova"]');
     assert.equal(await page.locator(".card").count(), MAT.filter((m) => m.tipo === "prova").length);
     await page.click('[data-serie="EM"]');
-    assert.equal(await page.locator(".card").count(), MAT.filter((m) => m.tipo === "prova" && m.serie.includes("EM")).length);
+    const doEM = (m) => m.serie.some((s) => s === "EM" || /^\dEM$/.test(s)); // o filtro “Ensino Médio” abrange o EM geral e os três anos
+    assert.equal(await page.locator(".card").count(), MAT.filter((m) => m.tipo === "prova" && doEM(m)).length);
     await page.selectOption("#assunto", "Literatura");
-    assert.equal(await page.locator(".card").count(), MAT.filter((m) => m.tipo === "prova" && m.serie.includes("EM") && m.assunto.includes("Literatura")).length);
+    assert.equal(await page.locator(".card").count(), MAT.filter((m) => m.tipo === "prova" && doEM(m) && m.assunto.includes("Literatura")).length);
     assert.equal(await page.getAttribute('[data-tipo="prova"]', "aria-pressed"), "true");
     await page.click("#limpar");
     assert.equal(await page.locator(".card").count(), MAT.length);

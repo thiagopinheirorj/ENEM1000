@@ -256,6 +256,31 @@ td.escrever{height:2.4rem}
 <script src="dados-6c.js"></script>
 <script src="dados-6d.js"></script>
 <script src="dados-6e.js"></script>
+<script src="dados-7a.js"></script>
+<script src="dados-7b.js"></script>
+<script src="dados-7c.js"></script>
+<script src="dados-7d.js"></script>
+<script src="dados-7e.js"></script>
+<script src="dados-8a.js"></script>
+<script src="dados-8b.js"></script>
+<script src="dados-8c.js"></script>
+<script src="dados-8d.js"></script>
+<script src="dados-8e.js"></script>
+<script src="dados-9a.js"></script>
+<script src="dados-9b.js"></script>
+<script src="dados-9c.js"></script>
+<script src="dados-9d.js"></script>
+<script src="dados-9e.js"></script>
+<script src="dados-em1a.js"></script>
+<script src="dados-em1b.js"></script>
+<script src="dados-em1c.js"></script>
+<script src="dados-em1d.js"></script>
+<script src="dados-em1e.js"></script>
+<script src="dados-em2a.js"></script>
+<script src="dados-em2b.js"></script>
+<script src="dados-em2c.js"></script>
+<script src="dados-em2d.js"></script>
+<script src="dados-em2e.js"></script>
 <script>
 (function () {
   "use strict";
@@ -277,7 +302,8 @@ td.escrever{height:2.4rem}
   ];
   var SERIES = [
     { id: "6", nome: "6º ano" }, { id: "7", nome: "7º ano" }, { id: "8", nome: "8º ano" },
-    { id: "9", nome: "9º ano" }, { id: "EM", nome: "Ensino Médio" }
+    { id: "9", nome: "9º ano" }, { id: "EM", nome: "Ensino Médio" }, { id: "1EM", nome: "1º ano EM" },
+    { id: "2EM", nome: "2º ano EM" }, { id: "3EM", nome: "3º ano EM" }
   ];
   var ASSUNTOS = ["Gramática", "Interpretação", "Literatura", "Redação"];
   var LETRAS = "ABCDEFGH";
@@ -315,13 +341,22 @@ td.escrever{height:2.4rem}
   function norm(s) { return String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); }
   function nomeTipo(id) { for (var i = 0; i < TIPOS.length; i++) if (TIPOS[i].id === id) return TIPOS[i].nome; return id; }
   function rotuloSerie(a) {
-    var nums = a.filter(function (x) { return x !== "EM"; }).sort();
+    var nums = a.filter(function (x) { return /^\d$/.test(x); }).sort();
+    var ems = a.filter(function (x) { return /^\dEM$/.test(x); }).map(function (x) { return x.charAt(0); }).sort();
     var partes = [];
     if (nums.length === 1) partes.push(nums[0] + "º ano");
     else if (nums.length === 2) partes.push(nums[0] + "º e " + nums[1] + "º ano");
     else if (nums.length > 2) partes.push(nums[0] + "º ao " + nums[nums.length - 1] + "º ano");
+    if (ems.length === 1) partes.push(ems[0] + "º ano do EM");
+    else if (ems.length === 2) partes.push(ems[0] + "º e " + ems[1] + "º ano do EM");
+    else if (ems.length > 2) partes.push(ems[0] + "º ao " + ems[ems.length - 1] + "º ano do EM");
     if (a.indexOf("EM") >= 0) partes.push("Ensino Médio");
     return partes.join(" e ");
+  }
+  /* o filtro “Ensino Médio” abrange o EM geral e os três anos; os demais são exatos */
+  function temSerie(m, id) {
+    if (id === "EM") return m.serie.some(function (x) { return x === "EM" || /^\dEM$/.test(x); });
+    return m.serie.indexOf(id) >= 0;
   }
   function colher(o, out) {
     if (typeof o === "string") out.push(o);
@@ -385,7 +420,7 @@ td.escrever{height:2.4rem}
 
   function casa(m, ignorarTipo) {
     if (!ignorarTipo && F.tipo && m.tipo !== F.tipo) return false;
-    if (F.serie && m.serie.indexOf(F.serie) < 0) return false;
+    if (F.serie && !temSerie(m, F.serie)) return false;
     if (F.assunto && m.assunto.indexOf(F.assunto) < 0) return false;
     if (F.fav && !ehFav(m.id)) return false;
     if (F.q) {

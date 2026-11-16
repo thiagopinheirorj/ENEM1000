@@ -7,7 +7,7 @@
 
 **Também publicado aqui:** [Vôlei dos Professores](https://thiagopinheirorj.github.io/ENEM1000/volei/) · ranking de jogadores e times equilibrados (`volei/index.html`, arquivo único).
 
-**Também publicado aqui:** [Português Pronto · Biblioteca do Professor](https://thiagopinheirorj.github.io/ENEM1000/biblioteca/) · atividades, provas, slides, mapas mentais, simulados ENEM e aulas de emergência de Português, Redação e Literatura, com 138 materiais (100 deles do 6º ano) e filtro por ano, assunto e tipo, versão do professor (gabarito), edição, impressão/PDF e slides para projetar (`biblioteca/index.html` + `biblioteca/dados.js`).
+**Também publicado aqui:** [Português Pronto · Biblioteca do Professor](https://thiagopinheirorj.github.io/ENEM1000/biblioteca/) · atividades, provas, slides, mapas mentais, simulados ENEM e aulas de emergência de Português, Redação e Literatura, com 538 materiais (100 por ano do 6º ao 9º ano e 100 do 1º ano do Ensino Médio) e filtro por ano, assunto e tipo, versão do professor (gabarito), edição, impressão/PDF e slides para projetar (`biblioteca/index.html` + `biblioteca/dados.js`).
 
 Um app de **5 minutos por dia** para ampliar o repertório da redação do ENEM.
 Cada dia traz um "devocional" com:
@@ -89,7 +89,7 @@ corrigidos estão em [`tests/RELATORIO-DE-TESTES.md`](tests/RELATORIO-DE-TESTES.
 ## Biblioteca do Professor
 
 Para adicionar um material, acrescente um objeto à lista `materiais` em `biblioteca/dados.js`
-(o formato está documentado no topo do arquivo). Os materiais do 6º ano ficam em `biblioteca/dados-6a.js` a `dados-6e.js` (gramática, interpretação, produção, avaliações e simulados, slides/mapas/aulas de emergência); novos arquivos `dados-*.js` precisam de uma linha `<script>` em `biblioteca/index.html`. Tipos: `atividade`, `prova`, `slides`, `mapa`,
+(o formato está documentado no topo do arquivo). Os materiais do 6º ano ficam em `biblioteca/dados-6a.js` a `dados-6e.js`, os do 7º ano em `dados-7a.js` a `dados-7e.js` os do 8º em `dados-8a.js` a `dados-8e.js` os do 9º em `dados-9a.js` a `dados-9e.js` e os do 1º ano do Ensino Médio em `dados-em1a.js` a `dados-em1e.js` (os do 2º e do 3º ano seguem o mesmo padrão, com séries `2EM` e `3EM`) (gramática, interpretação, produção, avaliações e simulados, slides/mapas/aulas de emergência); novos arquivos `dados-*.js` precisam de uma linha `<script>` em `biblioteca/index.html`. Tipos: `atividade`, `prova`, `slides`, `mapa`,
 `simulado`, `interpretacao`, `gramatica`, `emergencia`. O nome da marca fica em `marca`, no fim do arquivo.
 Os testes (`tests/biblioteca.test.js`) conferem os dados (ids, gabaritos, alternativas) e a tela
 (filtros, busca, favoritos, versão do professor, edição, slides, mapa mental e impressão).
