@@ -39,7 +39,7 @@ describe("B · Dados da biblioteca", () => {
 
   it("B03 · cada tipo de pasta tem ao menos um material, e cada ano também", () => {
     TIPOS.forEach((t) => assert.ok(MAT.some((m) => m.tipo === t), "tipo sem material: " + t));
-    SERIES.filter((s) => !["2EM", "3EM"].includes(s)).forEach((s) => assert.ok(MAT.some((m) => m.serie.includes(s)), "ano sem material: " + s));
+    SERIES.filter((s) => !["3EM"].includes(s)).forEach((s) => assert.ok(MAT.some((m) => m.serie.includes(s)), "ano sem material: " + s));
     ASSUNTOS.forEach((a) => assert.ok(MAT.some((m) => m.assunto.includes(a)), "assunto sem material: " + a));
   });
 
@@ -87,7 +87,7 @@ describe("B · Dados da biblioteca", () => {
   it("B08 · há 100 materiais por ano, com ids começando pelo ano e a distribuição esperada por tipo", () => {
     const FUND = { gramatica: 26, interpretacao: 18, atividade: 14, prova: 8, simulado: 4, slides: 10, mapa: 8, emergencia: 12 };
     const MEDIO = { gramatica: 18, interpretacao: 20, atividade: 16, prova: 8, simulado: 4, slides: 12, mapa: 10, emergencia: 12 };
-    const anos = [["6", FUND], ["7", FUND], ["8", FUND], ["9", FUND], ["1EM", MEDIO]];
+    const anos = [["6", FUND], ["7", FUND], ["8", FUND], ["9", FUND], ["1EM", MEDIO], ["2EM", MEDIO]];
     for (const [ano, esperado] of anos) {
       const lista = MAT.filter((m) => m.id.startsWith(ano + "-"));
       assert.equal(lista.length, 100, "ano " + ano);
